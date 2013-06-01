@@ -185,11 +185,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Resource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SelfLib.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\SelfLib.def"
+				>
+			</File>
+			<File
+				RelativePath=".\SelfLib.h"
 				>
 			</File>
 			<File
@@ -212,20 +220,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-			<File
-				RelativePath=".\Resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SelfLib.h"
-				>
-			</File>
 			<File
 				RelativePath=".\stdafx.h"
 				>
@@ -234,6 +228,12 @@
 				RelativePath=".\targetver.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -246,6 +246,78 @@
 			</File>
 			<File
 				RelativePath=".\res\SelfLib.rc2"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="util"
+			>
+			<File
+				RelativePath="..\src\util\Crc32.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\Crc32.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\Utils.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\Utils.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\UtilsFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\UtilsFile.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\UtilString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\UtilString.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="str"
+			>
+			<File
+				RelativePath="..\src\strconvert\strConvert.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\strconvert\strConvert.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="hash"
+			>
+			<File
+				RelativePath="..\src\hash\crc32.txt"
+				>
+			</File>
+			<File
+				RelativePath="..\src\hash\hash.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="NewFilter1"
+			>
+			<File
+				RelativePath="..\src\CIni\Ini.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\CIni\Ini.h"
 				>
 			</File>
 		</Filter>
