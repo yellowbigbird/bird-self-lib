@@ -27,11 +27,12 @@
 #pragma warning(disable: 4996)
 
 using namespace std;
+using namespace CUtils;
 
 ///------------------------------------------------------------------------------
 ///  Module and debug definitions                                                
 ///------------------------------------------------------------------------------
-AT_DECLARE_FILE( Utils.cpp, "$Rev:$" )
+//AT_DECLARE_FILE( Utils.cpp, "$Rev:$" )
 
 //--------------------------------------------------------------------------------------------
 //  Local type declarations and macros
