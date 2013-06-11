@@ -190,7 +190,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SelfLib.cpp"
+				RelativePath="..\src\SelfLib.cpp"
 				>
 			</File>
 			<File
@@ -198,11 +198,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SelfLib.h"
+				RelativePath="..\src\SelfLib.h"
 				>
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp"
+				RelativePath="..\src\stdafx.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -212,17 +212,9 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\stdafx.h"
+				RelativePath="..\src\stdafx.h"
 				>
 			</File>
 			<File
