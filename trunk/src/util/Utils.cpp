@@ -21,8 +21,10 @@
 //  Includes
 //--------------------------------------------------------------------------------------------
 #include <stdafx.h>
-#include <io.h>
 #include "Utils.h"
+
+#include <io.h>
+#include <assert.h>
 
 #pragma warning(disable: 4996)
 
@@ -74,6 +76,19 @@ tstring CUtils::ExtractFileName(const tstring& path)
   return path;
 }
 
+string CUtils::ExtractFileName(const string& path)
+{
+	size_t pos1 = path.rfind('\\');
+	size_t pos2 = path.rfind('/');
+
+	pos1 = min(pos1, pos2);
+	if (pos1 != string::npos)
+	{
+		return path.substr(pos1 + 1);
+	}
+	return path;
+}
+
 tstring CUtils::ExtractFileExt(const tstring& path)
 {
   size_t pos = path.find_last_of(_T("\\/."));
@@ -96,7 +111,7 @@ bool CUtils::FileExists(const tstring& path)
   return (dwAttribute & (FILE_ATTRIBUTE_DEVICE | FILE_ATTRIBUTE_DIRECTORY)) == 0;
 }
 
-UINT CUtils::getFileSize(const tstring path)
+UINT CUtils::GetFileSize(const tstring path)
 {
   HANDLE hFile = ::CreateFile(path.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
   if(!hFile || INVALID_HANDLE_VALUE == hFile){
@@ -150,43 +165,44 @@ bool CUtils::CreateDirectory(const tstring& path)
   return true;
 }
 
-void CUtils::DeleteDirectory(const TCHAR* charDir)
-{
-  assert(charDir);
-  if(!charDir)
-    return;
-
-  tstring strDir = charDir;
-
-  WIN32_FIND_DATA   wfd;
-  tstring strFileWildCard = strDir+_T("\\*.*");
-  HANDLE			  hFile=FindFirstFile(strFileWildCard.c_str(),(WIN32_FIND_DATA*)&wfd);   
-  if(hFile!=INVALID_HANDLE_VALUE)   
-  {   
-    do   
-    {   
-      if(wfd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)   
-      {   
-        tstring   strFolderName=wfd.cFileName;   
-        if(strFolderName!=_T(".")
-          &&strFolderName!=_T("..") )   
-        {   
-          tstring strTempPath = strDir+_T("\\")+strFolderName;
-          DeleteDirectory(strTempPath.c_str() );   
-
-          RemoveDirectory(strTempPath.c_str() );
-        }   
-      }   
-      else   
-        DeleteFile(strDir+_T("\\"+wfd.cFileName));
-    }
-    while(FindNextFile(hFile,&wfd));   
-
-    FindClose(hFile);   
-  }
-
-  RemoveDirectory(strDir.c_str() );
-}
+//bool CUtils::DeleteDirectory(const TCHAR* charDir)
+//{
+//  assert(charDir);
+//  if(!charDir)
+//    return false;
+//
+//  tstring strDir = charDir;
+//
+//  WIN32_FIND_DATA   wfd;
+//  tstring strFileWildCard = strDir+_T("\\*.*");
+//  HANDLE			  hFile=FindFirstFile(strFileWildCard.c_str(),(WIN32_FIND_DATA*)&wfd);   
+//  if(hFile!=INVALID_HANDLE_VALUE)   
+//  {   
+//    do   
+//    {   
+//      if(wfd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)   
+//      {   
+//        tstring   strFolderName=wfd.cFileName;   
+//        if(strFolderName!=_T(".")
+//          &&strFolderName!=_T("..") )   
+//        {   
+//          tstring strTempPath = strDir+_T("\\")+strFolderName;
+//          DeleteDirectory(strTempPath.c_str() );   
+//
+//          RemoveDirectory(strTempPath.c_str() );
+//        }   
+//      }   
+//      else   
+//        DeleteFile(strDir+_T("\\"+wfd.cFileName));
+//    }
+//    while(FindNextFile(hFile,&wfd));   
+//
+//    FindClose(hFile);   
+//  }
+//
+//  RemoveDirectory(strDir.c_str() );
+//  return true;
+//}
 //////////////////////////////////////////////////////////////////////////
 
 //replace global value, /  //
