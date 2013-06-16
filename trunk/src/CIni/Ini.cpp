@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////
 //                 Ini.cpp
 //
-// "CIni" is a simple API wrap class used for ini file access.
+// "CIni" is a simple API wrap class used for ini file access. 
 // The purpose of this class is to make ini file access more
 // convenient than direct API calls.
 //	

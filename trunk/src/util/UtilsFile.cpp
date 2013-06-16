@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <set>
+#include <io.h>
 
 #include <windows.h>
 #include <tchar.h>
@@ -52,6 +53,19 @@ namespace UtilFile{
         }
         return path;
     }
+
+	string ExtractFileName(const string& path)
+	{
+		size_t pos1 = path.rfind('\\');
+		size_t pos2 = path.rfind('/');
+
+		pos1 = min(pos1, pos2);
+		if (pos1 != string::npos)
+		{
+			return path.substr(pos1 + 1);
+		}
+		return path;
+	}
 
     tstring ExtractFileExt(const tstring& path)
     {
@@ -241,25 +255,25 @@ namespace UtilFile{
         return name.find_first_of(_T("*?")) != tstring::npos;
     }
 
-    //bool GetFileList(const tstring& mask, std::set<tstring>& files)
-    //{
-    //    struct _tfinddata_t file;
-    //    intptr_t            hFile;
-    //    tstring             dirPath = ExtractFilePath(mask);
-    //    size_t              initialSize = files.size();
+    bool GetFileList(const tstring& mask, std::set<tstring>& files)
+    {
+        struct _tfinddata_t file;
+        intptr_t            hFile;
+        tstring             dirPath = ExtractFilePath(mask);
+        size_t              initialSize = files.size();
 
-    //    if( (hFile = _tfindfirst( mask.c_str(), &file )) != -1L )
-    //    {
-    //        do 
-    //        {
-    //            tstring fileName = dirPath + _T("\\") + file.name;
-    //            files.insert(fileName);
-    //        } 
-    //        while( _tfindnext( hFile, &file ) == 0 );
-    //        _findclose( hFile );
-    //    }
-    //    return initialSize != files.size();
-    //}
+        if( (hFile = _tfindfirst( mask.c_str(), &file )) != -1L )
+        {
+            do 
+            {
+                tstring fileName = dirPath + _T("\\") + file.name;
+                files.insert(fileName);
+            } 
+            while( _tfindnext( hFile, &file ) == 0 );
+            _findclose( hFile );
+        }
+        return initialSize != files.size();
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Returns the path to the temporary folder. The path is terminated with a backslash, e.g.
