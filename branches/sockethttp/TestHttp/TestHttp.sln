@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Http", "..\Http\Http.vcproj", "{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestHttp", "TestHttp.vcproj", "{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}.Debug|Win32.ActiveCfg = Debug|Win32
+		{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}.Debug|Win32.Build.0 = Debug|Win32
+		{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}.Release|Win32.ActiveCfg = Release|Win32
+		{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}.Release|Win32.Build.0 = Release|Win32
+		{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}.Debug|Win32.Build.0 = Debug|Win32
+		{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}.Release|Win32.ActiveCfg = Release|Win32
+		{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
