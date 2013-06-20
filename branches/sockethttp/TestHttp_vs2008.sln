@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Http", "..\Http\Http.vcproj", "{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Http", "Http\Http.vcproj", "{393E13D7-8AF5-405D-8CEF-63ED3EE0EB45}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestHttp", "TestHttp.vcproj", "{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestHttp", "TestHttp\TestHttp.vcproj", "{348D61F1-FEDE-4BD2-AC6B-AF148C55CC2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
