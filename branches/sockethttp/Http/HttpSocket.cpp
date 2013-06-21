@@ -317,7 +317,7 @@ string CHttpSocket::GetResponseHeader()
 	if(m_bResponsed)
         return m_ResponseHeader;
 	
-    int nLength = 0;
+    //int nLength = 0;
 		//char c = 0;
 		int nIndex = 0;
 		BOOL bEndResponse = FALSE;
@@ -352,11 +352,11 @@ string CHttpSocket::GetResponseHeader()
 			//}
                 
 		}
-		m_nResponseHeaderSize = nIndex;
+		m_nResponseHeaderSize = m_ResponseHeader.length();
 		m_bResponsed = TRUE;
 	
 	
-	nLength = m_nResponseHeaderSize;
+	//nLength = m_nResponseHeaderSize;
 	return m_ResponseHeader;
 }
 
@@ -407,7 +407,9 @@ int CHttpSocket::GetField(const char *szSession, char *szValue, int nMaxLength)
 int CHttpSocket::GetServerState()
 {
 	//若没有取得响应头,返回失败
-	if(!m_bResponsed) return -1;
+	if(!m_bResponsed
+        || m_ResponseHeader.length()< 12) 
+        return -1;
 	
 	char szState[3];
 	szState[0] = m_ResponseHeader[9];
