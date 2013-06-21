@@ -1005,7 +1005,8 @@ UINT __cdecl CHTTPServer::ServiceProc(LPVOID pParam)
 		DWORD dwBytesTransferred = 0;
 		SOCKET hSocket = INVALID_SOCKET;
 		PCLIENTINF pSockInf = NULL;
-		if(!GetQueuedCompletionStatus(ServiceInf.hComplitionPort, &dwBytesTransferred, (DWORD *)&hSocket, (LPOVERLAPPED*)&pSockInf, INFINITE))
+        BOOL IFOK =GetQueuedCompletionStatus(ServiceInf.hComplitionPort, &dwBytesTransferred, (DWORD *)&hSocket, (LPOVERLAPPED*)&pSockInf, INFINITE) ;
+		if(!IFOK)
 		{
 			if(pSockInf == NULL)
 			{
