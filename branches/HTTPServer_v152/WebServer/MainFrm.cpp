@@ -104,8 +104,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
-		TRACE0("未能创建工具栏\n");
-		return -1;      // 未能创建
+		TRACE0("create toolbar error.\n");
+		return -1;       // couldn't create
 	}
 
 	if (!m_wndStatusBar.Create(this) ||
@@ -113,7 +113,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		  sizeof(indicators)/sizeof(UINT)))
 	{
 		TRACE0("未能创建状态栏\n");
-		return -1;      // 未能创建
+		return -1;      // couldn't create
 	}
 	else
 	{
@@ -122,18 +122,18 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_wndStatusBar.SetPaneInfo(3, ID_STATUS_SPEED_DOWN, SBPS_NORMAL, 100);
 	}
 
-	// 设置图标
+	
 	SetIcon(m_hIcon, TRUE);
 
-	// TODO: 如果不需要可停靠工具栏，则删除这三行
+	// TODO: docking toolbar
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&m_wndToolBar);
 
-	// 初始化日志模块
+	// init log
 	theLogger.open(true, LL_NONE);
 	
-	// 添加托盘图标.
+	// status bar.
 	memset(&m_IconData, 0, sizeof(m_IconData));
 	m_IconData.cbSize = sizeof(m_IconData);
 	m_IconData.hWnd = m_hWnd;
@@ -162,15 +162,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		theLogger.setLogLevel(LL_ALL);
 	}
 
-	// 启动
 	if(AfxGetApp()->GetProfileInt(INI_SESSION, _T("AutoRun"), 0))
 	{
-		LOGGER_CINFO(theLogger, _T("Que's HTTP Server 启动中...\r\n"));
+		LOGGER_CINFO(theLogger, _T("Que's HTTP Server starting...\r\n"));
 		OnStart();
 	}
 	else
 	{
-		LOGGER_CINFO(theLogger, _T("Que's HTTP Server 准备就绪.\r\n"));
+		LOGGER_CINFO(theLogger, _T("Que's HTTP Server ready.\r\n"));
 	}
 
 	return 0;
@@ -180,8 +179,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if( !CFrameWnd::PreCreateWindow(cs) )
 		return FALSE;
-	// TODO: 在此处通过修改
-	//  CREATESTRUCT cs 来修改窗口类或样式
+	// TODO: 
+	//  CREATESTRUCT cs edit window style
 
 	cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
 	cs.lpszClass = AfxRegisterWndClass(0);
@@ -290,11 +289,11 @@ void CMainFrame::OnStart()
 		ResetStatus();
 		m_uTimer = SetTimer(IDT_UPDATE_SPEED, CHECKTIME_SPEED, NULL);
 
-		LOGGER_CINFO(theLogger, _T("Que's HTTP Server 启动成功,根目录[%s],端口[%d],最大连接数[%d].\r\n"), strRoot, startDesc.nPort, startDesc.nMaxConnection);
+		LOGGER_CINFO(theLogger, _T("Que's HTTP Server start ok, path=[%s], port=[%d], max-connection[%d].\r\n"), strRoot, startDesc.nPort, startDesc.nMaxConnection);
 	}
 	else
 	{
-		LOGGER_CINFO(theLogger, _T("Que's HTTP Server 启动失败,已经在运行或者端口[%d]被占用..\r\n"), startDesc.nPort);
+		LOGGER_CINFO(theLogger, _T("Que's HTTP Server start err, port=[%d] is taken..\r\n"), startDesc.nPort);
 	}
 }
 
@@ -545,11 +544,11 @@ void CMainFrame::OnNewConnection(const wchar_t *pszIP, unsigned int nPort, BOOL 
 	{
 		if(bRefused)
 		{
-			LOGGER_CINFO(theLogger, _T("[%s:%d] - 服务器忙,连接被丢弃.\r\n"), pszIP, nPort);
+			LOGGER_CINFO(theLogger, _T("[%s:%d] - server busy, connection abandoned.\r\n"), pszIP, nPort);
 		}
 		else
 		{
-			LOGGER_CINFO(theLogger, _T("[%s:%d] - 新连接被接受.\r\n"), pszIP, nPort);
+			LOGGER_CINFO(theLogger, _T("[%s:%d] - new connection accepted.\r\n"), pszIP, nPort);
 
 			lock();
 			SetConnectionsNumber(m_nTotalConnections + 1);
@@ -623,7 +622,7 @@ void CMainFrame::OnConnectionClosed(const wchar_t *pszIP, unsigned int nPort, RE
 		}
 	}
 
-	LOGGER_CINFO(theLogger, _T("[%s:%d] - 连接被关闭[%s],总计发送数据[%s],用时[%.3fs],平均速度[%s].\r\n"), 
+	LOGGER_CINFO(theLogger, _T("[%s:%d] - connection closed[%s],send alldata[%s], time[%.3fs], avg-speed[%s].\r\n"), 
 		pszIP, nPort, strReason.c_str(), (LPCTSTR)strBytes, nTimeUsed * 1.0 / 1000, (LPCTSTR)strSpeed);
 }
 
@@ -652,8 +651,7 @@ void CMainFrame::OnDataReceived(const wchar_t *pszIP, unsigned int nPort, unsign
 
 void CMainFrame::OnRequested(const wchar_t *pszIP, unsigned int nPort, const wchar_t *pszUrl, HTTP_METHOD hm, SERVER_CODE sc)
 {
-	// 只写一下日志就可以了.
-	LOGGER_CINFO(theLogger, _T("[%s:%d] - 请求资源[%s],响应码: %d.\r\n"), pszIP, nPort, pszUrl, sc);  
+	LOGGER_CINFO(theLogger, _T("[%s:%d] - ask for res[%s],response code: %d.\r\n"), pszIP, nPort, pszUrl, sc);  
 }
 
 void CMainFrame::OnTimer(UINT_PTR nIDEvent)
@@ -661,7 +659,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	if( nIDEvent == m_uTimer )
 	{
-		// 记录数据,后面再计算
+		// record data, count after
 
 		lock();
 		__int64 lBytesSent = m_lBytesSent;
