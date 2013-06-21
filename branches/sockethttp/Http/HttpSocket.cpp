@@ -5,13 +5,18 @@
 #include "stdafx.h"
 #include "HttpSocket.h"
 
+#include <ASSERT.h>
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-#define MAXHEADERSIZE 1024
+#define MAX_HEADER_SIZE 1024
+
+//const int c_port = 8100;
+using namespace std;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -25,16 +30,17 @@ CHttpSocket::CHttpSocket()
 
 	for(int i=0;i<256;i++)
 		m_ipaddr[i]='\0';
-	memset(m_requestheader,0,MAXHEADERSIZE);
-	memset(m_ResponseHeader,0,MAXHEADERSIZE);
+	memset(m_requestheader,0,MAX_HEADER_SIZE);
+	//memset(m_ResponseHeader,0,MAXHEADERSIZE);
 
 	m_nCurIndex = 0;		//
 	m_bResponsed = FALSE;
 	m_nResponseHeaderSize = -1;
-/*
-	m_nBufferSize = nBufferSize;
-	m_pBuffer = new char[nBufferSize];
-	memset(m_pBuffer,0,nBufferSize);*/
+
+    WORD wVersion;
+	WSADATA WSAData;
+	wVersion=MAKEWORD(2,0);
+	int err=WSAStartup(wVersion,&WSAData);
 }
 
 CHttpSocket::~CHttpSocket()
@@ -44,10 +50,17 @@ CHttpSocket::~CHttpSocket()
 
 BOOL CHttpSocket::Socket()
 {
-	if(m_bConnected)return FALSE;
+	if(m_bConnected)
+        return FALSE;
 
 	struct protoent *ppe; 
 	ppe=getprotobyname("tcp"); 
+    if(!ppe)
+    {
+        DWORD rr = GetLastError();
+        assert(false);
+        return FALSE;
+    }
 	
 	///´´½¨SOCKET¶ÔÏó
 	m_s=socket(PF_INET,SOCK_STREAM,ppe->p_proto);
@@ -90,7 +103,7 @@ BOOL CHttpSocket::Connect(char *szHostName,int nPort)
 	struct sockaddr_in destaddr;
 	memset((void *)&destaddr,0,sizeof(destaddr)); 
 	destaddr.sin_family=AF_INET;
-	destaddr.sin_port=htons(80);
+	destaddr.sin_port=htons(m_port);  //80
 	destaddr.sin_addr=ip_addr;
 
 	///±£´æÖ÷»úµÄIPµØÖ·×Ö·û´®
@@ -127,7 +140,7 @@ BOOL CHttpSocket::Connect(char *szHostName,int nPort)
 	{
 		//CloseSocket();
 		//m_s=NULL;
-		MessageBox(NULL,"connect()º err","error",MB_OK);
+		MessageBox(NULL,"connect()?err","error",MB_OK);
 		return FALSE;
 	}
 
@@ -211,7 +224,8 @@ const char *CHttpSocket::FormatRequestHeader(char *pServer,char *pObject, long &
 ///·¢ËÍÇëÇóÍ·
 BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
 {
-	if(!m_bConnected)return FALSE;
+	if(!m_bConnected)
+        return FALSE;
 
 	if(pRequestHeader==NULL)
 		pRequestHeader=m_requestheader;
@@ -223,8 +237,8 @@ BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
 		MessageBox(NULL,"send()º¯ÊýÖ´ÐÐÊ§°Ü!","´íÎó",MB_OK);
 		return FALSE;
 	}
-	int nLength;
-	GetResponseHeader(nLength);
+	//int nLength;
+	GetResponseHeader();
 	return TRUE;
 }
 
@@ -298,27 +312,49 @@ BOOL CHttpSocket::SetTimeout(int nTime, int nType)
 }
 
 //»ñÈ¡HTTPÇëÇóµÄ·µ»ØÍ·
-const char* CHttpSocket::GetResponseHeader(int &nLength)
+string CHttpSocket::GetResponseHeader()
 {
-	if(!m_bResponsed)
-	{
-		char c = 0;
+	if(m_bResponsed)
+        return m_ResponseHeader;
+	
+    int nLength = 0;
+		//char c = 0;
 		int nIndex = 0;
 		BOOL bEndResponse = FALSE;
-		while(!bEndResponse && nIndex < MAXHEADERSIZE)
+        int recevlen = 0 ;
+        DWORD err = 0;
+        char buff[MAX_HEADER_SIZE+1];
+        m_ResponseHeader.clear();
+        
+		while(true)
 		{
-			recv(m_s,&c,1,0);
-			m_ResponseHeader[nIndex++] = c;
-			if(nIndex >= 4)
-			{
-				if(m_ResponseHeader[nIndex - 4] == '\r' && m_ResponseHeader[nIndex - 3] == '\n'
-					&& m_ResponseHeader[nIndex - 2] == '\r' && m_ResponseHeader[nIndex - 1] == '\n')
-				bEndResponse = TRUE;
-			}
+            memset(buff, 0, MAX_HEADER_SIZE+1);
+            recevlen = ::recv(m_s, buff, MAX_HEADER_SIZE, 0 );  //0 MSG_DONTWAIT  MSG_WAITALL
+            if(recevlen>0){
+                m_ResponseHeader += buff;
+                int strsize = m_ResponseHeader.size();
+                strsize = m_ResponseHeader.length();
+            }
+            if(recevlen<1
+                || recevlen < MAX_HEADER_SIZE){
+                err = ::GetLastError();
+                bEndResponse = TRUE;  
+                break;
+            }
+			
+			//if(nIndex >= 4)
+			//{
+			//	if(m_ResponseHeader[nIndex - 4] == '\r' 
+   //                 && m_ResponseHeader[nIndex - 3] == '\n'
+			//		&& m_ResponseHeader[nIndex - 2] == '\r' 
+   //                 && m_ResponseHeader[nIndex - 1] == '\n')
+			//	bEndResponse = TRUE;
+			//}
+                
 		}
 		m_nResponseHeaderSize = nIndex;
 		m_bResponsed = TRUE;
-	}
+	
 	
 	nLength = m_nResponseHeaderSize;
 	return m_ResponseHeader;
@@ -350,7 +386,7 @@ int CHttpSocket::GetField(const char *szSession, char *szValue, int nMaxLength)
 	if(!m_bResponsed) return -1;
 	
 	CString strRespons;
-	strRespons = m_ResponseHeader;
+    strRespons = m_ResponseHeader.c_str();
 	int nPos = -1;
 	nPos = strRespons.Find(szSession,0);
 	if(nPos != -1)

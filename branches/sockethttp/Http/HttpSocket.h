@@ -6,7 +6,8 @@
 #define AFX_HTTPSOCKET_H__F49A8F82_A933_41A8_AF47_68FBCAC4ADA6__INCLUDED_
 
 #include "winsock2.h"
-#include <afxinet.h>
+//#include <afxinet.h>
+#include <string>
 
 #if _MSC_VER > 1000
 #pragma once
@@ -17,7 +18,7 @@ public:
 	int				GetServerState();						//返回服务器状态码 -1表示不成功
 	int				GetField(const char* szSession,char *szValue,int nMaxLength);	//返回某个域值,-1表示不成功
 	int				GetResponseLine(char *pLine,int nMaxLength);				//获取返回头的一行
-	const char*		GetResponseHeader(int &Length);								//获取完整的返回头
+    std::string		GetResponseHeader();								//获取完整的返回头
 	const char *	FormatRequestHeader(char *pServer,char *pObject,long &Length,
 						char* pCookie=NULL,char *pReferer=NULL,
 						long nFrom=0,long nTo=0,
@@ -28,7 +29,7 @@ public:
 	CHttpSocket();
 	virtual ~CHttpSocket();
 
-	BOOL			SetTimeout(int nTime,int nType=0);
+	BOOL			SetTimeout(int nTime,int nType=0);  //seconds
 	long			Receive(char* pBuffer,long nMaxLength);
 	BOOL			Connect(char* szHostName,int nPort=80);
 	BOOL			Socket();
@@ -38,7 +39,8 @@ public:
 
 protected:	
 	char m_requestheader[1024];		//请求头
-	char m_ResponseHeader[1024];	//回应头
+	//char m_ResponseHeader[1024];	//回应头
+    std::string m_ResponseHeader;
 	int m_port;						//端口
 	char m_ipaddr[256];				//IP地址
 	BOOL m_bConnected;
