@@ -62,11 +62,11 @@ CHttpApp::CHttpApp()
 	err=WSAStartup(wVersion,&WSAData);
 	if(err!=0)
 	{
-		AfxMessageBox("无法装载Socket库.");
+		AfxMessageBox("can't load Socket lib.");
 	}
 	if(LOBYTE( WSAData.wVersion ) != 2)
 	{
-		AfxMessageBox("无法找到合适的Socket库.");
+		AfxMessageBox("can't find right Socket lib.");
 		WSACleanup();
 	}
 }

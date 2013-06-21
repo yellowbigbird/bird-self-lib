@@ -66,7 +66,7 @@ BOOL CHttpSocket::Socket()
 	m_s=socket(PF_INET,SOCK_STREAM,ppe->p_proto);
 	if(m_s==INVALID_SOCKET)
 	{
-		MessageBox(NULL,"socket()º¯ÊýÖ´ÐÐÊ§°Ü!","´íÎó",MB_OK);
+		MessageBox(NULL,"socket() running error.!","Error",MB_OK);
 		return FALSE;
 	}
 
@@ -92,7 +92,7 @@ BOOL CHttpSocket::Connect(char *szHostName,int nPort)
 	m_phostent=gethostbyname(szHostName);
 	if(m_phostent==NULL)
 	{
-		MessageBox(NULL,"gethostbyname()º¯ÊýÖ´ÐÐÊ§°Ü!","´íÎó",MB_OK);
+		MessageBox(NULL,"gethostbyname()ERROR!","error",MB_OK);
 		return FALSE;
 	}
 	
@@ -234,7 +234,7 @@ BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
 
 	if(send(m_s,pRequestHeader,Length,0)==SOCKET_ERROR)
 	{
-		MessageBox(NULL,"send()º¯ÊýÖ´ÐÐÊ§°Ü!","´íÎó",MB_OK);
+		MessageBox(NULL,"send() error.!","Error",MB_OK);
 		return FALSE;
 	}
 	//int nLength;
@@ -265,7 +265,7 @@ BOOL CHttpSocket::CloseSocket()
 	{
 		if(closesocket(m_s)==SOCKET_ERROR)
 		{
-			MessageBox(NULL,"closesocket()º¯ÊýÖ´ÐÐÊ§°Ü!","´íÎó",MB_OK);
+			MessageBox(NULL,"closesocket() Error!","Error",MB_OK);
 			return FALSE;
 		}
 	}
@@ -305,7 +305,7 @@ BOOL CHttpSocket::SetTimeout(int nTime, int nType)
     dwErr=setsockopt(m_s,SOL_SOCKET,nType,(char*)&nTime,sizeof(nTime)); 
 	if(dwErr)
 	{
-		MessageBox(NULL,"setsockopt()º¯ÊýÖ´ÐÐÊ§°Ü!","´íÎó",MB_OK);
+		MessageBox(NULL,"setsockopt() Error!","Error",MB_OK);
 		return FALSE;
 	}
 	return TRUE;

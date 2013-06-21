@@ -168,9 +168,11 @@ int CTestHttpDlg::ThreadFunc()
 	const char *pRequestHeader = NULL;
 	AfxParseURL(GetStrRequest(), dwServiceType, strServer, strObject, nPort);
 	
+    BOOL IFOK = FALSE;
+
 	pRequestHeader = HttpSocket.FormatRequestHeader((LPTSTR)(LPCTSTR)strServer,(LPTSTR)(LPCTSTR)strObject,nLength);	
-	HttpSocket.Socket();
-	HttpSocket.Connect((LPTSTR)(LPCTSTR)strServer, nPort);
+	IFOK = HttpSocket.Socket();
+	IFOK = HttpSocket.Connect((LPTSTR)(LPCTSTR)strServer, nPort);
 
     //set reqestheader
     string strsend;
@@ -254,7 +256,7 @@ bool CTestHttpDlg::WriteFile(CHttpSocket& rHttpSocket, int fileSize)
 		nReceSize = rHttpSocket.Receive(pData,1024);
 		if(nReceSize == 0)
 		{
-			AfxMessageBox("服务器已经关闭连接.");
+			AfxMessageBox("Server has been shut down..");
 			break;
 		}
 		if(nReceSize == -1)
