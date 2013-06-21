@@ -10,6 +10,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#ifndef WINVER
+#define WINVER      0x0500
+#endif
+
+
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 #include <afxwin.h>         // MFC core and standard components
@@ -21,7 +26,8 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 #include "winsock2.h"
 #include "afxinet.h"
-#include "HttpSocket.h"
+
+//#include "HttpSocket.h"
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
