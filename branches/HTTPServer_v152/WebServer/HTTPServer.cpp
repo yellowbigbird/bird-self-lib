@@ -1010,8 +1010,7 @@ UINT __cdecl CHTTPServer::ServiceProc(LPVOID pParam)
 		{
 			if(pSockInf == NULL)
 			{
-				// 发生了未知错误,可能需要重新启动才能解决
-				LOGGER_CERROR(theLogger, _T("服务线程[%d]非正常停止,需要重启服务器才能修复,错误码[%d].\r\n"), ServiceInf.nThreadIndex, GetLastError());
+				LOGGER_CERROR(theLogger, _T("server thread[%d]stopped err, need restart server, err code[%d]\r\n"), ServiceInf.nThreadIndex, GetLastError());
 				break;
 			}
 			else
