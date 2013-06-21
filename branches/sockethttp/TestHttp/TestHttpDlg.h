@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CTestHttpDlg dialog
 #include "TextProgressCtrl.h"
-#include "httpSocket.h"
+#include <httpSocket.h>
 
 class CTestHttpDlg : public CDialog
 {

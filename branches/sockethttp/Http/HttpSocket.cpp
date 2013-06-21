@@ -17,6 +17,9 @@ static char THIS_FILE[]=__FILE__;
 
 //const int c_port = 8100;
 using namespace std;
+
+const char* c_strContentlen = "Content-Length";
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -314,50 +317,52 @@ BOOL CHttpSocket::SetTimeout(int nTime, int nType)
 //获取HTTP请求的返回头
 string CHttpSocket::GetResponseHeader()
 {
-	if(m_bResponsed)
+    if(m_bResponsed)
         return m_ResponseHeader;
-	
-    //int nLength = 0;
-		//char c = 0;
-		int nIndex = 0;
-		BOOL bEndResponse = FALSE;
-        int recevlen = 0 ;
-        DWORD err = 0;
-        char buff[MAX_HEADER_SIZE+1];
-        m_ResponseHeader.clear();
-        
-		while(true)
-		{
-            memset(buff, 0, MAX_HEADER_SIZE+1);
-            recevlen = ::recv(m_s, buff, MAX_HEADER_SIZE, 0 );  //0 MSG_DONTWAIT  MSG_WAITALL
-            if(recevlen>0){
-                m_ResponseHeader += buff;
-                int strsize = m_ResponseHeader.size();
-                strsize = m_ResponseHeader.length();
-            }
-            if(recevlen<1
-                || recevlen < MAX_HEADER_SIZE){
+
+    int nIndex = 0;
+    BOOL bEndResponse = FALSE;
+    int recevlen = 0 ;
+    DWORD err = 0;
+    const int buffersize = 512;
+    char buff[buffersize+1];
+    m_ResponseHeader.clear();
+
+    while(true)
+    {
+        memset(buff, 0, buffersize+1);
+        recevlen = ::recv(m_s, buff, buffersize, 0 );  //0 MSG_DONTWAIT  MSG_WAITALL
+        if(recevlen>0){
+            m_ResponseHeader += buff;
+            int strsize = m_ResponseHeader.size();
+            strsize = m_ResponseHeader.length();
+        }
+        if(recevlen<1
+            || recevlen < buffersize){
                 err = ::GetLastError();
                 bEndResponse = TRUE;  
                 break;
-            }
-			
-			//if(nIndex >= 4)
-			//{
-			//	if(m_ResponseHeader[nIndex - 4] == '\r' 
-   //                 && m_ResponseHeader[nIndex - 3] == '\n'
-			//		&& m_ResponseHeader[nIndex - 2] == '\r' 
-   //                 && m_ResponseHeader[nIndex - 1] == '\n')
-			//	bEndResponse = TRUE;
-			//}
-                
-		}
-		m_nResponseHeaderSize = m_ResponseHeader.length();
-		m_bResponsed = TRUE;
-	
-	
-	//nLength = m_nResponseHeaderSize;
-	return m_ResponseHeader;
+        }
+
+        //if(nIndex >= 4)
+        //{
+        //	if(m_ResponseHeader[nIndex - 4] == '\r' 
+        //                 && m_ResponseHeader[nIndex - 3] == '\n'
+        //		&& m_ResponseHeader[nIndex - 2] == '\r' 
+        //                 && m_ResponseHeader[nIndex - 1] == '\n')
+        //	bEndResponse = TRUE;
+        //}
+
+    }
+    m_nResponseHeaderSize = m_ResponseHeader.length();
+    m_bResponsed = TRUE;
+
+    int len = 0;
+    bool ifget = GetContentLength(len);
+
+
+    //nLength = m_nResponseHeaderSize;
+    return m_ResponseHeader;
 }
 
 //返回HTTP响应头中的一行.
@@ -380,10 +385,14 @@ int CHttpSocket::GetResponseLine(char *pLine, int nMaxLength)
 	return nIndex;
 }
 
+//return -1 =error.
 int CHttpSocket::GetField(const char *szSession, char *szValue, int nMaxLength)
 {
 	//取得某个域值
-	if(!m_bResponsed) return -1;
+	if(!m_bResponsed)
+        return -1;
+
+    memset(szValue, 0, nMaxLength);
 	
 	CString strRespons;
     strRespons = m_ResponseHeader.c_str();
@@ -402,6 +411,37 @@ int CHttpSocket::GetField(const char *szSession, char *szValue, int nMaxLength)
 	{
 		return -1;
 	}
+}
+
+bool CHttpSocket::GetContentLength(int& len)
+{
+    bool ifok = false;
+    len = 0;
+
+    const int c_valuelen = 30;
+    char strValue[c_valuelen];
+	int ret = GetField(c_strContentlen, strValue,c_valuelen);
+    if(-1 == ret){
+        //no content-length
+        const string c_strrn = "\r\n";
+        int pos = m_ResponseHeader.find(c_strrn + c_strrn);
+        if(pos< 0 || pos >= (int)m_ResponseHeader.length())
+            return ifok;
+        string strSub = m_ResponseHeader.substr(pos + c_strrn.length()*2 );
+        pos = strSub.find(c_strrn);
+        if(pos< 0 || pos >= (int)m_ResponseHeader.length())
+            return ifok;
+        string strDataLen = strSub.substr(0, pos);
+        string strData = strSub.substr(pos +c_strrn.length() );
+
+        ifok = true;
+    }
+    else{
+        len = atoi(strValue);
+        ifok = true;
+    }
+
+    return ifok;
 }
 
 int CHttpSocket::GetServerState()

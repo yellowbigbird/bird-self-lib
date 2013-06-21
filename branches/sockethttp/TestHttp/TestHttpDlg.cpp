@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 
 const CString c_strStart = 
 //_T("http://gaia.uat.karmalab.net:8100");
-_T("http://gaia.uat.karmalab.net:8100/hotels/2/features?within=0km&type=region&verbose=3&cid=demo&apk=demo");
+_T("http://gaia.uat.karmalab.net:8100/hotels/5/features?within=0km&type=region&verbose=3&cid=demo&apk=demo");
 //_T("http://www.baidu.com");
 const CString c_strLog = _T("d:\\1.log");
 //_T("");
@@ -176,27 +176,27 @@ int CTestHttpDlg::ThreadFunc()
 
     //set reqestheader
     string strsend;
-    if(1)
-    {
-        strsend = "GET http://gaia.uat.karmalab.net:8100/hotels/1/features?within=0km&type=region&verbose=3&apk=demo&cid=demo HTTP/1.1";   strsend+="\r\n";
-        strsend+="Host: gaia.uat.karmalab.net:8100";   strsend+="\r\n";
-        strsend+="Connection: keep-alive";   strsend+="\r\n";
-        //strsend+="Cache-Control: max-age=0";   strsend+="\r\n";
-        strsend+="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";   strsend+="\r\n";
-        strsend+="User-Agent: Mozilla/5.0 (Windows NT 5.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36";   strsend+="\r\n";
-        strsend+="Accept-Encoding: gzip,deflate,sdch";   strsend+="\r\n";
-        strsend+="Accept-Language: zh-CN,zh;q=0.8";   strsend+="\r\n";
-    }
-    else{
-        strsend = "GET /hotels/1/features?within=0km&type=region&verbose=3&apk=demo&cid=demo HTTP/1.1";   strsend+="\r\n";
-        strsend+="Host: gaia.uat.karmalab.net:8100";   strsend+="\r\n";
-        strsend+="Connection: keep-alive";   strsend+="\r\n";
-        //strsend+="Cache-Control: max-age=0";   strsend+="\r\n";
-        strsend+="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";   strsend+="\r\n";
-        strsend+="User-Agent: Mozilla/5.0 (Windows NT 5.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36";   strsend+="\r\n";
-        strsend+="Accept-Encoding: gzip,deflate,sdch";   strsend+="\r\n";
-        strsend+="Accept-Language: zh-CN,zh;q=0.8";   strsend+="\r\n";
-    }
+    //if(1)
+    //{
+    //    strsend = "GET http://gaia.uat.karmalab.net:8100/hotels/1/features?within=0km&type=region&verbose=3&apk=demo&cid=demo HTTP/1.1";   strsend+="\r\n";
+    //    strsend+="Host: gaia.uat.karmalab.net:8100";   strsend+="\r\n";
+    //    strsend+="Connection: keep-alive";   strsend+="\r\n";
+    //    //strsend+="Cache-Control: max-age=0";   strsend+="\r\n";
+    //    strsend+="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";   strsend+="\r\n";
+    //    strsend+="User-Agent: Mozilla/5.0 (Windows NT 5.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36";   strsend+="\r\n";
+    //    strsend+="Accept-Encoding: gzip,deflate,sdch";   strsend+="\r\n";
+    //    strsend+="Accept-Language: zh-CN,zh;q=0.8";   strsend+="\r\n";
+    //}
+    //else{
+    //    strsend = "GET /hotels/1/features?within=0km&type=region&verbose=3&apk=demo&cid=demo HTTP/1.1";   strsend+="\r\n";
+    //    strsend+="Host: gaia.uat.karmalab.net:8100";   strsend+="\r\n";
+    //    strsend+="Connection: keep-alive";   strsend+="\r\n";
+    //    //strsend+="Cache-Control: max-age=0";   strsend+="\r\n";
+    //    strsend+="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";   strsend+="\r\n";
+    //    strsend+="User-Agent: Mozilla/5.0 (Windows NT 5.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36";   strsend+="\r\n";
+    //    strsend+="Accept-Encoding: gzip,deflate,sdch";   strsend+="\r\n";
+    //    strsend+="Accept-Language: zh-CN,zh;q=0.8";   strsend+="\r\n";
+    //}
 
     //HttpSocket.SendRequest(strsend.c_str(), strsend.length() );
 	HttpSocket.SetTimeout(10,0);
@@ -217,10 +217,12 @@ int CTestHttpDlg::ThreadFunc()
 			m_ctrlList.AddString(szLine);
 		}
 	}
-	char szValue[30];
-	HttpSocket.GetField("Content-Length",szValue,30);
+	//char szValue[30];
+	//HttpSocket.GetField("Content-Length",szValue,30);
+    int nFileSize = 0;
+    bool ifok = HttpSocket.GetContentLength(nFileSize);
 	int nSvrState = HttpSocket.GetServerState();
-	int nFileSize = atoi(szValue);
+	//int nFileSize = atoi(szValue);
 	m_ctrlProgress.ShowWindow(SW_SHOW);
 	m_ctrlProgress.SetRange(0,nFileSize / 1024);
 	

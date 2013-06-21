@@ -15,6 +15,9 @@
 class _declspec(dllexport) CHttpSocket  
 {
 public:
+    CHttpSocket();
+	virtual ~CHttpSocket();
+
 	int				GetServerState();						//返回服务器状态码 -1表示不成功
 	int				GetField(const char* szSession,char *szValue,int nMaxLength);	//返回某个域值,-1表示不成功
 	int				GetResponseLine(char *pLine,int nMaxLength);				//获取返回头的一行
@@ -26,8 +29,6 @@ public:
 	int				GetRequestHeader(char *pHeader,int nMaxLength) const;
 	BOOL			SendRequest(const char* pRequestHeader = NULL,long Length = 0);
 	
-	CHttpSocket();
-	virtual ~CHttpSocket();
 
 	BOOL			SetTimeout(int nTime,int nType=0);  //seconds
 	long			Receive(char* pBuffer,long nMaxLength);
@@ -35,6 +36,7 @@ public:
 	BOOL			Socket();
 	BOOL			CloseSocket();
 
+    bool            GetContentLength(int& len);
 
 
 protected:	
