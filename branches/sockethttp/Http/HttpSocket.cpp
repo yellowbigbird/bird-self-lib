@@ -388,25 +388,24 @@ int CHttpSocket::GetResponseLine(char *pLine, int nMaxLength)
 }
 
 //return -1 =error.
-int CHttpSocket::GetField(const char *szSession, char *szValue, int nMaxLength)
+int CHttpSocket::GetField(const char *szSession,  std::string& strValue)
 {
-	//取得某个域值
 	if(!m_bResponsed)
         return -1;
 
-    memset(szValue, 0, nMaxLength);
+    //memset(szValue, 0, nMaxLength);
 	
-	CString strRespons;
-    strRespons = m_ResponseHeader.c_str();
+	string strRespons;
+    strRespons = m_ResponseHeader;
 	int nPos = -1;
-	nPos = strRespons.Find(szSession,0);
+	nPos = strRespons.find(szSession,0);
 	if(nPos != -1)
 	{
 		nPos += strlen(szSession);
 		nPos += 2;
-		int nCr = strRespons.Find("\r\n",nPos);
-		CString strValue = strRespons.Mid(nPos,nCr - nPos);
-		strcpy(szValue,strValue);
+		int nCr = strRespons.find("\r\n", nPos);
+		strValue = strRespons.substr(nPos,nCr - nPos);
+		//strcpy(szValue,strValue);
 		return (nCr - nPos);
 	}
 	else
@@ -421,8 +420,8 @@ bool CHttpSocket::ParseContent()
     int datalen = 0;
 
     const int c_valuelen = 30;
-    char strValue[c_valuelen];
-	int ret = GetField(c_strContentlen, strValue,c_valuelen);
+    string strValue; //[c_valuelen];
+	int ret = GetField(c_strContentlen, strValue);
 
     if(-1 == ret){
         //no content-length
@@ -446,7 +445,7 @@ bool CHttpSocket::ParseContent()
         ifok = true;
     }
     else{
-        datalen = atoi(strValue);
+        datalen = atoi(strValue.c_str() );
         ifok = true;
     }
 
