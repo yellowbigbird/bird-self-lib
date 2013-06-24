@@ -36,13 +36,17 @@ public:
 	BOOL			Socket();
 	BOOL			CloseSocket();
 
-    bool            GetContentLength(int& len);
+    const std::string&      GetContent() const;
+    bool            ParseContent();
+    bool            GetValueFromHexString(const std::string& str, int& value) const;
 
 
 protected:	
 	char m_requestheader[1024];		//请求头
 	//char m_ResponseHeader[1024];	//回应头
-    std::string m_ResponseHeader;
+    std::string     m_ResponseHeader;
+    std::string     m_strContent;
+
 	int m_port;						//端口
 	char m_ipaddr[256];				//IP地址
 	BOOL m_bConnected;

@@ -240,6 +240,8 @@ BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
 		MessageBox(NULL,"send() error.!","Error",MB_OK);
 		return FALSE;
 	}
+    ::Sleep(400); //get full response,
+
 	//int nLength;
 	GetResponseHeader();
 	return TRUE;
@@ -327,9 +329,11 @@ string CHttpSocket::GetResponseHeader()
     const int buffersize = 512;
     char buff[buffersize+1];
     m_ResponseHeader.clear();
+    m_strContent.clear();
 
     while(true)
     {
+        ::Sleep(1);
         memset(buff, 0, buffersize+1);
         recevlen = ::recv(m_s, buff, buffersize, 0 );  //0 MSG_DONTWAIT  MSG_WAITALL
         if(recevlen>0){
@@ -357,9 +361,7 @@ string CHttpSocket::GetResponseHeader()
     m_nResponseHeaderSize = m_ResponseHeader.length();
     m_bResponsed = TRUE;
 
-    int len = 0;
-    bool ifget = GetContentLength(len);
-
+    bool ifget = ParseContent();
 
     //nLength = m_nResponseHeaderSize;
     return m_ResponseHeader;
@@ -413,14 +415,15 @@ int CHttpSocket::GetField(const char *szSession, char *szValue, int nMaxLength)
 	}
 }
 
-bool CHttpSocket::GetContentLength(int& len)
+bool CHttpSocket::ParseContent()
 {
     bool ifok = false;
-    len = 0;
+    int datalen = 0;
 
     const int c_valuelen = 30;
     char strValue[c_valuelen];
 	int ret = GetField(c_strContentlen, strValue,c_valuelen);
+
     if(-1 == ret){
         //no content-length
         const string c_strrn = "\r\n";
@@ -432,16 +435,62 @@ bool CHttpSocket::GetContentLength(int& len)
         if(pos< 0 || pos >= (int)m_ResponseHeader.length())
             return ifok;
         string strDataLen = strSub.substr(0, pos);
-        string strData = strSub.substr(pos +c_strrn.length() );
+        //int datalen = 0;
+        ifok = GetValueFromHexString(strDataLen, datalen);
+        //string strData;
+        if(ifok)
+            m_strContent = strSub.substr(pos +c_strrn.length(), datalen );
+        else
+            m_strContent = strSub.substr(pos +c_strrn.length() );
 
         ifok = true;
     }
     else{
-        len = atoi(strValue);
+        datalen = atoi(strValue);
         ifok = true;
     }
 
     return ifok;
+}
+
+const std::string&  CHttpSocket::GetContent() const
+{
+    return m_strContent;
+}
+
+bool  CHttpSocket::GetValueFromHexString(const string& str, int& value) const
+{
+    const int strlen0 = str.length();
+    char cc = 0;
+    bool ifErr = false;
+    value = 0;
+    int curValue = 0;
+    //for(int idx= strlen0-1, pos = 0; idx>-1; idx--, pos++)
+    for(int idx = 0; idx< strlen0; idx++)
+    {
+        cc = str[idx];
+        if(cc >= '0' && cc <= '9')
+        {
+            curValue = cc - '0';
+        }
+        else if(cc >= 'a' && cc <= 'f')
+        {
+            curValue = cc - 'a'+ 10;
+        }
+        else if(cc >= 'A' && cc <= 'F')
+        {
+            curValue = cc - 'A' + 10;
+        }
+        else{
+            ifErr = true;
+            continue;
+        }
+        value = value* 16 + curValue;
+    }
+    if(ifErr)
+        return false;
+    
+    return true;
 }
 
 int CHttpSocket::GetServerState()

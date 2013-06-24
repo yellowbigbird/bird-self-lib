@@ -246,6 +246,10 @@
 				>
 			</File>
 			<File
+				RelativePath="Http.h"
+				>
+			</File>
+			<File
 				RelativePath="Http.rc"
 				>
 				<FileConfiguration
@@ -286,6 +290,19 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="HttpSocket.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl"
+			>
+			<File
+				RelativePath="Resource.h"
+				>
+			</File>
+			<File
 				RelativePath="StdAfx.cpp"
 				>
 				<FileConfiguration
@@ -306,23 +323,6 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl"
-			>
-			<File
-				RelativePath="Http.h"
-				>
-			</File>
-			<File
-				RelativePath="HttpSocket.h"
-				>
-			</File>
-			<File
-				RelativePath="Resource.h"
-				>
 			</File>
 			<File
 				RelativePath="StdAfx.h"
