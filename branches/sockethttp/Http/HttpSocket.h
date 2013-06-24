@@ -19,7 +19,7 @@ public:
 	virtual ~CHttpSocket();
 
 	int				GetServerState();						//返回服务器状态码 -1表示不成功
-	int				GetField(const char* szSession,char *szValue,int nMaxLength);	//返回某个域值,-1表示不成功
+    int				GetField(const char* szSession, std::string& strValue);	//返回某个域值,-1表示不成功
 	int				GetResponseLine(char *pLine,int nMaxLength);				//获取返回头的一行
     std::string		GetResponseHeader();								//获取完整的返回头
 	const char *	FormatRequestHeader(char *pServer,char *pObject,long &Length,
