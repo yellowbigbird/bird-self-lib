@@ -11,5 +11,5 @@ namespace UtilString{
   std::string ConvertWideCharToMultiByte(const std::wstring& wstrSrc);
   std::string ConvertWideCharToMultiByteUTF8(const std::wstring& wstrSrc);
 
-  bool  ConvertStringToHex(const std::string& str, int& value) ;
+  bool  ConvertHexStringToValue(const std::string& str, int& value) ;
 }

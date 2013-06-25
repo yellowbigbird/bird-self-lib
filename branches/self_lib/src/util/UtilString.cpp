@@ -118,7 +118,7 @@ namespace UtilString{
     }
 
 
-    bool  ConvertStringToHex(const string& str, int& value) 
+    bool  ConvertHexStringToValue(const string& str, int& value) 
     {
         const int strlen0 = str.length();
         char cc = 0;
