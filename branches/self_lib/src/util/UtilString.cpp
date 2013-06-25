@@ -117,4 +117,40 @@ namespace UtilString{
         return strRet;
     }
 
+
+    bool  ConvertStringToHex(const string& str, int& value) 
+    {
+        const int strlen0 = str.length();
+        char cc = 0;
+        bool ifErr = false;
+        value = 0;
+        int curValue = 0;
+        //for(int idx= strlen0-1, pos = 0; idx>-1; idx--, pos++)
+        for(int idx = 0; idx< strlen0; idx++)
+        {
+            cc = str[idx];
+            if(cc >= '0' && cc <= '9')
+            {
+                curValue = cc - '0';
+            }
+            else if(cc >= 'a' && cc <= 'f')
+            {
+                curValue = cc - 'a'+ 10;
+            }
+            else if(cc >= 'A' && cc <= 'F')
+            {
+                curValue = cc - 'A' + 10;
+            }
+            else{
+                ifErr = true;
+                continue;
+            }
+            value = value* 16 + curValue;
+        }
+        if(ifErr)
+            return false;
+
+        return true;
+    }
+
 }; //namespace
