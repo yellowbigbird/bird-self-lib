@@ -26,16 +26,16 @@ public:
 	
 	//}}AFX_DATA
     virtual BOOL OnInitDialog();
-    virtual void OnOK();
+    //virtual void OnOK();
 
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-
+	afx_msg void OnBnClickedBtnReq();
+	afx_msg void OnBnClickedBtnSend();
 
     bool WriteFile(CHttpSocket& rHttpSocket, int fileSize);
 	
-
     CString GetStrRequest() const{ return m_strRequest; } 
 
     int ThreadFunc();
@@ -53,17 +53,13 @@ public:
 	CListBox	m_ctrlList;
 	CString	m_strResponse;
 	CString	m_strRequest;
+    CString m_strServer;
+    CString m_strObject;
+    WORD    m_port;
 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CTestHttpDlg)
-	
-	//}}AFX_MSG
-public:
-	afx_msg void OnBnClickedBtnReq();
-	afx_msg void OnBnClickedBtnSend();
 };
 
 //{{AFX_INSERT_LOCATION}}
