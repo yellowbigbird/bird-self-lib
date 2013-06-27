@@ -21,12 +21,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 const CString c_strStart = 
-//_T("http://gaia.uat.karmalab.net:8100");
 _T("http://gaia.uat.karmalab.net:8100/hotels/5/features?within=0km&type=region&verbose=3&cid=demo&apk=demo");
 //_T("http://www.baidu.com");
 const CString c_strLog = _T("d:\\1.log");
-//_T("");
-//_T("http://ambm.ku.net");
+
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
 
@@ -36,12 +34,10 @@ const CString c_strLog = _T("d:\\1.log");
 CTestHttpDlg::CTestHttpDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CTestHttpDlg::IDD, pParent)
     ,m_port(0)
+    ,m_strUrl(c_strStart)
 {
-	//{{AFX_DATA_INIT(CTestHttpDlg)
 	m_strResponse = _T("");
-	m_strRequest = c_strStart;
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -50,11 +46,13 @@ void CTestHttpDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTestHttpDlg)
 	DDX_Control(pDX, IDC_STATIC_SPEED, m_stcSpeed);
-	DDX_Control(pDX, IDC_EDIT_URL, m_edtEditRequest);
+	DDX_Control(pDX, IDC_EDIT_REQUEST, m_editRequest);
 	DDX_Control(pDX, IDC_PROGRESS1, m_ctrlProgress);
-	DDX_Control(pDX, IDC_LIST1, m_ctrlList);
-	DDX_Text(pDX, IDC_EDIT1, m_strResponse);
-	DDX_Text(pDX, IDC_EDIT2, m_strRequest);
+	DDX_Control(pDX, IDC_LIST_RESPONSE, m_ctrlList);
+
+	DDX_Text(pDX, IDC_EDIT_REQUEST, m_strResponse);
+	DDX_Text(pDX, IDC_EDIT_URL, m_strUrl);
+    DDX_Text(pDX, IDC_EDIT_REQUEST, m_strRequest);
 	//}}AFX_DATA_MAP
 }
 
@@ -189,9 +187,10 @@ int CTestHttpDlg::ThreadFunc()
 
     //set reqestheader
     string strsend = m_strRequest;      
+    sock.SetRequest(strsend);
     
-    sock.SendRequest(strsend.c_str(), strsend.length() );
-    //sock.SendRequest( );
+    //sock.SendRequest(strsend.c_str(), strsend.length() );
+    sock.SendRequest( );
 
 	int nLineSize = 0;
 
@@ -233,7 +232,7 @@ int CTestHttpDlg::ThreadFunc()
 	m_ctrlProgress.SetRange(0,nFileSize / 1024);
 	
 	
-    bool ifwriteok = this->WriteFile(sock, nFileSize);
+    //bool ifwriteok = this->WriteFile(sock, nFileSize);
 	
 	m_ctrlProgress.ShowWindow(SW_HIDE);
 	m_ctrlProgress.SetPos(0);
@@ -295,7 +294,7 @@ void CTestHttpDlg::OnBnClickedBtnReq()
 
     const char *pRequestHeader = NULL;
     DWORD dwServiceType = 0;
-	AfxParseURL(GetStrRequest(), dwServiceType, m_strServer, m_strObject, m_port);
+	AfxParseURL(m_strUrl, dwServiceType, m_strServer, m_strObject, m_port);
 	
     BOOL IFOK = FALSE;
 	long nLength = 0;
@@ -303,7 +302,7 @@ void CTestHttpDlg::OnBnClickedBtnReq()
     CHttpSocket sock; 
 	pRequestHeader = sock.FormatRequestHeader((LPTSTR)(LPCTSTR)m_strServer,(LPTSTR)(LPCTSTR)m_strObject,nLength);	
     
-	m_edtEditRequest.SetWindowText(pRequestHeader);
+	m_editRequest.SetWindowText(pRequestHeader);
 }
 
 void CTestHttpDlg::OnBnClickedBtnSend()

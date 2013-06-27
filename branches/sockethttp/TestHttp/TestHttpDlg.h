@@ -36,7 +36,7 @@ public:
 
     bool WriteFile(CHttpSocket& rHttpSocket, int fileSize);
 	
-    CString GetStrRequest() const{ return m_strRequest; } 
+    //CString GetStrUrl() const{ return m_strUrl; } 
 
     int ThreadFunc();
 
@@ -47,14 +47,15 @@ protected:
 	//}}AFX_VIRTUAL
 
 public:    
-	CEdit	m_edtEditRequest;
+	CEdit	m_editRequest;
     CStatic	m_stcSpeed;
 	CTextProgressCtrl	m_ctrlProgress;
 	CListBox	m_ctrlList;
 	CString	m_strResponse;
-	CString	m_strRequest;
+	CString	m_strUrl;
     CString m_strServer;
     CString m_strObject;
+    CString m_strRequest;
     WORD    m_port;
 
 protected:

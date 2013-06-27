@@ -222,6 +222,11 @@ const char *CHttpSocket::FormatRequestHeader(char *pServer,char *pObject, long &
     return m_requestheader.c_str();
 }
 
+void  CHttpSocket::SetRequest(const std::string& str)
+{
+    m_requestheader = str;
+}
+
 ///∑¢ÀÕ«Î«ÛÕ∑
 BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
 {

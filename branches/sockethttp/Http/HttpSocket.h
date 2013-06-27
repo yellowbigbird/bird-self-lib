@@ -27,6 +27,7 @@ public:
 						long nFrom=0,long nTo=0,
 						int nServerType=0);									//格式化请求头
 	int				GetRequestHeader(char *pHeader,int nMaxLength) const;
+    void            SetRequest(const std::string& str);
 	BOOL			SendRequest(const char* pRequestHeader = NULL,long Length = 0);
 	
 
