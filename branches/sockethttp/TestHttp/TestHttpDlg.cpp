@@ -9,9 +9,9 @@
 #include <vector>
 using namespace std;
 
-#define JSON_DEBUG
-#include "../libjson/libjson.h"
-#include "../libjson/source/JSONNode.h"
+//#define JSON_DEBUG
+//#include "../libjson/libjson.h"
+//#include "../libjson/source/JSONNode.h"
 
 
 #ifdef _DEBUG
@@ -35,6 +35,7 @@ const CString c_strLog = _T("d:\\1.log");
 
 CTestHttpDlg::CTestHttpDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CTestHttpDlg::IDD, pParent)
+    ,m_port(0)
 {
 	//{{AFX_DATA_INIT(CTestHttpDlg)
 	m_strResponse = _T("");
@@ -166,28 +167,32 @@ int CTestHttpDlg::ThreadFunc()
 {
 	//CFileDialog FileDlg(FALSE);
     
-	CHttpSocket HttpSocket;
-	CString strServer,strObject;
-	unsigned short nPort;
-	DWORD dwServiceType;
-	long nLength;
-	const char *pRequestHeader = NULL;
-	AfxParseURL(GetStrRequest(), dwServiceType, strServer, strObject, nPort);
+	CHttpSocket sock;
+		
 	
     BOOL IFOK = FALSE;
 
-	pRequestHeader = HttpSocket.FormatRequestHeader((LPTSTR)(LPCTSTR)strServer,(LPTSTR)(LPCTSTR)strObject,nLength);	
-	IFOK = HttpSocket.Socket();
-	IFOK = HttpSocket.Connect((LPTSTR)(LPCTSTR)strServer, nPort);
+	IFOK = sock.Socket();    
+    if(!IFOK)
+    {
+        ASSERT(FALSE);
+        return 0;
+    }
+
+	sock.SetTimeout(10,0);
+	IFOK = sock.Connect((LPTSTR)(LPCTSTR)m_strServer, m_port);
+    if(!IFOK)
+    {
+        ASSERT(FALSE);
+        return 0;
+    }
 
     //set reqestheader
-    string strsend;
+    string strsend = m_strRequest;      
     
-    //HttpSocket.SendRequest(strsend.c_str(), strsend.length() );
-	HttpSocket.SetTimeout(10,0);
-    HttpSocket.SendRequest( );
+    sock.SendRequest(strsend.c_str(), strsend.length() );
+    //sock.SendRequest( );
 
-	m_edtEditRequest.SetWindowText(pRequestHeader);
 	int nLineSize = 0;
 
 	char szLine[256+1];
@@ -196,7 +201,7 @@ int CTestHttpDlg::ThreadFunc()
     m_ctrlList.ResetContent();
 	while(nLineSize != -1)
 	{
-		nLineSize = HttpSocket.GetResponseLine(szLine,256);
+		nLineSize = sock.GetResponseLine(szLine,256);
 		if(nLineSize > -1)
 		{
 			szLine[nLineSize] = '\0';
@@ -206,35 +211,37 @@ int CTestHttpDlg::ThreadFunc()
 	//char szValue[30];
 	//HttpSocket.GetField("Content-Length",szValue,30);
     
-    string strContent = HttpSocket.GetContent();
+    string strContent = sock.GetContent();
     int pos = strContent.find("[");    
     string strJson = strContent.substr(pos + 1, strContent.length()-2 );
     int nFileSize = strContent.length();
 
     if(strJson.length() ){
-        JSONNode* node = (JSONNode*)json_parse(strJson.c_str() );
-        if(!node)
-            return 0;
-        char jsontype = json_type(node);
-        if(JSON_NODE == jsontype)
-        {}
-        int nodesize = json_size(node);
-        json_char * res = json_as_string(json_at(node, 0));
+        //JSONNode* node = (JSONNode*)json_parse(strJson.c_str() );
+        //if(!node)
+        //    return 0;
+        //char jsontype = json_type(node);
+        //if(JSON_NODE == jsontype)
+        //{}
+        //int nodesize = json_size(node);
+        //json_char * res = json_as_string(json_at(node, 0));
     }
     //bool ifok = HttpSocket.GetContentLength(nFileSize);
-	int nSvrState = HttpSocket.GetServerState();
+	int nSvrState = sock.GetServerState();
 	//int nFileSize = atoi(szValue);
 	m_ctrlProgress.ShowWindow(SW_SHOW);
 	m_ctrlProgress.SetRange(0,nFileSize / 1024);
 	
 	
-    bool ifwriteok = this->WriteFile(HttpSocket, nFileSize);
+    bool ifwriteok = this->WriteFile(sock, nFileSize);
 	
 	m_ctrlProgress.ShowWindow(SW_HIDE);
 	m_ctrlProgress.SetPos(0);
 
     string sdf;
     sdf.push_back('d');
+
+    sock.CloseSocket();
 
 	return 0;
 }
@@ -282,18 +289,27 @@ bool CTestHttpDlg::WriteFile(CHttpSocket& rHttpSocket, int fileSize)
     return true;
 }
 
-void CTestHttpDlg::OnSend() 
-{
-	UpdateData();
-	AfxBeginThread(DownloadThread,(void *)this);
-}
-
 void CTestHttpDlg::OnBnClickedBtnReq()
 {
-	// TODO: Add your control notification handler code here
+    UpdateData(); //control to value
+
+    const char *pRequestHeader = NULL;
+    DWORD dwServiceType = 0;
+	AfxParseURL(GetStrRequest(), dwServiceType, m_strServer, m_strObject, m_port);
+	
+    BOOL IFOK = FALSE;
+	long nLength = 0;
+
+    CHttpSocket sock; 
+	pRequestHeader = sock.FormatRequestHeader((LPTSTR)(LPCTSTR)m_strServer,(LPTSTR)(LPCTSTR)m_strObject,nLength);	
+    
+	m_edtEditRequest.SetWindowText(pRequestHeader);
 }
 
 void CTestHttpDlg::OnBnClickedBtnSend()
-{
-	// TODO: Add your control notification handler code here
+{    
+	UpdateData(TRUE);
+
+    m_strRequest;
+	AfxBeginThread(DownloadThread,(void *)this);
 }
