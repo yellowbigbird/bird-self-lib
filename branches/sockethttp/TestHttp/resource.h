@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by TestHttp.rc
 //
 #define IDM_ABOUTBOX                    0x0010
@@ -7,9 +7,12 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_TESTHTTP_DIALOG             102
 #define IDR_MAINFRAME                   128
-#define IDC_EDIT1                       1000
-#define IDC_LIST1                       1001
-#define IDC_EDIT2                       1002
+//#define IDC_EDIT1                       1000
+#define IDC_EDIT_REQUEST                1000
+//#define IDC_LIST1                       1001
+#define IDC_LIST_RESPONSE               1001
+//#define IDC_EDIT2                       1002
+#define IDC_EDIT_URL                    1002
 #define IDC_PROGRESS1                   1003
 #define IDC_STATIC_SPEED                1004
 #define IDC_BTN_REQ                     1005
