@@ -50,7 +50,7 @@ void CTestHttpDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTestHttpDlg)
 	DDX_Control(pDX, IDC_STATIC_SPEED, m_stcSpeed);
-	DDX_Control(pDX, IDC_EDIT1, m_edtEditRequest);
+	DDX_Control(pDX, IDC_EDIT_URL, m_edtEditRequest);
 	DDX_Control(pDX, IDC_PROGRESS1, m_ctrlProgress);
 	DDX_Control(pDX, IDC_LIST1, m_ctrlList);
 	DDX_Text(pDX, IDC_EDIT1, m_strResponse);
