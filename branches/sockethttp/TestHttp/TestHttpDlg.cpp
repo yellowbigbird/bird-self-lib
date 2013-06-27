@@ -63,6 +63,8 @@ BEGIN_MESSAGE_MAP(CTestHttpDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BTN_REQ, &CTestHttpDlg::OnBnClickedBtnReq)
+	ON_BN_CLICKED(IDC_BTN_SEND, &CTestHttpDlg::OnBnClickedBtnSend)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -284,4 +286,14 @@ void CTestHttpDlg::OnSend()
 {
 	UpdateData();
 	AfxBeginThread(DownloadThread,(void *)this);
+}
+
+void CTestHttpDlg::OnBnClickedBtnReq()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CTestHttpDlg::OnBnClickedBtnSend()
+{
+	// TODO: Add your control notification handler code here
 }

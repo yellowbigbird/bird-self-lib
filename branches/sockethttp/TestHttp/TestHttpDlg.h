@@ -61,6 +61,9 @@ protected:
 	//{{AFX_MSG(CTestHttpDlg)
 	
 	//}}AFX_MSG
+public:
+	afx_msg void OnBnClickedBtnReq();
+	afx_msg void OnBnClickedBtnSend();
 };
 
 //{{AFX_INSERT_LOCATION}}
