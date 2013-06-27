@@ -26,11 +26,15 @@ public:
 	
 	//}}AFX_DATA
     virtual BOOL OnInitDialog();
+    virtual void OnOK();
+
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+
+
     bool WriteFile(CHttpSocket& rHttpSocket, int fileSize);
-	virtual void OnOK();
+	
 
     CString GetStrRequest() const{ return m_strRequest; } 
 
@@ -43,7 +47,7 @@ protected:
 	//}}AFX_VIRTUAL
 
 public:    
-	CEdit	m_edtEdit1;
+	CEdit	m_edtEditRequest;
     CStatic	m_stcSpeed;
 	CTextProgressCtrl	m_ctrlProgress;
 	CListBox	m_ctrlList;

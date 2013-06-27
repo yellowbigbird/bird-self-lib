@@ -42,8 +42,9 @@ public:
 
 
 protected:	
-	char m_requestheader[1024];		//请求头
-	//char m_ResponseHeader[1024];	//回应头
+	//char m_requestheader[1024];		
+	//char m_ResponseHeader[1024];	
+    std::string     m_requestheader;
     std::string     m_ResponseHeader;
     std::string     m_strContent;
 

@@ -12,6 +12,8 @@
 #define IDC_EDIT2                       1002
 #define IDC_PROGRESS1                   1003
 #define IDC_STATIC_SPEED                1004
+#define IDC_BTN_REQ                     1005
+#define IDC_BTN_SEND                    1006
 
 // Next default values for new objects
 // 

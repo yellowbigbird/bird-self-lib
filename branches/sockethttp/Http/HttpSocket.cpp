@@ -33,7 +33,7 @@ CHttpSocket::CHttpSocket()
 
 	for(int i=0;i<256;i++)
 		m_ipaddr[i]='\0';
-	memset(m_requestheader,0,MAX_HEADER_SIZE);
+	//memset(m_requestheader,0,MAX_HEADER_SIZE);
 	//memset(m_ResponseHeader,0,MAXHEADERSIZE);
 
 	m_nCurIndex = 0;		//
@@ -158,70 +158,68 @@ const char *CHttpSocket::FormatRequestHeader(char *pServer,char *pObject, long &
 									  long nTo,int nServerType)
 {
 	char szPort[10];
-	char szTemp[20];
+	//char szTemp[20];
 	sprintf(szPort,"%d",m_port);
-	memset(m_requestheader,'\0',1024);
+
+    m_requestheader = "";
 
 	///第1行:方法,请求的路径,版本
-	strcat(m_requestheader,"GET ");
-	strcat(m_requestheader,pObject);
-	strcat(m_requestheader," HTTP/1.1");
-    strcat(m_requestheader,"\r\n");
+    m_requestheader += "GET ";
+    m_requestheader += pObject;
+    //m_requestheader += " HTTP/1.1\r\n";
 
-	///第2行:主机
-    strcat(m_requestheader,"Host:");
-	strcat(m_requestheader,pServer);
-    strcat(m_requestheader,"\r\n");
+	/////第2行:主机
+ //   strcat(m_requestheader,"Host:");
+	//strcat(m_requestheader,pServer);
+ //   strcat(m_requestheader,"\r\n");
 
-	///第3行:
-	if(pReferer != NULL)
-	{
-		strcat(m_requestheader,"Referer:");
-		strcat(m_requestheader,pReferer);
-		strcat(m_requestheader,"\r\n");		
-	}
+	/////第3行:
+	//if(pReferer != NULL)
+	//{
+	//	strcat(m_requestheader,"Referer:");
+	//	strcat(m_requestheader,pReferer);
+	//	strcat(m_requestheader,"\r\n");		
+	//}
 
-	///第4行:接收的数据类型
-    strcat(m_requestheader,"Accept:*/*");
-    strcat(m_requestheader,"\r\n");
+	/////第4行:接收的数据类型
+ //   strcat(m_requestheader,"Accept:*/*");
+ //   strcat(m_requestheader,"\r\n");
 
-	///第5行:浏览器类型
-    strcat(m_requestheader,"User-Agent:Mozilla/4.0 (compatible; MSIE 5.00; Windows 98)");
-    strcat(m_requestheader,"\r\n");
+	/////第5行:浏览器类型
+ //   strcat(m_requestheader,"User-Agent:Mozilla/4.0 (compatible; MSIE 5.00; Windows 98)");
+ //   strcat(m_requestheader,"\r\n");
 
-	///第6行:连接设置,保持
-	strcat(m_requestheader,"Connection:Keep-Alive");
-	strcat(m_requestheader,"\r\n");
+	/////第6行:连接设置,保持
+	//strcat(m_requestheader,"Connection:Keep-Alive");
+	//strcat(m_requestheader,"\r\n");
 
-	///第7行:Cookie.
-	if(pCookie != NULL)
-	{
-		strcat(m_requestheader,"Set Cookie:0");
-		strcat(m_requestheader,pCookie);
-		strcat(m_requestheader,"\r\n");
-	}
+	/////第7行:Cookie.
+	//if(pCookie != NULL)
+	//{
+	//	strcat(m_requestheader,"Set Cookie:0");
+	//	strcat(m_requestheader,pCookie);
+	//	strcat(m_requestheader,"\r\n");
+	//}
 
-	///第8行:请求的数据起始字节位置(断点续传的关键)
-	if(nFrom > 0)
-	{
-		strcat(m_requestheader,"Range: bytes=");
-		_ltoa(nFrom,szTemp,10);
-		strcat(m_requestheader,szTemp);
-		strcat(m_requestheader,"-");
-		if(nTo > nFrom)
-		{
-			_ltoa(nTo,szTemp,10);
-			strcat(m_requestheader,szTemp);
-		}
-		strcat(m_requestheader,"\r\n");
-	}
-	
-	///最后一行:空行
-	strcat(m_requestheader,"\r\n");
+	/////第8行:请求的数据起始字节位置(断点续传的关键)
+	//if(nFrom > 0)
+	//{
+	//	strcat(m_requestheader,"Range: bytes=");
+	//	_ltoa(nFrom,szTemp,10);
+	//	strcat(m_requestheader,szTemp);
+	//	strcat(m_requestheader,"-");
+	//	if(nTo > nFrom)
+	//	{
+	//		_ltoa(nTo,szTemp,10);
+	//		strcat(m_requestheader,szTemp);
+	//	}
+	//	strcat(m_requestheader,"\r\n");
+	//}
+	m_requestheader += "\r\n";
 
-	///返回结果
-	Length=strlen(m_requestheader);
-	return m_requestheader;
+	//Length=strlen(m_requestheader);
+    Length = m_requestheader.length();
+    return m_requestheader.c_str();
 }
 
 ///发送请求头
@@ -231,11 +229,11 @@ BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
         return FALSE;
 
 	if(pRequestHeader==NULL)
-		pRequestHeader=m_requestheader;
+		pRequestHeader=m_requestheader.c_str();
 	if(Length==0)
-		Length=strlen(m_requestheader);
+		Length=m_requestheader.length();
 
-	if(send(m_s,pRequestHeader,Length,0)==SOCKET_ERROR)
+	if(send(m_s, pRequestHeader, Length,0)==SOCKET_ERROR)
 	{
 		MessageBox(NULL,"send() error.!","Error",MB_OK);
 		return FALSE;
@@ -282,15 +280,16 @@ BOOL CHttpSocket::CloseSocket()
 int CHttpSocket::GetRequestHeader(char *pHeader, int nMaxLength) const
 {
 	int nLength;
-	if(int(strlen(m_requestheader))>nMaxLength)
+    const int reqlen = m_requestheader.length();
+    if(reqlen>nMaxLength)
 	{
 		nLength=nMaxLength;
 	}
 	else
 	{
-		nLength=strlen(m_requestheader);
+		nLength=reqlen;
 	}
-	memcpy(pHeader,m_requestheader,nLength);
+    memcpy(pHeader, m_requestheader.c_str() ,nLength);
 	return nLength;
 }
 

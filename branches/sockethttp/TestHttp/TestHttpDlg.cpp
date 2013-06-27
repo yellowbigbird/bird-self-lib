@@ -9,6 +9,11 @@
 #include <vector>
 using namespace std;
 
+#define JSON_DEBUG
+#include "../libjson/libjson.h"
+#include "../libjson/source/JSONNode.h"
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -44,7 +49,7 @@ void CTestHttpDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTestHttpDlg)
 	DDX_Control(pDX, IDC_STATIC_SPEED, m_stcSpeed);
-	DDX_Control(pDX, IDC_EDIT1, m_edtEdit1);
+	DDX_Control(pDX, IDC_EDIT1, m_edtEditRequest);
 	DDX_Control(pDX, IDC_PROGRESS1, m_ctrlProgress);
 	DDX_Control(pDX, IDC_LIST1, m_ctrlList);
 	DDX_Text(pDX, IDC_EDIT1, m_strResponse);
@@ -159,7 +164,6 @@ int CTestHttpDlg::ThreadFunc()
 {
 	//CFileDialog FileDlg(FALSE);
     
-
 	CHttpSocket HttpSocket;
 	CString strServer,strObject;
 	unsigned short nPort;
@@ -176,38 +180,18 @@ int CTestHttpDlg::ThreadFunc()
 
     //set reqestheader
     string strsend;
-    //if(1)
-    //{
-    //    strsend = "GET http://gaia.uat.karmalab.net:8100/hotels/1/features?within=0km&type=region&verbose=3&apk=demo&cid=demo HTTP/1.1";   strsend+="\r\n";
-    //    strsend+="Host: gaia.uat.karmalab.net:8100";   strsend+="\r\n";
-    //    strsend+="Connection: keep-alive";   strsend+="\r\n";
-    //    //strsend+="Cache-Control: max-age=0";   strsend+="\r\n";
-    //    strsend+="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";   strsend+="\r\n";
-    //    strsend+="User-Agent: Mozilla/5.0 (Windows NT 5.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36";   strsend+="\r\n";
-    //    strsend+="Accept-Encoding: gzip,deflate,sdch";   strsend+="\r\n";
-    //    strsend+="Accept-Language: zh-CN,zh;q=0.8";   strsend+="\r\n";
-    //}
-    //else{
-    //    strsend = "GET /hotels/1/features?within=0km&type=region&verbose=3&apk=demo&cid=demo HTTP/1.1";   strsend+="\r\n";
-    //    strsend+="Host: gaia.uat.karmalab.net:8100";   strsend+="\r\n";
-    //    strsend+="Connection: keep-alive";   strsend+="\r\n";
-    //    //strsend+="Cache-Control: max-age=0";   strsend+="\r\n";
-    //    strsend+="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";   strsend+="\r\n";
-    //    strsend+="User-Agent: Mozilla/5.0 (Windows NT 5.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36";   strsend+="\r\n";
-    //    strsend+="Accept-Encoding: gzip,deflate,sdch";   strsend+="\r\n";
-    //    strsend+="Accept-Language: zh-CN,zh;q=0.8";   strsend+="\r\n";
-    //}
-
+    
     //HttpSocket.SendRequest(strsend.c_str(), strsend.length() );
 	HttpSocket.SetTimeout(10,0);
     HttpSocket.SendRequest( );
-/*
-	int nSize;
-	HttpSocket.GetResponseHeader(nSize);*/
 
-	m_edtEdit1.SetWindowText(pRequestHeader);
+	m_edtEditRequest.SetWindowText(pRequestHeader);
 	int nLineSize = 0;
-	char szLine[256];
+
+	char szLine[256+1];
+    memset(szLine, 0, 256+1);
+
+    m_ctrlList.ResetContent();
 	while(nLineSize != -1)
 	{
 		nLineSize = HttpSocket.GetResponseLine(szLine,256);
@@ -219,8 +203,23 @@ int CTestHttpDlg::ThreadFunc()
 	}
 	//char szValue[30];
 	//HttpSocket.GetField("Content-Length",szValue,30);
-    int nFileSize = 0;
-    bool ifok = HttpSocket.GetContentLength(nFileSize);
+    
+    string strContent = HttpSocket.GetContent();
+    int pos = strContent.find("[");    
+    string strJson = strContent.substr(pos + 1, strContent.length()-2 );
+    int nFileSize = strContent.length();
+
+    if(strJson.length() ){
+        JSONNode* node = (JSONNode*)json_parse(strJson.c_str() );
+        if(!node)
+            return 0;
+        char jsontype = json_type(node);
+        if(JSON_NODE == jsontype)
+        {}
+        int nodesize = json_size(node);
+        json_char * res = json_as_string(json_at(node, 0));
+    }
+    //bool ifok = HttpSocket.GetContentLength(nFileSize);
 	int nSvrState = HttpSocket.GetServerState();
 	//int nFileSize = atoi(szValue);
 	m_ctrlProgress.ShowWindow(SW_SHOW);
@@ -281,7 +280,7 @@ bool CTestHttpDlg::WriteFile(CHttpSocket& rHttpSocket, int fileSize)
     return true;
 }
 
-void CTestHttpDlg::OnOK() 
+void CTestHttpDlg::OnSend() 
 {
 	UpdateData();
 	AfxBeginThread(DownloadThread,(void *)this);

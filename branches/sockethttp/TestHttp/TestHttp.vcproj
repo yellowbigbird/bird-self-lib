@@ -296,6 +296,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="TestHttpDlg.h"
+				>
+			</File>
+			<File
 				RelativePath="TextProgressCtrl.cpp"
 				>
 				<FileConfiguration
@@ -330,10 +334,6 @@
 			</File>
 			<File
 				RelativePath="TestHttp.h"
-				>
-			</File>
-			<File
-				RelativePath="TestHttpDlg.h"
 				>
 			</File>
 			<File
