@@ -190,7 +190,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ATW.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ChildView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ChildView.h"
 				>
 			</File>
 			<File
@@ -198,7 +206,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HTTPContent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HTTPDef.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HTTPDef.h"
 				>
 			</File>
 			<File
@@ -206,7 +222,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HTTPRequest.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HTTPResponse.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HTTPResponse.h"
 				>
 			</File>
 			<File
@@ -214,7 +238,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HTTPServer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Logger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Logger.h"
 				>
 			</File>
 			<File
@@ -222,7 +254,33 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MainFrm.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SettingDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SettingDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WebServer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WebServer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
@@ -246,69 +304,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\WebServer.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-			<File
-				RelativePath=".\ATW.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ChildView.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPContent.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPDef.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPRequest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPResponse.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPServer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Logger.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MainFrm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SettingDlg.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<File
 				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WebServer.h"
 				>
 			</File>
 		</Filter>
