@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaLib", "LzmaLib.vcproj", "{68B1EA49-3919-4529-808D-10954A26FBF2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestLzmaLib", "..\TestLzmaLib\TestLzmaLib.vcproj", "{EBB2B71A-195B-479E-A753-5F30B8325E55}"
+	ProjectSection(ProjectDependencies) = postProject
+		{68B1EA49-3919-4529-808D-10954A26FBF2} = {68B1EA49-3919-4529-808D-10954A26FBF2}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68B1EA49-3919-4529-808D-10954A26FBF2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{68B1EA49-3919-4529-808D-10954A26FBF2}.Debug|Win32.Build.0 = Debug|Win32
+		{68B1EA49-3919-4529-808D-10954A26FBF2}.Release|Win32.ActiveCfg = Release|Win32
+		{68B1EA49-3919-4529-808D-10954A26FBF2}.Release|Win32.Build.0 = Release|Win32
+		{EBB2B71A-195B-479E-A753-5F30B8325E55}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EBB2B71A-195B-479E-A753-5F30B8325E55}.Debug|Win32.Build.0 = Debug|Win32
+		{EBB2B71A-195B-479E-A753-5F30B8325E55}.Release|Win32.ActiveCfg = Release|Win32
+		{EBB2B71A-195B-479E-A753-5F30B8325E55}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
