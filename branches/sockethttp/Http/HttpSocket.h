@@ -33,7 +33,7 @@ public:
 
 	BOOL			SetTimeout(int nTime,int nType=0);  //seconds
 	long			Receive(char* pBuffer,long nMaxLength);
-	BOOL			Connect(char* szHostName,int nPort=80);
+	BOOL			Connect(const std::string& strHostName,int nPort=80);
 	BOOL			Socket();
 	BOOL			CloseSocket();
 

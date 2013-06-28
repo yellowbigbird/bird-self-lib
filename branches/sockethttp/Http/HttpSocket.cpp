@@ -77,9 +77,10 @@ BOOL CHttpSocket::Socket()
 
 }
 
-BOOL CHttpSocket::Connect(char *szHostName,int nPort)
+BOOL CHttpSocket::Connect(const std::string& szHostName,int nPort)
 {
-	if(szHostName==NULL)
+    if(szHostName.length()< 1
+        || nPort<1)
 		return FALSE;
 
 	///若已经连接,则先关闭
@@ -92,7 +93,7 @@ BOOL CHttpSocket::Connect(char *szHostName,int nPort)
 	m_port=nPort;
 
 	///根据主机名获得IP地址
-	m_phostent=gethostbyname(szHostName);
+    m_phostent=gethostbyname(szHostName.c_str() );
 	if(m_phostent==NULL)
 	{
 		MessageBox(NULL,"gethostbyname()ERROR!","error",MB_OK);
