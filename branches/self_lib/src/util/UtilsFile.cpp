@@ -293,5 +293,33 @@ namespace UtilFile{
 
         return resultPath;
     }
+    
+    bool GetFile(TCHAR* fileName, std::string& strData)
+    {
+        HANDLE hFile = ::CreateFile(fileName, GENERIC_READ , 0,NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL,
+            NULL );    
+        if(!hFile || INVALID_HANDLE_VALUE == hFile)
+            return false;
+        DWORD lasterr = ::GetLastError();
+        DWORD filelen = ::GetFileSize(hFile, 0);
+        DWORD readedLen = 0;
+        int toreadLen = filelen;
 
+        strData.resize(filelen);
+        //osmsg.value = (byte*) new (byte[filelen+1]);
+        if((int)strData.size() < filelen)
+        {
+            return false;
+        }
+        BOOL ifok = ReadFile(hFile, &(strData[0]), toreadLen, &readedLen, 0 );
+        if(readedLen!= toreadLen)
+        {
+            lasterr = GetLastError();
+        }
+        //vecData[filelen] = '\0'; //
+
+        CloseHandle(hFile);
+        return true;
+
+    }
 }
