@@ -46,6 +46,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 const TCHAR* c_strFileTxt = _T("d:\\wukong.txt");
 const TCHAR* c_strFileBin = _T("d:\\wukong-lzma.bin");
+const TCHAR* c_strFileDecode = _T("d:\\wukong-decode.txt");
 
 void TestWrapper()
 {
@@ -53,15 +54,18 @@ void TestWrapper()
     //CLzma2Enc
     string strSrc;
     string strDest;
+    string strDestDecode;
 
     bool ifok = false;
     ifok = UtilFile::ReadFileAsString(c_strFileTxt, strSrc);
-
     ifok = wrapper.Encode(strSrc, strDest);
-
     ifok = UtilFile::WriteFileAsString(c_strFileBin, strDest);
 
+    ifok = wrapper.Decode(strDest, strDestDecode);
+    ifok = UtilFile::WriteFileAsString(c_strFileBin, strDest);
 
+    int i=0;
+    i++;
 }
 
 
