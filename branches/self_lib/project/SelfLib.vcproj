@@ -190,14 +190,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\SelfLib.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SelfLib.def"
-				>
-			</File>
-			<File
 				RelativePath="..\src\SelfLib.h"
 				>
 			</File>

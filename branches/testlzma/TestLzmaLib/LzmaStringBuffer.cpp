@@ -34,7 +34,8 @@ bool CStringInStream::ReadData(void *data, const size_t sizeToRead0, size_t& siz
         sizeToRead1 = alllen - m_pointerIdx;
     }
     const char* pstr =  m_data.data();
-    memcpy(data,pstr + m_pointerIdx, sizeToRead1);
+    if(sizeToRead1)
+        memcpy(data,pstr + m_pointerIdx, sizeToRead1);
     m_pointerIdx += sizeToRead1;
     sizeHasRead = sizeToRead1;
     return true;

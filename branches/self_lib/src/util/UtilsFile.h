@@ -30,6 +30,8 @@ namespace UtilFile{
 
     tstring ExtractFileExt(const tstring& path);
 
+    bool GetFile(TCHAR* fileName, std::string& strData);
+
 	bool GetFileList(const tstring& mask, std::set<tstring>& files);
 
 	bool CompareFileTime(const tstring& file1, const tstring& file2, int& result);
