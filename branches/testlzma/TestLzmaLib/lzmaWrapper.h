@@ -9,4 +9,6 @@ public:
 
     bool Encode(const std::string& strSrc, std::string& strOut);
     bool Decode(const std::string& strSrc, std::string& strOut);
+
+    int    m_result;
 };

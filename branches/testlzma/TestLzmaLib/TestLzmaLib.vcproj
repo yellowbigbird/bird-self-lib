@@ -172,6 +172,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\LzmaStringBuffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LzmaStringBuffer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\lzmaWrapper.cpp"
 				>
 			</File>
@@ -181,6 +189,14 @@
 			</File>
 			<File
 				RelativePath=".\TestLzmaLib.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UtilsFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UtilsFile.h"
 				>
 			</File>
 		</Filter>
