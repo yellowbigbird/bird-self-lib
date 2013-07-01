@@ -67,10 +67,12 @@ bool CLzmaWrapper::Encode(const std::string& strSrc, std::string& strOut)
             return false;
         }
         res = LzmaEnc_Encode(enc, &outStream.m_stream, &inStream.m_stream, NULL, &g_Alloc, &g_Alloc);
+        if(res)
+            ifok = false;
     }
     LzmaEnc_Destroy(enc, &g_Alloc, &g_Alloc);
 
-    strOut = outStream.m_data;
+    //strOut = outStream.m_data;
     return ifok;
 }
 

@@ -15,7 +15,7 @@ public:
     UINT              m_pointerIdx;
 
     void CreateVTable();
-    WRes ReadData(void *data, size_t sizeToRead);
+    bool ReadData(void *data, const size_t sizeToRead, size_t& sizeHasRead);
 };
 
 /* writes *size bytes */

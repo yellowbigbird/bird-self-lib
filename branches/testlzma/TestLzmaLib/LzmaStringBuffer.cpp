@@ -14,8 +14,9 @@ CStringInStream::CStringInStream(const std::string& data)
 static SRes BufferSeqInStream_Read(void *pp, void *buf, size_t *size)
 {
     CStringInStream *pstream = (CStringInStream *)pp;
-    WRes wret = pstream->ReadData(buf, *size);
-    SRes ret =  (wret == 0) ? SZ_OK : SZ_ERROR_READ;
+    size_t sizeToRead = *size;
+    bool ifok = pstream->ReadData(buf, sizeToRead, *size );
+    SRes ret =  (ifok) ? SZ_OK : SZ_ERROR_READ;
     return ret;
 }
 
@@ -25,14 +26,18 @@ void CStringInStream::CreateVTable()
     m_pointerIdx = 0;
 }
 
-WRes CStringInStream::ReadData(void *data, size_t sizeToRead)
+bool CStringInStream::ReadData(void *data, const size_t sizeToRead0, size_t& sizeHasRead)
 {
     const UINT alllen = m_data.size();
-    if(m_pointerIdx+ sizeToRead > alllen)
-        return 1;
+    size_t sizeToRead1 = sizeToRead0;
+    if(m_pointerIdx+ sizeToRead0 > alllen){
+        sizeToRead1 = alllen - m_pointerIdx;
+    }
     const char* pstr =  m_data.data();
-    memcpy(data,pstr + m_pointerIdx, sizeToRead);
-    return 0;
+    memcpy(data,pstr + m_pointerIdx, sizeToRead1);
+    m_pointerIdx += sizeToRead1;
+    sizeHasRead = sizeToRead1;
+    return true;
 }
 /////////////
 
@@ -68,5 +73,8 @@ bool CStringOutStream::WriteData(const void *dataSrc, const size_t sizeToWrite, 
         m_data.push_back(chardata[idx]);
     }
     writtenSize = m_data.size()-1 - pointerStart;
+    ifok = true;
+    if(writtenSize != sizeToWrite)
+        ifok = false;
     return ifok;
 }
