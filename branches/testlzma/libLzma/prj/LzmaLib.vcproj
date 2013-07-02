@@ -17,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory="$(SolutionDir)\bin\$(PlatformName)_$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\bin\obj\$(PlatformName)_$(ProjectName)_$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -54,10 +54,10 @@
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/LzmaLib.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile="$(IntDir)/$(TargetName).pch"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName).pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CallingConvention="1"
@@ -75,15 +75,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="C:\Util\LZMA.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\LzmaLib.def"
-				ProgramDatabaseFile=".\Release/LZMA.pdb"
+				ProgramDatabaseFile="$(IntDir)/$(TargetName).pdb"
 				OptimizeForWindows98="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\Release/LZMA.lib"
+				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -177,7 +177,7 @@
 				ProgramDatabaseFile="$(IntDir)/$(TargetName).pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\Debug/LZMA.lib"
+				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
