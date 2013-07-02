@@ -62,7 +62,7 @@ void TestWrapper()
     ifok = UtilFile::WriteFileAsString(c_strFileBin, strDest);
 
     ifok = wrapper.Decode(strDest, strDestDecode);
-    ifok = UtilFile::WriteFileAsString(c_strFileBin, strDest);
+    ifok = UtilFile::WriteFileAsString(c_strFileDecode, strDestDecode);
 
     int i=0;
     i++;
