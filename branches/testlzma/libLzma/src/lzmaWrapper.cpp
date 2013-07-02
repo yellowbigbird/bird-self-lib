@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "lzmaWrapper.h"
 
 #include <vector>
@@ -53,8 +53,8 @@ bool CLzmaWrapper::Encode(const std::string& strSrc, std::string& strOut)
     LzmaEncProps_Init(&props);
     res = LzmaEnc_SetProps(enc, &props);
 
-    CStringOutStream outStream(strOut);
-    CStringInStream inStream(strSrc);
+    CStringStream strStream(strSrc, strOut);
+    //CStringInStream inStream(strSrc);
 
     if (res == SZ_OK)
     {
@@ -67,12 +67,12 @@ bool CLzmaWrapper::Encode(const std::string& strSrc, std::string& strOut)
             header[headerSize++] = (Byte)(srcSize >> (8 * i));
 
         size_t wrritenSize = 0;
-        ifok = outStream.WriteData( header, headerSize,wrritenSize);
+        ifok = strStream.WriteData( header, headerSize,wrritenSize);
         if(!ifok){
             res = SZ_ERROR_WRITE;
             return false;
         }
-        res = LzmaEnc_Encode(enc, &outStream.m_stream, &inStream.m_stream, NULL, &g_Alloc, &g_Alloc);
+        res = LzmaEnc_Encode(enc, &strStream.m_streamOut, &strStream.m_streamIn, NULL, &g_Alloc, &g_Alloc);
         if(res)
             ifok = false;
     }
@@ -92,15 +92,15 @@ bool CLzmaWrapper::Decode(const std::string& strSrc, std::string& strOut)
   SRes res = 0;
 
   CLzmaDec state;
-  CStringOutStream outStream(strOut);
-  CStringInStream inStream(strSrc);
+  CStringStream strStream(strSrc, strOut);
+  //CStringInStream inStream(strSrc);
 
   /* header: 5 bytes of LZMA properties and 8 bytes of uncompressed size */
   unsigned char header[LZMA_PROPS_SIZE + 8];
 
   /* Read and parse header */
 
-  RINOK(SeqInStream_Read(&inStream.m_stream, header, sizeof(header)));
+  RINOK(SeqInStream_Read(&strStream.m_streamIn, header, sizeof(header)));
 
   unpackSize = 0;
   for (i = 0; i < 8; i++)
@@ -109,7 +109,7 @@ bool CLzmaWrapper::Decode(const std::string& strSrc, std::string& strOut)
   LzmaDec_Construct(&state);
   RINOK(LzmaDec_Allocate(&state, header, LZMA_PROPS_SIZE, &g_Alloc));
 
-  res = Decode2(&state, &outStream.m_stream, &inStream.m_stream, unpackSize);
+  res = Decode2(&state, &strStream.m_streamOut, &strStream.m_streamIn, unpackSize);
 
   LzmaDec_Free(&state, &g_Alloc);
   return res;
