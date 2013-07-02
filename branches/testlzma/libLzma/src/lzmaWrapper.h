@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
-//#include "types.h"
 
+#include "lzma_dll.h"
 
-class CLzmaWrapper{
+class LZMA_DLL CLzmaWrapper{
 public:
     CLzmaWrapper();
     virtual ~CLzmaWrapper();

@@ -380,6 +380,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="wrapper"
+			>
+			<File
+				RelativePath="..\src\LzmaStringBuffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\LzmaStringBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\lzmaWrapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\lzmaWrapper.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
