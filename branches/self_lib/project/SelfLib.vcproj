@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)\bin\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\obj\$(ProjectName)_$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\bin\$(PlatformName)_$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\bin\obj\$(PlatformName)_$(ProjectName)_$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			CharacterSet="1"
@@ -68,7 +68,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				ModuleDefinitionFile=".\SelfLib.def"
+				ModuleDefinitionFile=".\$(ProjectName).def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -210,6 +210,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\targetver.h"
+				>
+			</File>
+			<File
 				RelativePath=".\targetver.h"
 				>
 			</File>
@@ -226,11 +230,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\SelfLib.rc"
+				RelativePath=".\SelfLib.def"
 				>
 			</File>
 			<File
-				RelativePath=".\res\SelfLib.rc2"
+				RelativePath=".\SelfLib.rc"
 				>
 			</File>
 		</Filter>
@@ -267,18 +271,6 @@
 			</File>
 			<File
 				RelativePath="..\src\util\UtilString.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="str"
-			>
-			<File
-				RelativePath="..\src\strconvert\strConvert.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\strconvert\strConvert.h"
 				>
 			</File>
 		</Filter>

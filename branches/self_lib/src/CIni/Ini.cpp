@@ -42,6 +42,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#pragma warning(disable:4996)
+
 #define DEF_PROFILE_NUM_LEN		64 // numeric string length, could be quite long for binary format
 #define DEF_PROFILE_THRESHOLD	512 // temporary string length
 #define DEF_PROFILE_DELIMITER	_T(",") // default string delimiter
@@ -620,7 +622,7 @@ void CIni::GetKeyNames(LPCTSTR lpSection, CStringArray *pArray) const
 		return;
 
 	pArray->RemoveAll();
-	const LEN = GetKeyNames(lpSection, NULL, 0);
+	const DWORD LEN = GetKeyNames(lpSection, NULL, 0);
 	LPTSTR psz = new TCHAR[LEN + 1];
 	GetKeyNames(lpSection, psz, LEN);
 	ParseDNTString(psz, __SubStrAdd, (LPVOID)pArray);
@@ -898,7 +900,8 @@ BOOL CALLBACK CIni:: __KeyPairProc(LPCTSTR lpString, LPVOID lpParam)
 	
 	// extract the sub-string on left side of the '='
 	LPTSTR psz = new TCHAR[_tcslen(lpString) + 1];
-	for (int i = 0; &lpString[i] < p; i++)
+    int i = 0;
+	for (i = 0; &lpString[i] < p; i++)
 		psz[i] = lpString[i];
 	psz[i] = _T('\0');
 
