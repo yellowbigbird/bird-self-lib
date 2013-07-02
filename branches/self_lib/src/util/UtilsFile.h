@@ -30,7 +30,8 @@ namespace UtilFile{
 
     tstring ExtractFileExt(const tstring& path);
 
-    bool GetFile(TCHAR* fileName, std::string& strData);
+    bool ReadFileAsString(const TCHAR* fileName, std::string& strData);
+    bool WriteFileAsString(const TCHAR* fileName, const std::string& strData);
 
 	bool GetFileList(const tstring& mask, std::set<tstring>& files);
 
