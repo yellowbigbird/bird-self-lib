@@ -12,28 +12,29 @@
 
 #include "wtypes.h"
 #include <set>
+#include "selflib_dll.h"
 
-namespace UtilFile{
+namespace  UtilFile{
 
-	bool HasWildcards(const tstring& path);
+	SELFLIB_DLL bool HasWildcards(const tstring& path);
 
-    bool FileExists(const tstring& path);
-    UINT GetFileSize(const tstring path);
-    bool DirectoryExists(const tstring& path);
+    SELFLIB_DLL bool FileExists(const tstring& path);
+    SELFLIB_DLL UINT GetFileSize(const tstring path);
+    SELFLIB_DLL bool DirectoryExists(const tstring& path);
 
-	bool DeleteFile(const tstring& path);
+	SELFLIB_DLL bool DeleteFile(const tstring& path);
 
-    tstring		ExtractFilePath(const tstring& path);
+    SELFLIB_DLL tstring		ExtractFilePath(const tstring& path);
 
-    tstring		ExtractFileName(const tstring& path);
-	std::string ExtractFileName(const std::string& path);
+    SELFLIB_DLL tstring		ExtractFileName(const tstring& path);
+	SELFLIB_DLL std::string ExtractFileName(const std::string& path);
 
-    tstring ExtractFileExt(const tstring& path);
+    SELFLIB_DLL  tstring ExtractFileExt(const tstring& path);
 
-    bool ReadFileAsString(const TCHAR* fileName, std::string& strData);
-    bool WriteFileAsString(const TCHAR* fileName, const std::string& strData);
+    SELFLIB_DLL bool ReadFileAsString(const TCHAR* fileName, std::string& strData);
+    SELFLIB_DLL bool WriteFileAsString(const TCHAR* fileName, const std::string& strData);
 
-	bool GetFileList(const tstring& mask, std::set<tstring>& files);
+	SELFLIB_DLL bool GetFileList(const tstring& mask, std::set<tstring>& files);
 
-	bool CompareFileTime(const tstring& file1, const tstring& file2, int& result);
+	SELFLIB_DLL bool CompareFileTime(const tstring& file1, const tstring& file2, int& result);
 }

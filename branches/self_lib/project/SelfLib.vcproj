@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(ProjectDir)\..\src"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_SELF_LIB_DLL_"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -190,7 +190,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\SelfLib.h"
+				RelativePath="..\src\selflib_dll.h"
 				>
 			</File>
 			<File
