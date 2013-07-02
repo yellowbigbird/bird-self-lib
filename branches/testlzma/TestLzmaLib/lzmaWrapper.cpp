@@ -38,7 +38,7 @@ bool CLzmaWrapper::Encode(const std::string& strSrc, std::string& strOut)
 {
     bool ifok = false;
     strOut = "";
-    const UINT srcSize = strSrc.size();
+    const UInt64 srcSize = strSrc.size(); //must x64
 
     CLzmaEncHandle enc;
     SRes res;
