@@ -7,19 +7,29 @@ static SRes BufferSeqInStream_Read(void *pp, void *buf, size_t *size);
 static size_t BufferOutStream_Write(void *pp, const void *data, size_t size);
 //////////////////
 
-CStringStream::CStringStream(const std::string& dataIn ,std::string& dataOut)
+CStringStreamIn::CStringStreamIn(const std::string& dataIn )
 :m_dataIn(dataIn)
-,m_dataOut(dataOut)
+//,m_dataOut(dataOut)
 ,m_pointerIdxIn(0)
 {
     m_streamIn.Read = BufferSeqInStream_Read;
+    //m_streamOut.Write = BufferOutStream_Write;
+    //CreateVTable();
+}
+
+CStringStreamOut::CStringStreamOut(std::string& dataOut)
+//:m_dataIn(dataIn)
+:m_dataOut(dataOut)
+//,m_pointerIdxIn(0)
+{
+    //m_streamIn.Read = BufferSeqInStream_Read;
     m_streamOut.Write = BufferOutStream_Write;
     //CreateVTable();
 }
 
 static SRes BufferSeqInStream_Read(void *pp, void *buf, size_t *size)
 {
-    CStringStream *pstream = (CStringStream *)pp;
+    CStringStreamIn *pstream = (CStringStreamIn *)pp;
     size_t sizeToRead = *size;
     bool ifok = pstream->ReadData(buf, sizeToRead, *size );
     SRes ret =  (ifok) ? SZ_OK : SZ_ERROR_READ;
@@ -28,7 +38,7 @@ static SRes BufferSeqInStream_Read(void *pp, void *buf, size_t *size)
 
 static size_t BufferOutStream_Write(void *pp, const void *data, size_t size)
 {
-  CStringStream *pEntry = (CStringStream *)pp;
+  CStringStreamOut *pEntry = (CStringStreamOut *)pp;
   if(!pEntry)
       return 0;
   size_t writtenSize = 0;
@@ -36,7 +46,7 @@ static size_t BufferOutStream_Write(void *pp, const void *data, size_t size)
   return size;
 }
 
-bool CStringStream::ReadData(void *data, const size_t sizeToRead0, size_t& sizeHasRead)
+bool CStringStreamIn::ReadData(void *data, const size_t sizeToRead0, size_t& sizeHasRead)
 {
     const UINT alllen = m_dataIn.size();
     size_t sizeToRead1 = sizeToRead0;
@@ -53,7 +63,7 @@ bool CStringStream::ReadData(void *data, const size_t sizeToRead0, size_t& sizeH
 /////////////
 
 
-bool CStringStream::WriteData(const void *dataSrc, const size_t sizeToWrite, size_t& writtenSize)
+bool CStringStreamOut::WriteData(const void *dataSrc, const size_t sizeToWrite, size_t& writtenSize)
 {
     bool ifok= false;
     size_t pointerStart = m_dataOut.size()-1;
