@@ -294,8 +294,9 @@ namespace UtilFile{
         return resultPath;
     }
     
-    bool GetFile(TCHAR* fileName, std::string& strData)
+    bool ReadFileAsString(const TCHAR* fileName, std::string& strData)
     {
+        bool ifok = true;
         HANDLE hFile = ::CreateFile(fileName, GENERIC_READ , 0,NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL,
             NULL );    
         if(!hFile || INVALID_HANDLE_VALUE == hFile)
@@ -306,20 +307,43 @@ namespace UtilFile{
         int toreadLen = filelen;
 
         strData.resize(filelen);
-        //osmsg.value = (byte*) new (byte[filelen+1]);
         if((int)strData.size() < filelen)
         {
-            return false;
+            goto Done;
         }
-        BOOL ifok = ReadFile(hFile, &(strData[0]), toreadLen, &readedLen, 0 );
-        if(readedLen!= toreadLen)
+        BOOL ifokBIG = ::ReadFile(hFile, &(strData[0]), toreadLen, &readedLen, 0 );
+        if(!ifokBIG || readedLen!= toreadLen)
         {
             lasterr = GetLastError();
-        }
-        //vecData[filelen] = '\0'; //
-
+            ifok = false;
+             goto Done;
+        }        
+Done:
         CloseHandle(hFile);
-        return true;
-
+        return ifok;
     }
+
+    bool WriteFileAsString(const TCHAR* fileName, const std::string& strData)
+    {
+        bool ifok = true;
+        HANDLE hFile = ::CreateFile(fileName, GENERIC_WRITE , 0,NULL, 
+            OPEN_ALWAYS,  FILE_ATTRIBUTE_NORMAL,   NULL );    
+        if(!hFile || INVALID_HANDLE_VALUE == hFile)
+            return false;
+        DWORD lasterr = ::GetLastError();
+        DWORD writtenLen = 0;
+        DWORD towriteLen = strData.size();
+
+        BOOL ifokBIG = ::WriteFile(hFile, &(strData[0]), towriteLen, &writtenLen, 0 );
+        if(!ifokBIG || towriteLen!= writtenLen)
+        {
+            lasterr = GetLastError();
+            goto Done;
+        }
+Done:
+        CloseHandle(hFile);
+        return ifok;
+    }
+
+
 }
