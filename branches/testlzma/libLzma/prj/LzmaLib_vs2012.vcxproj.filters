@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Spec">
+      <UniqueIdentifier>{64db8222-5b5f-4c11-aba6-303e662e0c1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lzma2">
+      <UniqueIdentifier>{6b99708a-6922-45ab-b261-3e71193d7ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{ac9b9584-2c58-44a0-9431-257f19f6c493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="file">
+      <UniqueIdentifier>{f39d87a2-5b45-4491-95b9-940c99e1695d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{e4fcfe55-8274-4595-af4d-79f2ddf08349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{b816b8d0-26d0-42b2-af36-b8c19d427721}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wrapper">
+      <UniqueIdentifier>{c76f1d80-b3a2-40fe-865b-4d9364649ccf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LzmaLibExports.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Lzma2Dec.c">
+      <Filter>lzma2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Lzma2Enc.c">
+      <Filter>lzma2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MtCoder.c">
+      <Filter>lzma2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\7zFile.c">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\7zStream.c">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Alloc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LzFind.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LzFindMt.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LzmaDec.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LzmaEnc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LzmaLib.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Threads.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LzmaStringBuffer.cpp">
+      <Filter>wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lzmaWrapper.cpp">
+      <Filter>wrapper</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Lzma2Dec.h">
+      <Filter>lzma2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Lzma2Enc.h">
+      <Filter>lzma2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MtCoder.h">
+      <Filter>lzma2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\7zFile.h">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\7zVersion.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Alloc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzFind.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzFindMt.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzHash.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzmaDec.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzmaEnc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzmaLib.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Threads.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Types.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lzma_dll.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LzmaStringBuffer.h">
+      <Filter>wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lzmaWrapper.h">
+      <Filter>wrapper</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <Filter>res</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
