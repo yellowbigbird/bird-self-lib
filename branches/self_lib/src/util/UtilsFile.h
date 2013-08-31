@@ -16,6 +16,9 @@
 
 namespace  UtilFile{
 
+    
+    SELFLIB_DLL std::wstring    GetFilePath() ;
+
 	SELFLIB_DLL bool HasWildcards(const tstring& path);
 
     SELFLIB_DLL bool FileExists(const tstring& path);
