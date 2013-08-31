@@ -23,12 +23,21 @@ using namespace std;
 ///  Module and debug definitions                                                
 ///------------------------------------------------------------------------------
 //AT_DECLARE_FILE( Utils.cpp, "$Rev:$" )
-namespace UtilFile{
+namespace UtilFile
+{
+    //exe path, "x:\fdsfds" , no last "\\"
+    wstring GetFilePath() 
+    { 
+        TCHAR  exepath[MAX_PATH];
+        CString  strdir,tmpdir; 
+        memset(exepath,0,MAX_PATH); 
+        GetModuleFileName(NULL,exepath,MAX_PATH); 
+        tmpdir=exepath; 
+        strdir=tmpdir.Left(tmpdir.ReverseFind('\\'));
+        wstring wstr = strdir.GetString();
+        return wstr; 
+    } 
 
-
-    //--------------------------------------------------------------------------------------------
-    //  Implementation
-    //--------------------------------------------------------------------------------------------
     //return path like="xxx/xxx" , without "/" at last.
     tstring ExtractFilePath(const tstring& path)
     {

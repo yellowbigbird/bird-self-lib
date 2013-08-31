@@ -19,7 +19,7 @@
     <Filter Include="hash">
       <UniqueIdentifier>{8e9d2e9d-ab56-4156-b1b8-21c8f6bb3d61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewFilter1">
+    <Filter Include="ini">
       <UniqueIdentifier>{084240b2-8c82-4ba2-8ffa-404b3592408b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -55,7 +55,7 @@
       <Filter>hash</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CIni\Ini.h">
-      <Filter>NewFilter1</Filter>
+      <Filter>ini</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -75,7 +75,7 @@
       <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\src\CIni\Ini.cpp">
-      <Filter>NewFilter1</Filter>
+      <Filter>ini</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

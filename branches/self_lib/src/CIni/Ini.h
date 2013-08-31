@@ -35,6 +35,9 @@
 
 #ifndef __INI_H__
 #define __INI_H__
+#pragma once
+
+#include "selflib_dll.h"
 
 #include <windows.h>
 #include <tchar.h>
@@ -60,7 +63,7 @@
 // the callback, function pointer needs to be passed to "CIni::ParseDNTString".
 typedef BOOL (CALLBACK *SUBSTRPROC)(LPCTSTR, LPVOID);
 
-class CIni
+class SELFLIB_DLL CIni
 {
 public:		
 
