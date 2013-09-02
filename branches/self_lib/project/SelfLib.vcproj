@@ -383,10 +383,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\targetver.h"
 				>
 			</File>
@@ -451,7 +447,7 @@
 			Name="hash"
 			>
 			<File
-				RelativePath="..\src\hash\crc32.txt"
+				RelativePath="..\src\hash\crc32.cpp"
 				>
 			</File>
 			<File
@@ -471,10 +467,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
