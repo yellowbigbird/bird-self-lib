@@ -2,6 +2,12 @@
 #define DROPHANDLER_INCLUDED
 
 #include <list>
+
+#if _MSC_VER == 1700  
+//vs2012
+#include <shldisp.h>
+#endif
+
 #include "Helper.h"
 #include "FileOperations.h"
 #include "Buffer.h"
