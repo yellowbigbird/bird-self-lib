@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Explorer++", "Explorer++\Explorer++_vs2012.vcxproj", "{7544A240-2EBF-4DC1-B55B-C8AE32672ED0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Helper", "Helper\Helper_vs2012.vcxproj", "{FAADBE00-9376-45F8-AEAC-1BA3A8E58A1D}"

@@ -13,8 +13,15 @@
 
 #include "stdafx.h"
 #include <list>
+#include <ShlDisp.h>
+
 #include "iDataObject.h"
 #include "iEnumFormatEtc.h"
+
+//struct IAsyncOperation;
+#ifdef __IAsyncOperation_FWD_DEFINED__
+fdsfds;
+#endif
 
 struct DataObjectInternal
 {
@@ -22,7 +29,8 @@ struct DataObjectInternal
 	STGMEDIUM	stg;
 };
 
-class CDataObject : public IDataObject, public IAsyncOperation
+class CDataObject : public IDataObject
+    //, public IAsyncOperation
 {
 public:
 
@@ -107,10 +115,10 @@ HRESULT __stdcall CDataObject::QueryInterface(REFIID iid, void **ppvObject)
 	{
 		*ppvObject = this;
 	}
-	else if(IsEqualIID(iid,IID_IAsyncOperation))
-	{
-		*ppvObject = static_cast<IAsyncOperation *>(this);
-	}
+	//else if(IsEqualIID(iid,IID_IAsyncOperation))
+	//{
+	//	*ppvObject = static_cast<IAsyncOperation *>(this);
+	//}
 
 	if(*ppvObject)
 	{

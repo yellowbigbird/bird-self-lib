@@ -303,10 +303,13 @@ namespace UtilFile
         return resultPath;
     }
     
-    bool ReadFileAsString(const TCHAR* fileName, std::string& strData)
+    bool ReadFileAsString(const std::wstring& fileName, std::string& strData)
     {
+        if(fileName.length()< 1)
+            return false;
+
         bool ifok = true;
-        HANDLE hFile = ::CreateFile(fileName, GENERIC_READ , 0,NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL,
+        HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_READ , 0,NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL,
             NULL );    
         if(!hFile || INVALID_HANDLE_VALUE == hFile)
             return false;
@@ -332,10 +335,13 @@ Done:
         return ifok;
     }
 
-    bool WriteFileAsString(const TCHAR* fileName, const std::string& strData)
+    bool WriteFileAsString(const std::wstring& fileName, const std::string& strData)
     {
+        if(fileName.length()< 1)
+            return false;
+
         bool ifok = true;
-        HANDLE hFile = ::CreateFile(fileName, GENERIC_WRITE , 0,NULL, 
+        HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_WRITE , 0,NULL, 
             OPEN_ALWAYS,  FILE_ATTRIBUTE_NORMAL,   NULL );    
         if(!hFile || INVALID_HANDLE_VALUE == hFile)
             return false;
