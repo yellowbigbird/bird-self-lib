@@ -34,8 +34,8 @@ namespace  UtilFile{
 
     SELFLIB_DLL  tstring ExtractFileExt(const tstring& path);
 
-    SELFLIB_DLL bool ReadFileAsString(const TCHAR* fileName, std::string& strData);
-    SELFLIB_DLL bool WriteFileAsString(const TCHAR* fileName, const std::string& strData);
+    SELFLIB_DLL bool ReadFileAsString(const std::wstring& fileName, std::string& strData);
+    SELFLIB_DLL bool WriteFileAsString(const std::wstring& fileName, const std::string& strData);
 
 	SELFLIB_DLL bool GetFileList(const tstring& mask, std::set<tstring>& files);
 

@@ -12,6 +12,14 @@
  *****************************************************************/
 
 #include "stdafx.h"
+#include <gdiplus.h>
+#include <tchar.h>
+#include <strsafe.h>
+#include <ShlObj.h>
+#include <Shlwapi.h>
+#include <Richedit.h>
+#include <AccCtrl.h>
+
 #include "Helper.h"
 #include "FileOperations.h"
 #include "Buffer.h"

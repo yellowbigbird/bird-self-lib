@@ -310,7 +310,6 @@ BOOL bMove,IDataObject **pClipboardDataObject)
 	hr = CreateDataObject(ftc,stg,pClipboardDataObject,2);
 
 	IAsyncOperation *pAsyncOperation = NULL;
-
 	(*pClipboardDataObject)->QueryInterface(IID_IAsyncOperation,(void **)&pAsyncOperation);
 
 	pAsyncOperation->SetAsyncMode(TRUE);

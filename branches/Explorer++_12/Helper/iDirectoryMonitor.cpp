@@ -15,7 +15,10 @@
 
 #include "stdafx.h"
 #include <list>
+#include <strsafe.h>
+
 #include "iDirectoryMonitor.h"
+
 
 
 using namespace std;

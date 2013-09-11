@@ -5,6 +5,10 @@
 #include <winioctl.h>
 #include <list>
 
+#include <ObjectArray.h>
+#include <shtypes.h>
+#include <shobjidl.h>
+
 using namespace std;
 
 /* Major version numbers for various versions of
