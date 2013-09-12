@@ -48,7 +48,7 @@ static size_t BufferOutStream_Write(void *pp, const void *data, size_t size)
 
 bool CStringStreamIn::ReadData(void *data, const size_t sizeToRead0, size_t& sizeHasRead)
 {
-    const UINT alllen = m_dataIn.size();
+    const size_t alllen = m_dataIn.size();
     size_t sizeToRead1 = sizeToRead0;
     if(m_pointerIdxIn+ sizeToRead0 > alllen){
         sizeToRead1 = alllen - m_pointerIdxIn;
