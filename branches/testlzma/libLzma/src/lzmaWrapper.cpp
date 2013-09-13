@@ -34,6 +34,7 @@ CLzmaWrapper::~CLzmaWrapper()
 }
 
 /////////////////
+//becareful, strOut must be new and delete in same place.
 bool CLzmaWrapper::Encode(const std::string& strSrc, std::string& strOut)
 {
     bool ifok = false;
