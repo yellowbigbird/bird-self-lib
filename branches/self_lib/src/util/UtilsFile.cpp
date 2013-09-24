@@ -98,7 +98,7 @@ namespace UtilFile
         return (dwAttribute & (FILE_ATTRIBUTE_DEVICE | FILE_ATTRIBUTE_DIRECTORY)) == 0;
     }
 
-    UINT GetFileSize(const tstring path)
+    UINT GetFileSize(const tstring& path)
     {
         HANDLE hFile = ::CreateFile(path.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if(!hFile || INVALID_HANDLE_VALUE == hFile){
@@ -106,9 +106,45 @@ namespace UtilFile
         }
         DWORD filesizeHi=0;
         DWORD fileSize = ::GetFileSize(hFile, &filesizeHi);
+        if(filesizeHi> 0)
+            ASSERT(false);  //todo, return x64 size.
         ::CloseHandle(hFile);
 
         return fileSize;
+    }
+
+    UINT64 GetFileTime(const tstring& path)
+    {
+        UINT64 fileTime = 0;
+                
+        CFile file;
+        CFileStatus fileSta;
+        BOOL IFOK = file.Open(path.c_str(), CFile::modeRead|CFile::shareDenyNone, NULL);
+        if(!IFOK) 
+        {  
+            //AddDebug("open file err.");
+            ASSERT(false);
+            return 0;
+        }  
+        IFOK = file.GetStatus(fileSta) ;
+        if(!IFOK){
+            //AddDebug("file GetStatus err.");
+            ASSERT(false);
+            return 0;
+        }
+
+        //m_time = fileSta.m_mtime.GetTime();
+        //SYSTEMTIME systime;
+        //ifok = fileSta.m_mtime.GetAsSystemTime(systime);
+        //if(!ifok )
+        //	break;		
+        //CString strtime1 = time1.Format(_T("%Y-%m-%d %H:%M:%S") ); 		
+        tm tm0;
+        tm* ptm = fileSta.m_mtime.GetGmtTm(&tm0);
+        fileTime = mktime(ptm);
+
+        file.Close();
+        return fileTime;
     }
 
     bool DirectoryExists(const tstring& path)
