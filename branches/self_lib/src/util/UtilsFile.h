@@ -25,6 +25,8 @@ namespace  UtilFile{
     SELFLIB_DLL UINT GetFileSize(const tstring path);
     SELFLIB_DLL bool DirectoryExists(const tstring& path);
 
+    SELFLIB_DLL bool CreateDirectory(const tstring& path);
+
 	SELFLIB_DLL bool DeleteFile(const tstring& path);
 
     SELFLIB_DLL tstring		ExtractFilePath(const tstring& path);

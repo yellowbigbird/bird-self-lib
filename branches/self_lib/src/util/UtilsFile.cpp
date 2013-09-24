@@ -340,6 +340,16 @@ Done:
         if(fileName.length()< 1)
             return false;
 
+        //get path
+        wstring wstrPath = ExtractFilePath(fileName);
+        if(wstrPath.length() )   {
+            bool fDirExist = DirectoryExists(wstrPath);
+            if(!fDirExist){
+                fDirExist = CreateDirectory(wstrPath);
+                ASSERT(fDirExist);
+            }
+        }
+
         bool ifok = true;
         HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_WRITE , 0,NULL, 
             OPEN_ALWAYS,  FILE_ATTRIBUTE_NORMAL,   NULL );    
@@ -347,7 +357,7 @@ Done:
             return false;
         DWORD lasterr = ::GetLastError();
         DWORD writtenLen = 0;
-        DWORD towriteLen = strData.size();
+        DWORD towriteLen = (DWORD)strData.size();
 
         BOOL ifokBIG = ::WriteFile(hFile, &(strData[0]), towriteLen, &writtenLen, 0 );
         if(!ifokBIG || towriteLen!= writtenLen)
