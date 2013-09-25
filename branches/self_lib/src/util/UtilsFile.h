@@ -23,7 +23,7 @@ namespace  UtilFile{
 
     SELFLIB_DLL bool        FileExists(const tstring& path);
 
-    SELFLIB_DLL UINT        GetFileSize(const tstring& path);
+    SELFLIB_DLL UINT64      GetFileSize(const tstring& path);
     SELFLIB_DLL UINT64      GetFileTime(const tstring& path);
 
     SELFLIB_DLL bool        DirectoryExists(const tstring& path);

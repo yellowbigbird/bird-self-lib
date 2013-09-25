@@ -89,74 +89,108 @@ namespace UtilFile
 
     bool FileExists(const tstring& path)
     {
-        DWORD dwAttribute = ::GetFileAttributes(path.c_str());
-
-        if (dwAttribute == INVALID_FILE_ATTRIBUTES)
+        DWORD dwAttribute  = 0;
+        try
         {
-            return false;
+
+            dwAttribute = ::GetFileAttributes(path.c_str());
+
+            if (dwAttribute == INVALID_FILE_ATTRIBUTES)
+            {
+                return false;
+            }
+        }
+        catch (CException* )
+        {
         }
         return (dwAttribute & (FILE_ATTRIBUTE_DEVICE | FILE_ATTRIBUTE_DIRECTORY)) == 0;
     }
 
-    UINT GetFileSize(const tstring& path)
-    {
-        HANDLE hFile = ::CreateFile(path.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        if(!hFile || INVALID_HANDLE_VALUE == hFile){
-            return 0;
-        }
-        DWORD filesizeHi=0;
-        DWORD fileSize = ::GetFileSize(hFile, &filesizeHi);
-        if(filesizeHi> 0)
-            ASSERT(false);  //todo, return x64 size.
-        ::CloseHandle(hFile);
 
-        return fileSize;
+    bool DirectoryExists(const tstring& path)
+    {
+
+        DWORD dwAttribute = 0;
+        try
+        {
+            dwAttribute  = ::GetFileAttributes(path.c_str());
+
+            if (dwAttribute == INVALID_FILE_ATTRIBUTES)
+            {
+                return false;
+            }
+        }
+        catch (CException* )
+        {
+        }
+        return (dwAttribute & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY;
+    }
+
+    UINT64 GetFileSize(const tstring& path)
+    {
+        UINT64 fileSize64 = 0;
+
+        try
+        {
+            HANDLE hFile = ::CreateFile(path.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            if(!hFile || INVALID_HANDLE_VALUE == hFile){
+                return 0;
+            }
+            DWORD filesizeHi=0;
+            DWORD fileSizeLow = ::GetFileSize(hFile, &filesizeHi);
+            if(filesizeHi> 0){
+                fileSize64 = filesizeHi;
+                fileSize64 = fileSize64<<32;
+                fileSize64 += fileSizeLow;
+            }    
+            else{
+                fileSize64 = fileSizeLow;
+            }
+            ::CloseHandle(hFile);
+        }
+        catch (CException* )
+        {
+        }      
+
+        return fileSize64;
     }
 
     UINT64 GetFileTime(const tstring& path)
     {
         UINT64 fileTime = 0;
                 
-        CFile file;
-        CFileStatus fileSta;
-        BOOL IFOK = file.Open(path.c_str(), CFile::modeRead|CFile::shareDenyNone, NULL);
-        if(!IFOK) 
-        {  
-            //AddDebug("open file err.");
-            ASSERT(false);
-            return 0;
-        }  
-        IFOK = file.GetStatus(fileSta) ;
-        if(!IFOK){
-            //AddDebug("file GetStatus err.");
-            ASSERT(false);
-            return 0;
+        try
+        {
+            CFile file;
+            CFileStatus fileSta;
+            BOOL IFOK = file.Open(path.c_str(), CFile::modeRead|CFile::shareDenyNone, NULL);
+            if(!IFOK) 
+            {  
+                ASSERT(false);
+                return 0;
+            }  
+            IFOK = file.GetStatus(fileSta) ;
+            if(!IFOK){
+                ASSERT(false);
+                return 0;
+            }
+
+            //m_time = fileSta.m_mtime.GetTime();
+            //SYSTEMTIME systime;
+            //ifok = fileSta.m_mtime.GetAsSystemTime(systime);	
+            tm tm0;
+            tm* ptm = fileSta.m_mtime.GetGmtTm(&tm0);
+            fileTime = mktime(ptm);
+
+            file.Close();
         }
-
-        //m_time = fileSta.m_mtime.GetTime();
-        //SYSTEMTIME systime;
-        //ifok = fileSta.m_mtime.GetAsSystemTime(systime);
-        //if(!ifok )
-        //	break;		
-        //CString strtime1 = time1.Format(_T("%Y-%m-%d %H:%M:%S") ); 		
-        tm tm0;
-        tm* ptm = fileSta.m_mtime.GetGmtTm(&tm0);
-        fileTime = mktime(ptm);
-
-        file.Close();
+        catch (CException* )
+        {
+        }
+       
         return fileTime;
     }
 
-    bool DirectoryExists(const tstring& path)
-    {
-        DWORD dwAttribute = ::GetFileAttributes(path.c_str());
-
-        if (dwAttribute == INVALID_FILE_ATTRIBUTES)
-        {
-            return false;
-        }
-        return (dwAttribute & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY;
-    }
 
     bool CreateDirectory(const tstring& path)
     {
@@ -164,27 +198,34 @@ namespace UtilFile
         int     index = 0;
         tstring subPath;
 
-        while((pos = path.find_first_of(_T("\\/"), pos)) != tstring::npos)
+        try
         {
-            index++;
-            pos++;
-            if (index == 1)
+            while((pos = path.find_first_of(_T("\\/"), pos)) != tstring::npos)
             {
-                continue;
-            }
-            subPath = path.substr(0, pos - 1);
-            if (!DirectoryExists(subPath))
-            {
-                if (::CreateDirectory(subPath.c_str(), NULL) == FALSE)
+                index++;
+                pos++;
+                if (index == 1)
                 {
-                    return false;
+                    continue;
+                }
+                subPath = path.substr(0, pos - 1);
+                if (!DirectoryExists(subPath))
+                {
+                    if (::CreateDirectory(subPath.c_str(), NULL) == FALSE)
+                    {
+                        return false;
+                    }
                 }
             }
+            if (!DirectoryExists(path))
+            {
+                return ::CreateDirectory(path.c_str(), NULL) != FALSE;
+            }
         }
-        if (!DirectoryExists(path))
+        catch (CException* )
         {
-            return ::CreateDirectory(path.c_str(), NULL) != FALSE;
         }
+       
         return true;
     }
 
@@ -260,37 +301,52 @@ namespace UtilFile
 
     bool DeleteFile(const tstring& path)
     {
-        return ::DeleteFile(path.c_str()) == TRUE;
+        BOOL IFOK = FALSE;
+        try
+        {
+            IFOK = ::DeleteFile(path.c_str() );
+        }
+        catch (CException* )
+        {
+        }
+        return IFOK == TRUE;
     }
 
     bool CompareFileTime(const tstring& file1, const tstring& file2, int& result)
     {
-        HANDLE hFile1 = CreateFile(file1.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        HANDLE hFile2 = CreateFile(file2.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         bool   res = false;
 
-        res    = false;
-        result = 0;
-        if (hFile1 != INVALID_HANDLE_VALUE && hFile2 != INVALID_HANDLE_VALUE)
+        try
         {
-            ULARGE_INTEGER time1;
-            ULARGE_INTEGER time2;
-
-            if (GetFileTime(hFile1, NULL, NULL, (PFILETIME)&time1) &&
-                GetFileTime(hFile2, NULL, NULL, (PFILETIME)&time2))
+            HANDLE hFile1 = ::CreateFile(file1.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            HANDLE hFile2 = ::CreateFile(file2.c_str(), 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            
+            result = 0;
+            if (hFile1 != INVALID_HANDLE_VALUE && hFile2 != INVALID_HANDLE_VALUE)
             {
-                res = true;
-                result = (time1.QuadPart < time2.QuadPart) ? -1 : ((time1.QuadPart > time2.QuadPart) ? 1 : 0);
+                ULARGE_INTEGER time1;
+                ULARGE_INTEGER time2;
+
+                if (::GetFileTime(hFile1, NULL, NULL, (PFILETIME)&time1) &&
+                    ::GetFileTime(hFile2, NULL, NULL, (PFILETIME)&time2))
+                {
+                    res = true;
+                    result = (time1.QuadPart < time2.QuadPart) ? -1 : ((time1.QuadPart > time2.QuadPart) ? 1 : 0);
+                }
+            }
+            if (hFile1 != INVALID_HANDLE_VALUE)
+            {
+                CloseHandle(hFile1);
+            }
+            if (hFile2 != INVALID_HANDLE_VALUE)
+            {
+                CloseHandle(hFile2);
             }
         }
-        if (hFile1 != INVALID_HANDLE_VALUE)
+        catch (CException* )
         {
-            CloseHandle(hFile1);
         }
-        if (hFile2 != INVALID_HANDLE_VALUE)
-        {
-            CloseHandle(hFile2);
-        }
+        
         return res;
     }
 
@@ -307,16 +363,23 @@ namespace UtilFile
         tstring             dirPath = ExtractFilePath(mask);
         size_t              initialSize = files.size();
 
-        if( (hFile = _tfindfirst( mask.c_str(), &file )) != -1L )
+        try
         {
-            do 
+            if( (hFile = _tfindfirst( mask.c_str(), &file )) != -1L )
             {
-                tstring fileName = dirPath + _T("\\") + file.name;
-                files.insert(fileName);
-            } 
-            while( _tfindnext( hFile, &file ) == 0 );
-            _findclose( hFile );
+                do 
+                {
+                    tstring fileName = dirPath + _T("\\") + file.name;
+                    files.insert(fileName);
+                } 
+                while( _tfindnext( hFile, &file ) == 0 );
+                _findclose( hFile );
+            }
         }
+        catch (CException* )
+        {
+        }
+        
         return initialSize != files.size();
     }
 
@@ -345,29 +408,36 @@ namespace UtilFile
             return false;
 
         bool ifok = true;
-        HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_READ , 0,NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL,
-            NULL );    
-        if(!hFile || INVALID_HANDLE_VALUE == hFile)
-            return false;
-        DWORD lasterr = ::GetLastError();
-        DWORD filelen = ::GetFileSize(hFile, 0);
-        DWORD readedLen = 0;
-        int toreadLen = filelen;
+        try
+        {
+            HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_READ , 0,NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL,
+                NULL );    
+            if(!hFile || INVALID_HANDLE_VALUE == hFile)
+                return false;
+            DWORD lasterr = ::GetLastError();
+            DWORD filelen = ::GetFileSize(hFile, 0);
+            DWORD readedLen = 0;
+            int toreadLen = filelen;
 
-        strData.resize(filelen);
-        if((int)strData.size() < filelen)
-        {
-            goto Done;
-        }
-        BOOL ifokBIG = ::ReadFile(hFile, &(strData[0]), toreadLen, &readedLen, 0 );
-        if(!ifokBIG || readedLen!= toreadLen)
-        {
-            lasterr = GetLastError();
-            ifok = false;
-             goto Done;
-        }        
+            strData.resize(filelen);
+            if((int)strData.size() < filelen)
+            {
+                goto Done;
+            }
+            BOOL ifokBIG = ::ReadFile(hFile, &(strData[0]), toreadLen, &readedLen, 0 );
+            if(!ifokBIG || readedLen!= toreadLen)
+            {
+                lasterr = GetLastError();
+                ifok = false;
+                goto Done;
+            }        
 Done:
-        CloseHandle(hFile);
+            CloseHandle(hFile);
+        }
+        catch (CException* )
+        {
+        }
+       
         return ifok;
     }
 
@@ -376,35 +446,42 @@ Done:
         if(fileName.length()< 1)
             return false;
 
-        //get path
-        wstring wstrPath = ExtractFilePath(fileName);
-        if(wstrPath.length() )   {
-            bool fDirExist = DirectoryExists(wstrPath);
-            if(!fDirExist){
-                fDirExist = CreateDirectory(wstrPath);
-                ASSERT(fDirExist);
-            }
-        }
-
         bool ifok = true;
-        HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_WRITE , 0,NULL, 
-            OPEN_ALWAYS,  FILE_ATTRIBUTE_NORMAL,   NULL );    
-        if(!hFile || INVALID_HANDLE_VALUE == hFile)
-            return false;
-        DWORD lasterr = ::GetLastError();
-        DWORD writtenLen = 0;
-        DWORD towriteLen = (DWORD)strData.size();
-
-        BOOL ifokBIG = ::WriteFile(hFile, &(strData[0]), towriteLen, &writtenLen, 0 );
-        if(!ifokBIG || towriteLen!= writtenLen)
+        try
         {
-            lasterr = GetLastError();
-            goto Done;
-        }
+            //get path
+            wstring wstrPath = ExtractFilePath(fileName);
+            if(wstrPath.length() )   {
+                bool fDirExist = DirectoryExists(wstrPath);
+                if(!fDirExist){
+                    fDirExist = CreateDirectory(wstrPath);
+                    ASSERT(fDirExist);
+                }
+            }
+
+            HANDLE hFile = ::CreateFile(fileName.c_str(), GENERIC_WRITE , 0,NULL, 
+                OPEN_ALWAYS,  FILE_ATTRIBUTE_NORMAL,   NULL );    
+            if(!hFile || INVALID_HANDLE_VALUE == hFile)
+                return false;
+            DWORD lasterr = ::GetLastError();
+            DWORD writtenLen = 0;
+            DWORD towriteLen = (DWORD)strData.size();
+
+            BOOL ifokBIG = ::WriteFile(hFile, &(strData[0]), towriteLen, &writtenLen, 0 );
+            if(!ifokBIG || towriteLen!= writtenLen)
+            {
+                lasterr = GetLastError();
+                goto Done;
+            }
 Done:
-        CloseHandle(hFile);
+            CloseHandle(hFile);
+        }
+        catch (CException* )
+        {
+        }
+        
         return ifok;
     }
 
 
-}
+} //namespace
