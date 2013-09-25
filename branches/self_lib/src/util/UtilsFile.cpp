@@ -154,22 +154,18 @@ namespace UtilFile
 
         return fileSize64;
     }
+    //////////////////////////////////////////////////////////////////////////
 
-    UINT64 GetFileTime(const tstring& path)
+    UINT64 GetFileTimeGmt(const tstring& path)
     {
         UINT64 fileTime = 0;
                 
+        if(path.length() < 1)
+            return 0;
         try
         {
-            CFile file;
-            CFileStatus fileSta;
-            BOOL IFOK = file.Open(path.c_str(), CFile::modeRead|CFile::shareDenyNone, NULL);
-            if(!IFOK) 
-            {  
-                ASSERT(false);
-                return 0;
-            }  
-            IFOK = file.GetStatus(fileSta) ;
+            CFileStatus fileSta;            
+            BOOL IFOK = CFile::GetStatus(path.c_str(), fileSta) ;
             if(!IFOK){
                 ASSERT(false);
                 return 0;
@@ -179,10 +175,8 @@ namespace UtilFile
             //SYSTEMTIME systime;
             //ifok = fileSta.m_mtime.GetAsSystemTime(systime);	
             tm tm0;
-            tm* ptm = fileSta.m_mtime.GetGmtTm(&tm0);
+            tm* ptm = fileSta.m_mtime.GetGmtTm(&tm0);  // last modification date/time of file
             fileTime = mktime(ptm);
-
-            file.Close();
         }
         catch (CException* )
         {
@@ -190,6 +184,35 @@ namespace UtilFile
        
         return fileTime;
     }
+
+    bool SetFileTimeGmt(const tstring& path, UINT64 gmtTime)
+    {
+        if(path.length() < 1)
+            return false;
+
+        BOOL fok = true;
+        try{
+            CFileStatus fileSta;            
+            fok = CFile::GetStatus(path.c_str(), fileSta) ;
+            if(!fok){
+                ASSERT(false);
+                return false;
+            }
+
+            CFileTime fileTimeGmt(gmtTime);
+            CFileTime fileTimeLocal = fileTimeGmt.UTCToLocal();
+            UINT64 u64time = fileTimeLocal.GetTime();
+            fileSta.m_mtime = u64time;
+
+            CFile::SetStatus(path.c_str(), fileSta) ;
+        }
+        catch(CException* )
+        {
+            return false;
+        }
+        return fok==TRUE;
+    }
+    //////////////////////////////////////////////////////////////////////////
 
 
     bool CreateDirectory(const tstring& path)
