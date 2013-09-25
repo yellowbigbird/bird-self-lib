@@ -22,12 +22,13 @@ namespace  UtilFile{
 	SELFLIB_DLL bool        HasWildcards(const tstring& path);
 
     SELFLIB_DLL bool        FileExists(const tstring& path);
-
-    SELFLIB_DLL UINT64      GetFileSize(const tstring& path);
-    SELFLIB_DLL UINT64      GetFileTime(const tstring& path);
-
     SELFLIB_DLL bool        DirectoryExists(const tstring& path);
 
+    SELFLIB_DLL UINT64      GetFileSize(const tstring& path);
+
+    SELFLIB_DLL UINT64      GetFileTimeGmt(const tstring& path);
+    SELFLIB_DLL bool        SetFileTimeGmt(const tstring& path, UINT64 gmtTime);
+    
     SELFLIB_DLL bool        CreateDirectory(const tstring& path);
 
 	SELFLIB_DLL bool        DeleteFile(const tstring& path);
