@@ -27,7 +27,11 @@ namespace  UtilFile{
     SELFLIB_DLL UINT64      GetFileSize(const tstring& path);
 
     SELFLIB_DLL UINT64      GetFileTimeGmt(const tstring& path);
+    SELFLIB_DLL UINT64      GetFileTimeGmtByMfc(const tstring& path);
+
     SELFLIB_DLL bool        SetFileTimeGmt(const tstring& path, UINT64 gmtTime);
+
+    SELFLIB_DLL UINT64      ConvertFileTimeToUint64(const FILETIME& fileTime);
     
     SELFLIB_DLL bool        CreateDirectory(const tstring& path);
 
