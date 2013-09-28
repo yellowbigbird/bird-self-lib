@@ -156,7 +156,7 @@ namespace UtilFile
     }
     //////////////////////////////////////////////////////////////////////////
 
-    UINT64 GetFileTimeGmt(const tstring& path)
+    UINT64 GetFileTimeGmtByMfc(const tstring& path)
     {
         UINT64 fileTime = 0;
                 
@@ -185,7 +185,76 @@ namespace UtilFile
         return fileTime;
     }
 
-    bool SetFileTimeGmt(const tstring& path, UINT64 gmtTime)
+    UINT64 ConvertFileTimeToUint64(const FILETIME& fileTime)
+    {
+        UINT64 time64;
+        memcpy_s(&time64, sizeof(time64), &fileTime ,  sizeof(FILETIME) );
+        return time64;
+    }
+
+    bool ConvertUint64ToFileTime(FILETIME& fileTime, UINT64 time64)
+    {
+        //UINT64 time64;
+        memcpy_s(&fileTime, sizeof(FILETIME), &time64 ,  sizeof(time64) );
+        return true;
+    }
+
+    UINT64 GetFileTimeGmt(const tstring& path)
+    {
+        UINT64 fileTime = 0;
+
+        if(path.length() < 1)
+            return 0;
+
+        try
+        {          
+            HANDLE hFile = ::CreateFile(path.c_str(),              
+                GENERIC_READ,  
+                FILE_SHARE_READ,                      
+                NULL,                   
+                OPEN_EXISTING,         
+                FILE_ATTRIBUTE_NORMAL,
+                NULL);  
+            if(!hFile 
+                || hFile == INVALID_HANDLE_VALUE) 
+                return 0;
+
+            FILETIME modifyTime;
+            BOOL IFOK  =::GetFileTime(hFile, NULL, NULL, &modifyTime);         
+            if(!IFOK){
+                ASSERT(false);
+                return 0;
+            }
+            fileTime = ConvertFileTimeToUint64(modifyTime);
+            //CString strTime;
+
+            //(1)
+            //FileTimeToLocalFileTime(&fCreateTime,&localTime);//将文件时间转换为本地文件时间
+            //FileTimeToSystemTime(&localTime, &sysTime);//将文件时间转换为本地系统时间
+
+            //(2)
+            //FileTimeToSystemTime(&fCreateTime, &sysTime);//将文件时间转换为标准系统时间
+            //SystemTimeToTzSpecificLocalTime(&sysTime, &sysTime);//将标准系统时间转换为本地系统时间
+
+            //strTime.Format(_T("%4d-%2d-%2d %2d:%2d:%2d"),
+            //    sysTime.wYear,
+            //    sysTime.wMonth,
+            //    sysTime.wDay,
+            //    sysTime.wHour,
+            //    sysTime.wMinute,
+            //    sysTime.wSecond
+            //    );
+            ::CloseHandle(hFile);
+
+        }
+        catch (CException* )
+        {
+        }
+
+        return fileTime;
+    }
+
+    bool SetFileTimeGmtByMfc(const tstring& path, UINT64 gmtTime)
     {
         if(path.length() < 1)
             return false;
@@ -211,6 +280,41 @@ namespace UtilFile
             return false;
         }
         return fok==TRUE;
+    }
+
+    //use winapi
+    bool SetFileTimeGmt(const tstring& path, UINT64 gmtTime )
+    {
+        if(path.length() < 1)
+            return false;
+
+        bool ifok = true;
+        HANDLE hFile = ::CreateFile(path.c_str(),              
+            GENERIC_WRITE|GENERIC_READ,  
+            FILE_SHARE_READ,                      
+            NULL,                   
+            OPEN_EXISTING,         
+            FILE_ATTRIBUTE_NORMAL,
+            NULL);  
+        if(!hFile 
+            || hFile == INVALID_HANDLE_VALUE) 
+            return 0;
+
+        FILETIME modifyTime;
+        bool fConvert = ConvertUint64ToFileTime(modifyTime, gmtTime);
+        if(fConvert){
+            BOOL IFOK  =::SetFileTime(hFile, NULL, NULL, &modifyTime);    
+            if(!IFOK){
+                ASSERT(false);
+                ifok = false;
+            }
+        }
+        else{
+            ifok = false;
+        }             
+        ::CloseHandle(hFile);
+       
+        return true;
     }
     //////////////////////////////////////////////////////////////////////////
 
