@@ -113,7 +113,7 @@ bool CLzmaWrapper::Decode(const std::string& strSrc, std::string& strOut)
   res = Decode2(&state, &strStreamOut.m_streamOut, &strStreamIn.m_streamIn, unpackSize);
 
   LzmaDec_Free(&state, &g_Alloc);
-  return (res!=0);
+  return (res==SZ_OK);
 }
 
 SRes Decode2(CLzmaDec *state, ISeqOutStream *outStream, ISeqInStream *inStream, UInt64 unpackSize)
