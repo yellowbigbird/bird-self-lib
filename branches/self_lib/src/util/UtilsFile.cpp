@@ -43,11 +43,12 @@ namespace UtilFile
     {
         size_t pos = path.find_last_of(_T("\\/"));
 
-        if (pos != tstring::npos)
+        if (pos != tstring::npos
+			&& pos < path.size() )
         {
             return path.substr(0, pos);
         }
-        return path;
+        return _T("");
     }
 
     tstring ExtractFileName(const tstring& path)
