@@ -1,7 +1,8 @@
 
-加入tinyxml
+是否需要相对路径
 
-read all files
+//加入tinyxml
 
-先保存为绝对路径
+//read all files
 
+//先保存为绝对路径
