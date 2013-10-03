@@ -12,6 +12,7 @@
 #define IDC_EDIT1                       1002
 #define IDC_EDIT_PATH                   1002
 #define IDC_BUT_OPEN_PATH               1003
+#define IDC_BUT_SEARCH                  1004
 
 // Next default values for new objects
 // 

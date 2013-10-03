@@ -4,6 +4,8 @@
 
 #pragma once
 
+class CFileInfo;
+class TiXmlElement;
 
 // CAddFileToVsprojectDlg dialog
 class CAddFileToVsprojectDlg : public CDialog
@@ -31,9 +33,16 @@ protected:
     afx_msg void OnBtnOpenPrj();
     afx_msg void OnBtnAddPath();
     afx_msg void OnBtnOpenPath();
+
+    //bool        SearchFiles();
+    bool        ChangeProjectFile();
+
+    bool        CreateXmlElement(const CFileInfo* pFileInfo, TiXmlElement* pXmlElem) const;
 	
 protected:
     HICON       m_hIcon;
     CString     m_strRootPath;
     CString     m_strPrjFilePathName;
+public:
+    afx_msg void OnBtnSearch();
 };
