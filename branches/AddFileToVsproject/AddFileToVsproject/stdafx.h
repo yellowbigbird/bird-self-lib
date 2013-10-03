@@ -61,3 +61,5 @@
 #include <string>
 #include <vector>
 
+#define SAFE_DELETE(p) { if(p) { delete (p); (p)=NULL; } }
+
