@@ -1,0 +1,2 @@
+"C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\resgen.exe" Resources.resx
+"C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\al.exe" /t:lib /embed:Resources.resources /culture:en-US /out:Switch2008.Resources.dll
