@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Switch2010", "Switch2010\Switch2010.csproj", "{2E9BD3F4-AC0A-4699-8400-794032211965}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchPackage", "SwitchPackage\SwitchPackage.csproj", "{C987E645-DD4D-4DAC-8928-DD0EB57D7633}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E9BD3F4-AC0A-4699-8400-794032211965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9BD3F4-AC0A-4699-8400-794032211965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9BD3F4-AC0A-4699-8400-794032211965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9BD3F4-AC0A-4699-8400-794032211965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C987E645-DD4D-4DAC-8928-DD0EB57D7633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C987E645-DD4D-4DAC-8928-DD0EB57D7633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C987E645-DD4D-4DAC-8928-DD0EB57D7633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C987E645-DD4D-4DAC-8928-DD0EB57D7633}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
