@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeElementWrapper">
+    <Position X="0.5" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <FileName>CodeElementWrapper.cs</FileName>
+      <HashCode>AAAABAAAJAAEQAAAAAYAAAAUGAAAAEgAAQIAAAAAAAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeElementWrapperArray">
+    <Position X="0.5" Y="5" Width="3.5" />
+    <TypeIdentifier>
+      <FileName>CodeElementWrapperArray.cs</FileName>
+      <HashCode>AAAAAAAABAAAAAAAAAAQABAAAAAABAACAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeElementWrapperArray.CodeElementWrapperElementIDComparer">
+        <TypeIdentifier>
+          <NewMemberFileName>CodeElementWrapperArray.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeElementWrapperArrayIndexTable">
+    <Position X="0.5" Y="8.75" Width="3.5" />
+    <TypeIdentifier>
+      <FileName>IndexTable.cs</FileName>
+      <HashCode>AAIAAAAAAAAAgAAACAAQAAQAAAAAAAAAQAAAAAAAABA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeElementWrapperArrayIndexTable.MyComparer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IndexTable.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeElementWrapperIndexTable">
+    <Position X="0.5" Y="12.75" Width="3.5" />
+    <TypeIdentifier>
+      <FileName>CodeElementWrapperIndexTable.cs</FileName>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeModelHelpers">
+    <Position X="4.25" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <FileName>CodeModelHelpers.cs</FileName>
+      <HashCode>AAAAAAAABEgAAAAAAABAAAICAQAAQAAAAAAAAACAAKA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeOutlineCache">
+    <Position X="4.25" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <FileName>CodeOutlineCache.cs</FileName>
+      <HashCode>AAIAAACgAGAAAAICCAAgABAAAACgAAIAgAAAABAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeOutlineFileManager">
+    <Position X="4.25" Y="8" Width="3.25" />
+    <TypeIdentifier>
+      <FileName>CodeOutlineFileManager.cs</FileName>
+      <HashCode>AAECggyhCiJJVgYBAhBIGBTgECEAAFcC0EBzDEJEICA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.CodeOutlineFileManager.OutlineFileManagerState">
+        <TypeIdentifier>
+          <NewMemberFileName>CodeOutlineFileManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.EditorSupport">
+    <Position X="7.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>EditorSupport.cs</FileName>
+      <HashCode>IAAAAAAAAAEAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.GuidList">
+    <Position X="7.75" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>Guids.cs</FileName>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.IndexTable">
+    <Position X="0.5" Y="15" Width="3.5" />
+    <TypeIdentifier>
+      <FileName>IndexTable.cs</FileName>
+      <HashCode>AACAAAAAAQAAhBAAAAAAAAAAACAAAAAkBACAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.PkgCmdIDList">
+    <Position X="7.75" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>PkgCmdID.cs</FileName>
+      <HashCode>AAgAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.Resources">
+    <Position X="7.75" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAIABEAAAAQAAAAAAAAAQAAAIAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.ResultsTable">
+    <Position X="0.5" Y="18.25" Width="3.5" />
+    <TypeIdentifier>
+      <FileName>ResultsTable.cs</FileName>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.SearchCriteria">
+    <Position X="7.75" Y="8" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>IndexTable.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.SortCriteria">
+    <Position X="7.75" Y="10" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>IndexTable.cs</FileName>
+      <HashCode>AAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.SortCriteria.SortType">
+        <TypeIdentifier>
+          <NewMemberFileName>IndexTable.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.SourceOutliner">
+    <Position X="7.75" Y="13.25" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>VsPkg.cs</FileName>
+      <HashCode>UABAAACAAiAAAQACAAAEIBAAAABAAAAAAAAAAAAAQAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner.SourceOutlineToolWindow">
+    <Position X="7.75" Y="17.25" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>SourceOutlinerToolWindow.cs</FileName>
+      <HashCode>QMA4AEaKISCAAgAY2AARBDUAIohBBZAQRUSErMgGAAE=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+</ClassDiagram>

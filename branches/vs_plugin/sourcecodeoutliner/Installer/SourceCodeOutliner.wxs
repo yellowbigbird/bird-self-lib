@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2003/01/wi'>
+  <Product Name='Power Toys for Visual Studio - Source Code Outliner' Id='6358F470-A641-444d-A322-600000530E5C'
+    Language='1033' Codepage='1252' Version='1.1.0' Manufacturer='Microsoft Corporation' 
+    UpgradeCode='9D25F0EB-F496-4362-8086-0BF6B5B6117D'>
+
+    <Package Id='????????-????-????-????-????????????' 
+      Keywords='Installer'
+      Comments='Source Code Outliner for Visual Studio 2008.'
+      Manufacturer='Microsoft Corporation'
+      InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+    <!--
+    These condition tags represent conditions that must be met for the installer to run. 
+    The LaunchConditions action in the InstallExecuteSequence causes the installer to check each condition.
+    -->
+
+    <Condition Message="You need to be an administrator to install this product.">
+      Privileged
+    </Condition>
+
+    <Property Id="VS2008">
+      <RegistrySearch Id="VS2008Registry" Type="raw"
+                      Root="HKLM" Key="Software\Microsoft\VisualStudio\9.0" Name="ApplicationID" />
+    </Property>
+
+    <Property Id="DEVENV_EXE_2008">
+      <RegistrySearch Id="DevEnvLocationRegistry" Type="raw"
+                      Root="HKLM" Key="Software\Microsoft\VisualStudio\9.0\Setup\VS" Name="EnvironmentPath" />
+    </Property>
+    
+    <Condition Message="Source Code Outliner requires Visual Studio 2008, which is not present on the computer.">
+      VS2008 = "VisualStudio"
+    </Condition>
+
+    <Media Id='1' Cabinet='SourceCodeOutliner.cab' EmbedCab='yes' />
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='PowerToysFolder' Name='powertoy' LongName='Power Toys for Visual Studio'>
+          <Directory Id='INSTALLDIR' Name='CodeOut' LongName='Source Code Outliner'>
+            <Component Id='PowerToyCore' Guid='EFD35723-EEC4-455a-8341-185FA2865B87'>
+              <File Id='File_Microsoft.Shared.PowerToy.SourceOutlinerPackage.dll' Name='package.dll' LongName='Microsoft.Shared.PowerToy.SourceOutlinerPackage.dll' DiskId='1'
+                      src='Bin\Microsoft.Shared.PowerToy.SourceOutlinerPackage.dll' Vital='yes'>
+              </File>
+              <File Id='File_Microsoft.VSSDK.PowerToy.SourceOutlinerControl.dll' Name='Common.dll' LongName='Microsoft.VSSDK.PowerToy.SourceOutlinerControl.dll' DiskId='1'
+                      src='Bin\Microsoft.VSSDK.PowerToy.SourceOutlinerControl.dll' Vital='yes'>
+              </File>
+              <?include SourceCodeOutliner.Registry.wxi?>
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature 
+      Id='Complete' 
+      Title='Source Code Outliner' 
+      Description='Source Code Outliner for Visual Studio 2008'
+      Display='expand' 
+      Level='1'
+      ConfigurableDirectory='INSTALLDIR'
+    >
+      <ComponentRef Id='PowerToyCore' />
+    </Feature>
+
+    <!-- 
+    The LaunchConditions conditional ensures we only check registry keys during install.
+    -->
+    <CustomAction Id='NewerVersionError' Error="A newer version of Source Code Outliner is already installed on the computer.">
+    </CustomAction>
+
+    <InstallUISequence>
+      <LaunchConditions>NOT Installed</LaunchConditions>
+      <Custom Action="NewerVersionError" After="FindRelatedProducts">NEWVERSIONDETECTED</Custom>
+    </InstallUISequence>
+
+
+    <InstallExecuteSequence>
+      <LaunchConditions>NOT Installed</LaunchConditions>
+      <Custom Action="NewerVersionError" After="FindRelatedProducts">NEWVERSIONDETECTED</Custom>
+      <Custom Action="CA_DevenvSetup2008" Before="InstallFinalize" />
+      <RemoveExistingProducts After="InstallInitialize"></RemoveExistingProducts>
+    </InstallExecuteSequence>
+
+    <CustomAction Id="CA_DevenvSetup2008" Property="DEVENV_EXE_2008" ExeCommand="/setup" Execute="deferred" Return="check" Impersonate="no" />
+    <UI>
+      <ProgressText Action="CA_DevenvSetup2008">Setting up Visual Studio environment.</ProgressText>
+    </UI>
+    <UIRef Id="WixUI" />
+
+    <!-- 
+    Set properties for the Add/Remove Programs (ARP) entry.
+    -->
+
+    <Property Id="ARPPRODUCTICON">arpicon.ico</Property>
+    <Icon Id="arpicon.ico" src="Bitmaps\powertoys.ico" />
+    <Property Id="ARPHELPLINK"><![CDATA[http://go.microsoft.com/fwlink/?LinkId=77546]]></Property>
+    <Property Id="ARPURLINFOABOUT"><![CDATA[http://go.microsoft.com/fwlink/?LinkId=77545]]></Property>
+    <Property Id="ARPCONTACT"><![CDATA[Microsoft Corporation]]></Property>
+    <Property Id="ARPCOMMENTS"><![CDATA[Source Code Outliner for Visual Studio 2008]]></Property>
+
+  </Product>
+</Wix>
