@@ -662,14 +662,14 @@ namespace Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner
                 return;
             }
 
-            // Only C# and VB are currently supported.
-            if ((fileCodeModel.Language != CodeModelLanguageConstants.vsCMLanguageCSharp)
-                && (fileCodeModel.Language != CodeModelLanguageConstants.vsCMLanguageVB))
-            {
-                TreeView.Hide();
-                State = OutlineFileManagerState.DoneLoadingCodeModel;
-                return;
-            }
+            // Only C# and VB are currently supported. cpp
+            //if ((fileCodeModel.Language != CodeModelLanguageConstants.vsCMLanguageCSharp)
+            //    && (fileCodeModel.Language != CodeModelLanguageConstants.vsCMLanguageVB))
+            //{
+            //    TreeView.Hide();
+            //    State = OutlineFileManagerState.DoneLoadingCodeModel;
+            //    return;
+            //}
 
             EnvDTE.CodeElements fileCodeElements = fileCodeModel.CodeElements;
             int nFileCodeElements = fileCodeElements.Count;
