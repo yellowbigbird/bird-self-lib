@@ -53,13 +53,13 @@ namespace Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner
         /// <remarks>
         /// If the document is in the cache, it is reused.
         /// </remarks>
-        public void AddDocumentToCache(Document d, SourceOutlineToolWindow tw)
+        public void AddDocumentToCache(Document doc, SourceOutlineToolWindow tw)
         {
-            Debug.Assert(d != null);
+            Debug.Assert(doc != null);
 
             _toolWindow = tw;
 
-            if (d == _document)
+            if (doc == _document)
             {
                 return;
             }
@@ -72,8 +72,8 @@ namespace Microsoft.Samples.VisualStudio.PowerToy.SourceOutliner
                 _control.RemoveTreeFromControls(_fileManager.FilterView);
             }
 
-            _document = d;
-            _fileManager = new CodeOutlineFileManager(_control, _dte, d, tw);
+            _document = doc;
+            _fileManager = new CodeOutlineFileManager(_control, _dte, doc, tw);
 
             tw.RegisterTreeEvents(_fileManager.TreeView, _fileManager.FilterView);
 
