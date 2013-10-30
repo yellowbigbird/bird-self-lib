@@ -176,6 +176,7 @@
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				ModuleDefinitionFile=".\LzmaLib.def"
 				ProgramDatabaseFile="$(IntDir)/$(TargetName).pdb"
 				OptimizeForWindows98="1"
