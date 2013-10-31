@@ -6,6 +6,11 @@
 #include "DcTest.h"
 #include "DcTestDlg.h"
 
+#include "dcData.h"
+
+#include <Util/UtilString.h>
+#include <assert.h>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -21,8 +26,16 @@ using namespace std;
 CDcTestDlg::CDcTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDcTestDlg::IDD, pParent)
 	, m_strUrl(_T("localhost::8080"))
+    , m_pData(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+    m_pData = new CDcData();
+    assert(m_pData);
+}
+
+CDcTestDlg::~CDcTestDlg()
+{
+    SAFE_DELETE(m_pData);
 }
 
 void CDcTestDlg::DoDataExchange(CDataExchange* pDX)
@@ -98,25 +111,39 @@ HCURSOR CDcTestDlg::OnQueryDragIcon()
 
 void CDcTestDlg::OnBnClickedButGo()
 {
+    if(!m_pData)
+        return;
+    CDcData& dcData = *m_pData;
+
 	UpdateData(TRUE);  //control to value
 	if(m_strUrl.IsEmpty() )
 		return;
 
 	const wstring wstrUrl = m_strUrl;
-	m_data.SetUrl(wstrUrl);
-	bool fok = m_data.SendRequest();
+    const string strUrl = UtilString::ConvertWideCharToMultiByte(wstrUrl);
+	dcData.SetUrl(strUrl);
+
+	bool fok = dcData.SendRequest();
 }
 
 void CDcTestDlg::OnBnClickedButOpen()
 {
+    if(!m_pData)
+        return;
+    CDcData& dcData = *m_pData;
+
 	CFileDialog dlg(TRUE, _T("*.xml") );
 	if(IDOK == dlg.DoModal() )	{		
 		m_strFileRequest = dlg.GetPathName();
-		bool fok = m_data.LoadRequest(m_strFileRequest);
+		bool fok = dcData.LoadRequest(m_strFileRequest);
 	}
 
 }
 
 void CDcTestDlg::OnBnClickedButReload()
 {
+    if(!m_pData)
+        return;
+    CDcData& dcData = *m_pData;
+    bool fok = dcData.LoadRequest(m_strFileRequest);
 }

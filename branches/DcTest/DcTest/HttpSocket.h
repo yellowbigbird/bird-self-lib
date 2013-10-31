@@ -15,23 +15,33 @@ public:
     CHttpSocket();
 	virtual ~CHttpSocket();
 
+    
+	bool			Connect(const std::string& strHostName,int nPort=80);
+
 	int				GetServerState();						//返回服务器状态码 -1表示不成功
     int				GetField(const char* szSession, std::string& strValue);	//返回某个域值,-1表示不成功
+
 	int				GetResponseLine(char *pLine,int nMaxLength);				//获取返回头的一行
     std::string		GetResponseHeader();								//获取完整的返回头
-	const char *	FormatRequestHeader(char *pServer,char *pObject,long &Length,
-						char* pCookie=NULL,char *pReferer=NULL,
-						long nFrom=0,long nTo=0,
-						int nServerType=0);									//格式化请求头
+
+    const std::string&      FormatRequestHeader(const std::string& strServer
+        ,char *pObject
+        //,long &Length,
+        ,char* pCookie=NULL
+        ,char *pReferer=NULL,
+        long nFrom=0,long nTo=0,
+        int nServerType=0);									//格式化请求头
 	int				GetRequestHeader(char *pHeader,int nMaxLength) const;
-    void            SetRequest(const std::string& str);
-	BOOL			SendRequest(const char* pRequestHeader = NULL,long Length = 0);
+
+    void            SetRequestHeader(const std::string& strHeader);
+	bool			SendRequest(const std::string& strHeader);
+    bool			SendRequest();
 	
 
 	BOOL			SetTimeout(int nTime,int nType=0);  //seconds
-	long			Receive(char* pBuffer,long nMaxLength);
-	BOOL			Connect(const std::string& strHostName,int nPort=80);
-	BOOL			Socket();
+    long			Receive(std::string& strResponse);  //char* pBuffer
+
+	bool			Socket();
 	BOOL			CloseSocket();
 
     const std::string&      GetContent() const;
