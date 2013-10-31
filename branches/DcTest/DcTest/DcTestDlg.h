@@ -16,6 +16,7 @@ class CDcTestDlg : public CDialog
 // Construction
 public:
 	CDcTestDlg(CWnd* pParent = NULL);	// standard constructor
+    virtual ~CDcTestDlg();
 
 // Dialog Data
 	enum { IDD = IDD_DCTEST_DIALOG };

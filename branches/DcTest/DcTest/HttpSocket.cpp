@@ -51,10 +51,10 @@ CHttpSocket::~CHttpSocket()
 	CloseSocket();
 }
 
-BOOL CHttpSocket::Socket()
+bool CHttpSocket::Socket()
 {
 	if(m_bConnected)
-        return FALSE;
+        return 0;
 
 	struct protoent *ppe; 
 	ppe=getprotobyname("tcp"); 
@@ -62,7 +62,7 @@ BOOL CHttpSocket::Socket()
     {
         DWORD rr = GetLastError();
         assert(false);
-        return FALSE;
+        return 0;
     }
 	
 	///创建SOCKET对象
@@ -70,18 +70,18 @@ BOOL CHttpSocket::Socket()
 	if(m_s==INVALID_SOCKET)
 	{
 		//MessageBox(NULL,"socket() running error.!","Error",MB_OK);
-		return FALSE;
+		return 0;
 	}
 
-	return TRUE;
+	return true;
 
 }
 
-BOOL CHttpSocket::Connect(const std::string& szHostName,int nPort)
+bool CHttpSocket::Connect(const std::string& szHostName,int nPort)
 {
     if(szHostName.length()< 1
         || nPort<1)
-		return FALSE;
+		return false;
 
 	///若已经连接,则先关闭
 	if(m_bConnected)
@@ -97,7 +97,7 @@ BOOL CHttpSocket::Connect(const std::string& szHostName,int nPort)
 	if(m_phostent==NULL)
 	{
 		//MessageBox(NULL,"gethostbyname()ERROR!","error",MB_OK);
-		return FALSE;
+		return false;
 	}
 	
 	///连接
@@ -145,18 +145,23 @@ BOOL CHttpSocket::Connect(const std::string& szHostName,int nPort)
 		//CloseSocket();
 		//m_s=NULL;
 		//MessageBox(NULL,"connect()?err","error",MB_OK);
-		return FALSE;
+		return false;
 	}
 
 	///设置已经连接的标志
 	m_bConnected=TRUE;
-	return TRUE;
+	return true;
 }
 
 ///根据请求的相对URL输出HTTP请求头
-const char *CHttpSocket::FormatRequestHeader(char *pServer,char *pObject, long &Length,
-									  char *pCookie,char *pReferer,long nFrom,
-									  long nTo,int nServerType)
+const string& CHttpSocket::FormatRequestHeader(const string& strServer
+                                             ,char *pObject
+                                             //,long &Length
+                                             ,char *pCookie
+                                             ,char *pReferer
+                                             ,long nFrom
+                                             ,long nTo
+                                             ,int nServerType)
 {
 	char szPort[10];
 	//char szTemp[20];
@@ -218,47 +223,53 @@ const char *CHttpSocket::FormatRequestHeader(char *pServer,char *pObject, long &
 	//}
 	m_requestheader += "\r\n";
 
-	//Length=strlen(m_requestheader);
-    Length = m_requestheader.length();
-    return m_requestheader.c_str();
+    return m_requestheader;
 }
 
-void  CHttpSocket::SetRequest(const std::string& str)
+void  CHttpSocket::SetRequestHeader(const std::string& str)
 {
     m_requestheader = str;
 }
 
 ///发送请求头
-BOOL CHttpSocket::SendRequest(const char *pRequestHeader, long Length)
+bool CHttpSocket::SendRequest()
+{
+    return SendRequest(m_requestheader);
+}
+
+bool CHttpSocket::SendRequest(const std::string& strRequest)
 {
 	if(!m_bConnected)
-        return FALSE;
+        return 0;
 
-	if(pRequestHeader==NULL)
-		pRequestHeader=m_requestheader.c_str();
-	if(Length==0)
-		Length=m_requestheader.length();
+	const char* pRequestHeader = m_requestheader.c_str();
+	
+	int Length= m_requestheader.length();
 
-	if(send(m_s, pRequestHeader, Length,0)==SOCKET_ERROR)
+	if(SOCKET_ERROR == send(m_s, pRequestHeader, Length,0) )
 	{
 		//MessageBox(NULL,"send() error.!","Error",MB_OK);
-		return FALSE;
+		return false;
 	}
     ::Sleep(400); //get full response,
 
 	//int nLength;
 	GetResponseHeader();
-	return TRUE;
+	return true;
 }
 
-long CHttpSocket::Receive(char* pBuffer,long nMaxLength)
+long CHttpSocket::Receive(std::string& strResponse)
 {
-	if(!m_bConnected)return NULL;
+	if(!m_bConnected)
+        return 0;
 
 	///接收数据
 	long nLength;
-	nLength=recv(m_s,pBuffer,nMaxLength,0);
+    const int nMaxLength = 1024* 1024;
+    char pBuffer[nMaxLength];
+	nLength=recv(m_s, pBuffer, nMaxLength, 0);
 	
+    strResponse = pBuffer;
 	if(nLength <= 0)
 	{
 		//MessageBox(NULL,"recv()函数执行失败!","错误",MB_OK);
@@ -312,7 +323,7 @@ BOOL CHttpSocket::SetTimeout(int nTime, int nType)
 	}
 
 	DWORD dwErr;
-    dwErr=setsockopt(m_s,SOL_SOCKET,nType,(char*)&nTime,sizeof(nTime)); 
+    dwErr= setsockopt(m_s,SOL_SOCKET,nType,(char*)&nTime,sizeof(nTime)); 
 	if(dwErr)
 	{
 		//MessageBox(NULL,"setsockopt() Error!","Error",MB_OK);
