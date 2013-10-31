@@ -67,6 +67,8 @@ BOOL CDcTestDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+    if(!m_pData->Init() )
+        return FALSE;
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }

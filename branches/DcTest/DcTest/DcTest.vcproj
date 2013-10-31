@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..\self_lib\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..\self_lib\src&quot;;&quot;$(ossx)\include&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -71,7 +71,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ossxapi.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(ossx)\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -96,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="xcopy /d /y $(SolutionDir)\resource\*.ini $(OutDir)&#x0D;&#x0A;xcopy /d /y &quot;$(ossx)\bin\*.dll&quot; $(OutDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -179,6 +182,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="xcopy /d /y $(SolutionDir)\resource\*.ini $(OutDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -382,6 +386,14 @@
 			</File>
 			<File
 				RelativePath=".\HttpSocket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ossxWrapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ossxWrapper.h"
 				>
 			</File>
 		</Filter>

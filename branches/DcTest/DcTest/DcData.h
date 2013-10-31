@@ -1,12 +1,15 @@
 #pragma once
 
 class CHttpSocket;
+class COssxWrapper;
 
 class CDcData
 {
 public:
 	CDcData();
 	virtual ~CDcData();
+
+    bool Init();
 
 	bool LoadRequest(const CString& filePathName);
 	bool SaveResponse();
@@ -25,4 +28,5 @@ public:
     int             m_port;
 	
 	CHttpSocket*	m_pSocket;
+    COssxWrapper*   m_pOssWrapper;
 };
