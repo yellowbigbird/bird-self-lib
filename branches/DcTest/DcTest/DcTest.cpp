@@ -56,6 +56,8 @@ BOOL CDcTestApp::InitInstance()
 
 	AfxEnableControlContainer();
 
+	AfxInitRichEdit2(); //rich edit need this
+
 	// Standard initialization
 	// If you are not using these features and wish to reduce the size
 	// of your final executable, you should remove from the following
