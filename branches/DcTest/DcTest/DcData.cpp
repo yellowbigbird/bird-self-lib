@@ -2,7 +2,7 @@
 #include "dcdata.h"
 
 #include "httpSocket.h"
-#include "ossxWrapper.h"
+#include "ossWrapper/ossWrapper.h"
 
 #include "util/UtilString.h"
 #include "util/UtilsFile.h"
@@ -47,8 +47,8 @@ bool CDcData::Init()
         ASSERT(false);
         return false;
     }
-    if(!m_pOssWrapper->Init() )
-        return false;
+    //if(!m_pOssWrapper->Init() )
+    //    return false;
 
     return true;
 }
@@ -92,14 +92,20 @@ void	CDcData::SetUrl(const std::string& strUrl)
 bool CDcData::SendRequest()
 {
     if(!m_pSocket
+        || !m_pOssWrapper
         || m_strHost.length() < 1
-        || m_port < 1
+        || m_port < 1        
         )
         return false;
+
     CHttpSocket& rsocket = *m_pSocket;
     bool fok = rsocket.Connect(m_strHost, m_port);
     if(!fok)
         return false;
+
+    string strFast;
+    strFast.resize(m_strRequest.size() );
+    fok = m_pOssWrapper->XmlToFastInfoSet(m_strRequest, strFast);
 
     rsocket.FormatRequestHeader(m_strHost, "");
     fok = rsocket.SendRequest();
