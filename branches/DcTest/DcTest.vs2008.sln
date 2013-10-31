@@ -1,12 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DcTest", "DcTest\DcTest.vcproj", "{E0FAB588-038A-4E73-A4E6-2B119401BDB9}"
 	ProjectSection(ProjectDependencies) = postProject
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586} = {711C9B07-7A41-4CDE-BAB7-4CD1BE130586}
 		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355} = {C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SelfLib", "..\self_lib\project\SelfLib.vcproj", "{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ossWrapper", "ossWrapper\ossWrapper.vcproj", "{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +35,14 @@ Global
 		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|Win32.Build.0 = Release|Win32
 		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|x64.ActiveCfg = Release|x64
 		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|x64.Build.0 = Release|x64
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Debug|Win32.ActiveCfg = Debug|Win32
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Debug|Win32.Build.0 = Debug|Win32
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Debug|x64.ActiveCfg = Debug|x64
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Debug|x64.Build.0 = Debug|x64
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Release|Win32.ActiveCfg = Release|Win32
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Release|Win32.Build.0 = Release|Win32
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Release|x64.ActiveCfg = Release|x64
+		{711C9B07-7A41-4CDE-BAB7-4CD1BE130586}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
