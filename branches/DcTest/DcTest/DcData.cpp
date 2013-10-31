@@ -2,35 +2,57 @@
 #include "dcdata.h"
 
 #include "httpSocket.h"
+#include "ossxWrapper.h"
 
 #include "util/UtilString.h"
 #include "util/UtilsFile.h"
+
+#include <afxinet.h>
 
 using namespace std;
 ////////////////////
 CDcData::CDcData()
 :m_pSocket(NULL)
 ,m_port(80)
-{
-    m_pSocket = new CHttpSocket();
-    if(!m_pSocket)
-        return;
-	bool fok = m_pSocket->Socket();    
-    if(!fok)
-    {
-        ASSERT(FALSE);
-        //return 0;
-    }
-
-	m_pSocket->SetTimeout(15,0);
+,m_pOssWrapper(NULL)
+{    
 }
 
 CDcData::~CDcData()
 {
     SAFE_DELETE(m_pSocket);
+    SAFE_DELETE(m_pOssWrapper);    
 }
 
 ///////////////////////
+
+bool CDcData::Init()
+{
+    if(!m_pSocket)
+        m_pSocket = new CHttpSocket();
+    if(!m_pSocket)
+        return false;
+	bool fok = m_pSocket->Socket();    
+    if(!fok)
+    {
+        ASSERT(FALSE);
+        return 0;
+    }
+
+	m_pSocket->SetTimeout(15,0);
+
+    if(!m_pOssWrapper)
+        m_pOssWrapper = new COssxWrapper();
+    if(!m_pOssWrapper){
+        ASSERT(false);
+        return false;
+    }
+    if(!m_pOssWrapper->Init() )
+        return false;
+
+    return true;
+}
+
 bool CDcData::LoadRequest(const CString& filePathName)
 {
 	if(filePathName.GetLength() < 1)
@@ -48,10 +70,23 @@ bool CDcData::LoadRequest(const CString& filePathName)
 void	CDcData::SetUrl(const std::string& strUrl)
 {
     m_strUrl = strUrl;
+    wstring wstr = UtilString::ConvertMultiByteToWideChar(strUrl);
+    CString cstrUrl = wstr.c_str();
 
     m_strHost = "chellilisrc101";
     m_port = 8080;
-    //AfxParseURL(m_strUrl, dwServiceType, m_strServer, m_strObject, m_port);
+    
+    DWORD dwServiceType = 0;
+    CString cstrObject;
+    CString cstrServer;
+    WORD port = 0;
+    //BOOL AFXAPI AfxParseURL(LPCTSTR pstrURL, DWORD& dwServiceType,
+	//CString& strServer, CString& strObject, INTERNET_PORT& nPort);
+    if(AfxParseURL(cstrUrl, dwServiceType, cstrServer, cstrObject, port) ){
+        m_port = port; 
+        wstr = cstrServer;
+        m_strHost = UtilString::ConvertWideCharToMultiByte(wstr);
+    }
 }
 
 bool CDcData::SendRequest()
@@ -67,7 +102,7 @@ bool CDcData::SendRequest()
         return false;
 
     rsocket.FormatRequestHeader(m_strHost, "");
-    rsocket.SendRequest();
+    fok = rsocket.SendRequest();
 
-    return true;
+    return fok;
 }
