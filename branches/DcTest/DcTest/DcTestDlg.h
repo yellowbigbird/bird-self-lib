@@ -6,6 +6,7 @@
 
 //#include "dcdata.h"
 #include "afxwin.h"
+#include "afxcmn.h"
 
 class CDcData;
 
@@ -42,6 +43,10 @@ protected:
 	HICON		m_hIcon;
 	CDcData*	m_pData;
 	CString		m_strFileRequest;
+	//CString		m_strRequestFile;
 	CComboBox	m_comboUrl;
 	CString		m_strUrl;
+
+	CRichEditCtrl	m_richEditRequst;
+	CRichEditCtrl	m_richEditResponse;
 };
