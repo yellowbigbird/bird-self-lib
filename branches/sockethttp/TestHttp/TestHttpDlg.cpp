@@ -300,7 +300,7 @@ void CTestHttpDlg::OnBnClickedBtnReq()
 	long nLength = 0;
 
     CHttpSocket sock; 
-	pRequestHeader = sock.FormatRequestHeader((LPTSTR)(LPCTSTR)m_strServer,(LPTSTR)(LPCTSTR)m_strObject,nLength);	
+	pRequestHeader = sock.FormatRequestHeaderSoap((LPTSTR)(LPCTSTR)m_strServer,(LPTSTR)(LPCTSTR)m_strObject,nLength);	
     
 	m_editRequest.SetWindowText(pRequestHeader);
 }

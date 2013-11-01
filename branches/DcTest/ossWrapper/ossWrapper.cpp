@@ -34,7 +34,13 @@ COssxWrapper::~COssxWrapper()
     SAFE_DELETE(m_pEnv);
 }
 
-bool COssxWrapper::XmlToFastInfoSet(const std::string& strRawXml, std::string& strFastInfoSet)
+void  COssxWrapper::Clear()
+{
+    m_strFastInfoSet.clear();
+    m_strRawXml.clear();
+}
+
+bool COssxWrapper::XmlToFastInfoSet(const std::string& strRawXml)
 {
     if(strRawXml.length()< 1
         || !m_pEnv)
@@ -43,10 +49,6 @@ bool COssxWrapper::XmlToFastInfoSet(const std::string& strRawXml, std::string& s
     OssxBuf inBuffer;
     OssxBuf outBuffer;
 
-//    array<unsigned char>^ bytes = encoding->GetBytes(rawXml);
-//    inBuffer.length = bytes->Length;
-//    pin_ptr<unsigned char> pointer = &bytes[0];
-//    inBuffer.value = pointer;
     inBuffer.length = (long)strRawXml.size();
     inBuffer.value = (byte*)&strRawXml[0];
     
@@ -59,20 +61,19 @@ bool COssxWrapper::XmlToFastInfoSet(const std::string& strRawXml, std::string& s
         return false;
     }
 
-    strFastInfoSet.resize(outBuffer.length);
-    if(strFastInfoSet.size() != outBuffer.length){
+    m_strFastInfoSet.resize(outBuffer.length);
+    if(m_strFastInfoSet.size() != outBuffer.length){
         assert(false);
         return false;
     }
-    memcpy_s(&strFastInfoSet[0], outBuffer.length, outBuffer.value, outBuffer.length);
+    memcpy_s(&m_strFastInfoSet[0], outBuffer.length, outBuffer.value, outBuffer.length);
     //strFastInfoSet = (char*)outBuffer.value;
     ::ossxFreeBuf(m_pEnv, outBuffer.value);
-
     
     return fok ;
 }
 
-bool    COssxWrapper::FastInfoSetToXml(const std::string& strFast,  std::string & strRawXml)
+bool    COssxWrapper::FastInfoSetToXml(const std::string& strFast)
 {
     if(strFast.length()< 1
         || !m_pEnv)
@@ -84,16 +85,32 @@ bool    COssxWrapper::FastInfoSetToXml(const std::string& strFast,  std::string 
     OssxBuf outBuffer;
 
     inBuffer.length = (long)strFast.length();
-    inBuffer.value =  (byte*)&strRawXml[0];
+    inBuffer.value =  (byte*)&strFast[0];
     
     outBuffer.length = 0;
     outBuffer.value = NULL;
     ret = ::ossxFastInfoset2XML(m_pEnv, &inBuffer, &outBuffer);
 
-    strRawXml = (char*)outBuffer.value;
+    //m_strRawXml = (char*)outBuffer.value;
+    m_strRawXml.resize(outBuffer.length);
+    if(m_strRawXml.size() != outBuffer.length){
+        assert(false);
+        return false;
+    }
+    memcpy_s(&m_strRawXml[0], outBuffer.length, outBuffer.value, outBuffer.length);
+    
     ::ossxFreeBuf(m_pEnv, outBuffer.value);
 
     bool fok = (ret==0);
     return fok ;
 }
 
+const std::string&   COssxWrapper::GetStrFastInfoSet() const
+{
+    return m_strFastInfoSet;
+}
+
+const std::string&   COssxWrapper::GetStrRawXml()      const
+{
+    return m_strRawXml;
+}

@@ -163,10 +163,6 @@ const string& CHttpSocket::FormatRequestHeader(const string& strServer
                                              ,long nTo
                                              ,int nServerType)
 {
-	char szPort[10];
-	//char szTemp[20];
-	sprintf(szPort,"%d",m_port);
-
     m_requestheader = "";
 
 	///第1行:方法,请求的路径,版本
@@ -222,6 +218,65 @@ const string& CHttpSocket::FormatRequestHeader(const string& strServer
 	//	strcat(m_requestheader,"\r\n");
 	//}
 	m_requestheader += "\r\n";
+
+    return m_requestheader;
+}
+
+const std::string&       CHttpSocket::FormatRequestHeaderSoap(const std::string& strServer
+        ,const std::string& pObject
+        ,const std::string& strData   
+        ,long nFrom
+        ,long nTo
+        ,int nServerType)
+{
+    m_requestheader = "";
+    const string strRet = "\r\n";
+
+	///第1行:方法,请求的路径,版本
+    m_requestheader += "POST ";
+    m_requestheader += pObject;
+    m_requestheader += " HTTP/1.1";
+    m_requestheader += strRet;
+    
+	//User-Agent
+    m_requestheader += "User-Agent:Mozilla/4.0 (compatible; MSIE 5.00; Windows 98)" ; //
+    m_requestheader += strRet;
+
+    //SOAPAction
+    m_requestheader += "SOAPAction: \"\"";  ///
+    m_requestheader += strRet;
+
+    //contenttype
+    m_requestheader += "Content-Type: application/fastinfoset";  
+    m_requestheader += strRet;
+
+	//host
+    m_requestheader += "Host: ";
+    m_requestheader += strServer;
+    m_requestheader += strRet;
+	
+
+	//Content-Length: 3921
+    char carray[10];
+    memset(carray, 0, 10);
+    sprintf_s(carray,10, "%d", strData.size() );
+    m_requestheader += "Content-Length: ";
+    m_requestheader += carray;
+    m_requestheader += strRet;
+
+	///第6行:连接设置,保持
+	m_requestheader += "Connection:Keep-Alive";
+	m_requestheader += strRet;
+
+    m_requestheader += strRet;
+
+    const int oldSize = m_requestheader.size();
+    m_requestheader += strData;
+    const int newSize = m_requestheader.size();
+    const int addSize = newSize- oldSize;
+    if(addSize != strData.size()){
+        assert(false);
+    }
 
     return m_requestheader;
 }
@@ -457,13 +512,16 @@ bool CHttpSocket::ParseContent()
             m_strContent = strSub.substr(pos +c_strrn.length(), datalen );
         else
             m_strContent = strSub.substr(pos +c_strrn.length() );
-
-        ifok = true;
     }
     else{
         datalen = atoi(strValue.c_str() );
-        ifok = true;
+        if(datalen < 1
+            || datalen > m_ResponseHeader.size())
+            return false;
+        int dataStartPos = m_ResponseHeader.size() - datalen;
+        m_strContent = m_ResponseHeader.substr(dataStartPos );        
     }
+    ifok = true;
 
     return ifok;
 }

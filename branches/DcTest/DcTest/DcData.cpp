@@ -86,6 +86,7 @@ void	CDcData::SetUrl(const std::string& strUrl)
         m_port = port; 
         wstr = cstrServer;
         m_strHost = UtilString::ConvertWideCharToMultiByte(wstr);
+        m_strObject = UtilString::ConvertWideCharToMultiByte(cstrObject.GetString() );
     }
 }
 
@@ -104,11 +105,26 @@ bool CDcData::SendRequest()
         return false;
 
     string strFast;
-    strFast.resize(m_strRequest.size() );
-    fok = m_pOssWrapper->XmlToFastInfoSet(m_strRequest, strFast);
+    //strFast.reserve(m_strRequest.size() );
+    fok = m_pOssWrapper->XmlToFastInfoSet(m_strRequest);
+    if(fok){
+        strFast = m_pOssWrapper->GetStrFastInfoSet();
+    }
+    else{
+        return false;
+    }
 
-    rsocket.FormatRequestHeader(m_strHost, "");
+    rsocket.FormatRequestHeaderSoap(m_strHost, m_strObject, strFast);
     fok = rsocket.SendRequest();
+    if(!fok)
+        return false;
+
+    string strResponseFast;
+    strResponseFast = rsocket.GetContent();
+    fok = m_pOssWrapper->FastInfoSetToXml(strResponseFast);
+    if(fok){
+        m_strResponse = m_pOssWrapper->GetStrRawXml();
+    }
 
     return fok;
 }
