@@ -24,6 +24,7 @@ public:
 	std::string		m_strResponse;
     std::string     m_strUrl;
     std::string     m_strHost;
+    std::string     m_strObject;
 
     int             m_port;
 	

@@ -31,6 +31,14 @@ public:
         ,char *pReferer=NULL,
         long nFrom=0,long nTo=0,
         int nServerType=0);									//格式化请求头
+
+    const std::string&      FormatRequestHeaderSoap(const std::string& strServer
+        ,const std::string& pObject
+        ,const std::string& pData    
+        ,long nFrom=0
+        ,long nTo=0
+        ,int nServerType=0);	
+
 	int				GetRequestHeader(char *pHeader,int nMaxLength) const;
 
     void            SetRequestHeader(const std::string& strHeader);

@@ -25,7 +25,7 @@ using namespace std;
 
 CDcTestDlg::CDcTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDcTestDlg::IDD, pParent)
-    , m_strUrl(_T("http://localhost:8080"))
+    , m_strUrl(_T("http:\\\\chellilisrc101:8080"))  //http://localhost:8080  chellilisrc101
     , m_pData(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
