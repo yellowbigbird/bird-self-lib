@@ -27,6 +27,7 @@ CDcTestDlg::CDcTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDcTestDlg::IDD, pParent)
     , m_strUrl(_T("http:\\\\chellilisrc101:8080"))  //http://localhost:8080  chellilisrc101
     , m_pData(NULL)
+	//, m_strRequestFile(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_pData = new CDcData();
@@ -43,6 +44,9 @@ void CDcTestDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO_URL, m_comboUrl);
 	DDX_Text(pDX, IDC_EDIT_URL, m_strUrl);
+	DDX_Text(pDX, IDC_EDIT_REQUEST_FILE, m_strFileRequest);
+	DDX_Control(pDX, IDC_RICHEDIT_REQUEST, m_richEditRequst);
+	DDX_Control(pDX, IDC_RICHEDIT_RESPONSE, m_richEditResponse);
 }
 
 BEGIN_MESSAGE_MAP(CDcTestDlg, CDialog)
@@ -69,6 +73,9 @@ BOOL CDcTestDlg::OnInitDialog()
 	// TODO: Add extra initialization here
     if(!m_pData->Init() )
         return FALSE;
+
+	//set wrap
+	//m_richEditRequst.SetWordWrapMode();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -138,6 +145,10 @@ void CDcTestDlg::OnBnClickedButOpen()
 	if(IDOK == dlg.DoModal() )	{		
 		m_strFileRequest = dlg.GetPathName();
 		bool fok = dcData.LoadRequest(m_strFileRequest);
+		UpdateData(FALSE); //data to control.
+
+		wstring wstr = UtilString::ConvertMultiByteToWideChar(dcData.m_strRequest);
+		m_richEditRequst.SetWindowText(wstr.c_str() );
 	}
 
 }
