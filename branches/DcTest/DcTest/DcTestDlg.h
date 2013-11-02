@@ -49,4 +49,6 @@ protected:
 
 	CRichEditCtrl	m_richEditRequst;
 	CRichEditCtrl	m_richEditResponse;
+public:
+    afx_msg void OnEnChangeEditUrl();
 };
