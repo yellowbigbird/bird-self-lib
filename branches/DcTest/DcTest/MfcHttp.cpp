@@ -104,7 +104,7 @@ bool CMfcHttp::SendRequest()
     }
     else
     {
-        int len = rFile.GetLength();       
+        //int len = rFile.GetLength();       
         //while ((numread = pFile->Read(buf,sizeof(buf)-1)) > 0)
        
     }
@@ -142,12 +142,20 @@ bool CMfcHttp::SendRequestFastInfoSet(const string& strData)
     DWORD dwRet;
     rFile.QueryInfoStatusCode(dwRet);
 
-    if(dwRet != HTTP_STATUS_OK)    {
+    if(dwRet == HTTP_STATUS_OK)    {
+        UINT64 datalen = rFile.GetLength();
+        m_strContent.clear();
+        m_strContent.resize(datalen);
+        UINT readlen = rFile.Read(&m_strContent[0], (UINT)datalen);
+        if(readlen != datalen){
+            ASSERT(false);
+            fok = false;
+        }
+    }
+    else    {
         //err
         ASSERT(false);
         fok = false;
-    }
-    else    {
     }
     rFile.Close();
 
@@ -156,6 +164,7 @@ bool CMfcHttp::SendRequestFastInfoSet(const string& strData)
 
 bool CMfcHttp::GetContent(std::string&  strData) const
 {
+    strData = m_strContent;
     return true;
 }
 

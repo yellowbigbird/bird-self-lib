@@ -56,6 +56,7 @@ BEGIN_MESSAGE_MAP(CDcTestDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUT_GO, &CDcTestDlg::OnBnClickedButGo)
 	ON_BN_CLICKED(IDC_BUT_OPEN, &CDcTestDlg::OnBnClickedButOpen)
 	ON_BN_CLICKED(IDC_BUT_RELOAD, &CDcTestDlg::OnBnClickedButReload)
+    ON_EN_CHANGE(IDC_EDIT_URL, &CDcTestDlg::OnEnChangeEditUrl)
 END_MESSAGE_MAP()
 
 
@@ -159,4 +160,9 @@ void CDcTestDlg::OnBnClickedButReload()
         return;
     CDcData& dcData = *m_pData;
     bool fok = dcData.LoadRequest(m_strFileRequest);
+}
+
+void CDcTestDlg::OnEnChangeEditUrl()
+{
+    UpdateData(TRUE); //Control to value
 }
