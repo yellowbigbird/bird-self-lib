@@ -104,20 +104,9 @@ bool CMfcHttp::SendRequest()
     }
     else
     {
-        int len = rFile.GetLength();
-        //char buf[2000];
-        //int numread;
-        //CString filepath;
-        //CString strFile = L"response.txt";
-        //filepath.Format(L".\\%s", strFile);
-        //CFile myfile( filepath,            CFile::modeCreate|CFile::modeWrite|CFile::typeBinary);
+        int len = rFile.GetLength();       
         //while ((numread = pFile->Read(buf,sizeof(buf)-1)) > 0)
-        //{
-        //    buf[numread] = '\0';
-        //    strFile += buf;
-        //    myfile.Write(buf, numread);
-        //}
-        //myfile.Close();
+       
     }
     rFile.Close();
 
@@ -141,7 +130,10 @@ bool CMfcHttp::SendRequestFastInfoSet(const string& strData)
     CString cstrHeader;
 
     try {
-        rFile.SendRequest(cstrHeader, (LPVOID)&strData[0], (DWORD)strData.size() );        
+        //rFile.SendRequest(cstrHeader, (LPVOID)&strData[0], (DWORD)strData.size() );   
+        pFile->SendRequestEx((DWORD)strData.size());
+        pFile->Write(&strData[0], (UINT)strData.size());
+        pFile->EndRequest();
     }
     catch (CException* )    {
         fok = false;
