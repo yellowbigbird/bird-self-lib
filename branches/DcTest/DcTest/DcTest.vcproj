@@ -177,7 +177,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /d /y $(SolutionDir)\resource\*.ini $(OutDir)&#x0D;&#x0A;xcopy /d /y &quot;$(ossx)\$(PlatformName)\dll\*.dll&quot; $(OutDir)"
+				CommandLine="xcopy /d /y $(SolutionDir)\resource\*.ini $(OutDir)&#x0D;&#x0A;xcopy /d /y &quot;$(ossx)\$(PlatformName)\dll\*.dll&quot; $(OutDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -387,6 +387,14 @@
 			</File>
 			<File
 				RelativePath=".\HttpSocket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MfcHttp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MfcHttp.h"
 				>
 			</File>
 		</Filter>

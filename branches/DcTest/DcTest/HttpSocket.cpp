@@ -223,7 +223,7 @@ const string& CHttpSocket::FormatRequestHeader(const string& strServer
 }
 
 const std::string&       CHttpSocket::FormatRequestHeaderSoap(const std::string& strServer
-        ,const std::string& pObject
+        ,const std::string& strObject
         ,const std::string& strData   
         ,long nFrom
         ,long nTo
@@ -234,7 +234,7 @@ const std::string&       CHttpSocket::FormatRequestHeaderSoap(const std::string&
 
 	///第1行:方法,请求的路径,版本
     m_requestheader += "POST ";
-    m_requestheader += pObject;
+    m_requestheader += strObject;
     m_requestheader += " HTTP/1.1";
     m_requestheader += strRet;
     
