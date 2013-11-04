@@ -43,7 +43,7 @@ protected:
 	HICON		m_hIcon;
 	CDcData*	m_pData;
 	CString		m_strFileRequest;
-	//CString		m_strRequestFile;
+	CString		m_strRequestFile;
 	CComboBox	m_comboUrl;
 	CString		m_strUrl;
 

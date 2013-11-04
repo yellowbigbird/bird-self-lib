@@ -134,6 +134,10 @@ void CDcTestDlg::OnBnClickedButGo()
 	dcData.SetUrl(strUrl);
 
 	bool fok = dcData.SendRequest();
+    if(fok){
+        wstring wstr = UtilString::ConvertMultiByteToWideChar(dcData.m_strResponse);
+		m_richEditResponse.SetWindowText(wstr.c_str() );
+    }
 }
 
 void CDcTestDlg::OnBnClickedButOpen()
