@@ -1,6 +1,6 @@
 #pragma once
 
-//class CHttpSocket;
+class CHttpSocket;
 class CMfcHttp;
 class COssxWrapper;
 
@@ -29,7 +29,7 @@ public:
 
     //int             m_port;
 	
-	//CHttpSocket*	m_pSocket;
-    CMfcHttp*       m_pSocket;
+	CHttpSocket*	m_pSocket;
+    //CMfcHttp*       m_pSocket;
     COssxWrapper*   m_pOssWrapper;
 };

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "HttpSocket.h"
 
+#include <util/utilstring.h>
 #include <ASSERT.h>
 
 #ifdef _DEBUG
@@ -77,7 +78,36 @@ bool CHttpSocket::Socket()
 
 }
 
-bool CHttpSocket::Connect(const std::string& szHostName,int nPort)
+bool  CHttpSocket::Connect(const std::wstring& strUrl)
+{
+    WORD port = 8080;
+
+    try
+    {
+        CString cstrObject;
+        CString cstrServer;
+        DWORD dwServiceType;
+
+        m_strUrl = strUrl.c_str();
+        if(AfxParseURL(strUrl.c_str(), dwServiceType, cstrServer, cstrObject, port) ){
+            m_port = port; 
+            m_strServer = cstrServer;
+        }
+        else{
+        }
+
+        //each time must clear
+        string str = UtilString::ConvertWideCharToMultiByte(m_strServer.GetString() );
+        ConnectHostPort( str, m_port);
+    }
+    catch (CException* )
+    {
+    }
+
+    return true;
+}
+
+bool CHttpSocket::ConnectHostPort(const std::string& szHostName, int nPort)
 {
     if(szHostName.length()< 1
         || nPort<1)
@@ -159,9 +189,10 @@ const string& CHttpSocket::FormatRequestHeader(const string& strServer
                                              //,long &Length
                                              ,char *pCookie
                                              ,char *pReferer
-                                             ,long nFrom
-                                             ,long nTo
-                                             ,int nServerType)
+                                             //,long nFrom
+                                             //,long nTo
+                                             //,int nServerType
+                                             )
 {
     m_requestheader = "";
 
@@ -225,9 +256,10 @@ const string& CHttpSocket::FormatRequestHeader(const string& strServer
 const std::string&       CHttpSocket::FormatRequestHeaderSoap(const std::string& strServer
         ,const std::string& strObject
         ,const std::string& strData   
-        ,long nFrom
-        ,long nTo
-        ,int nServerType)
+        //,long nFrom
+        //,long nTo
+        //,int nServerType
+        )
 {
     m_requestheader = "";
     const string strRet = "\r\n";
@@ -301,7 +333,7 @@ bool CHttpSocket::SendRequest(const std::string& strRequest)
 	
 	int Length= m_requestheader.length();
 
-	if(SOCKET_ERROR == send(m_s, pRequestHeader, Length,0) )
+    if(SOCKET_ERROR == ::send(m_s, pRequestHeader, Length,0) )
 	{
 		//MessageBox(NULL,"send() error.!","Error",MB_OK);
 		return false;

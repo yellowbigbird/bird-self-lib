@@ -138,6 +138,7 @@ bool CMfcHttp::SendRequestFastInfoSet(const string& strData)
     catch (CException* )    {
         fok = false;
     }
+    ::Sleep(500);
 
     DWORD dwRet;
     rFile.QueryInfoStatusCode(dwRet);
@@ -145,7 +146,7 @@ bool CMfcHttp::SendRequestFastInfoSet(const string& strData)
     if(dwRet == HTTP_STATUS_OK)    {
         UINT64 datalen = rFile.GetLength();
         m_strContent.clear();
-        m_strContent.resize(datalen);
+        m_strContent.resize((UINT)datalen);
         UINT readlen = rFile.Read(&m_strContent[0], (UINT)datalen);
         if(readlen != datalen){
             ASSERT(false);
@@ -168,7 +169,9 @@ bool CMfcHttp::GetContent(std::string&  strData) const
     return true;
 }
 
-bool  CMfcHttp::FormatRequestHeaderSoap(const std::string& strData  )
+bool  CMfcHttp::FormatRequestHeaderSoap(const std::string& strServer
+                                        ,const std::string& pObject
+                                        ,const std::string& strData  )
 {
     m_strRequestHeaderAdd.Empty();
 

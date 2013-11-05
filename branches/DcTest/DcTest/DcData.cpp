@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "dcdata.h"
 
-//#include "httpSocket.h"
+#include "httpSocket.h"
 #include "MfcHttp.h"
 #include "ossWrapper/ossWrapper.h"
 
@@ -30,7 +30,7 @@ CDcData::~CDcData()
 bool CDcData::Init()
 {
     if(!m_pSocket)
-        m_pSocket = new CMfcHttp(); //CHttpSocket
+        m_pSocket = new CHttpSocket(); //CHttpSocket CMfcHttp
     if(!m_pSocket)
         return false;
 	
@@ -66,7 +66,8 @@ bool	CDcData::SetUrl(const std::string& strUrl)
 {
     if(!m_pSocket   )
         return false;
-    CMfcHttp& rsocket = *m_pSocket;
+    //CMfcHttp& rsocket = *m_pSocket;
+    CHttpSocket& rsocket = *m_pSocket;
 
     m_strUrl = strUrl;
     wstring wstrUrl = UtilString::ConvertMultiByteToWideChar(strUrl);
@@ -102,7 +103,8 @@ bool CDcData::SendRequest()
         )
         return false;
 
-    CMfcHttp& rsocket = *m_pSocket;
+    //CMfcHttp& rsocket = *m_pSocket;
+    CHttpSocket& rsocket = *m_pSocket;
     wstring wstrUrl = UtilString::ConvertMultiByteToWideChar(m_strUrl);
     bool fok = rsocket.Connect(wstrUrl); //m_strHost, m_port);
     if(!fok)
@@ -118,7 +120,7 @@ bool CDcData::SendRequest()
         return false;
     }
 
-    rsocket.FormatRequestHeaderSoap(strFast);
+    rsocket.FormatRequestHeaderSoap("", "", strFast);
 
     fok = rsocket.SendRequestFastInfoSet(strFast);
     if(!fok)

@@ -18,7 +18,9 @@ public:
 
     bool        GetContent(std::string&  strData) const;
 
-    bool        FormatRequestHeaderSoap( const std::string& strData );
+    bool        FormatRequestHeaderSoap( const std::string& strServer
+        ,const std::string& pObject
+        ,const std::string& strData );
 
 protected:
     CInternetSession*       m_pSession;
