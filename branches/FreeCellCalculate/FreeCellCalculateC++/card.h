@@ -2,35 +2,74 @@
 
 #include <vector>
 
-enum eType
+namespace Card
 {
-    eHeart = 0,
-    eClub,
-    eDiamond,
-    eSpade,
 
-    eMax,
-    eInvalid,
-};
+    const int c_size = 4;
+    const int c_colSize = 8;
+    const int c_cardNumberMax = 13;     //0-11
+    const int c_cardAll = c_cardNumberMax* c_size;
+    //-1 means no card
 
-//Ï´ÅÆ shuffle
-//ºìÌÒ heart
-//Ã·»¨ club
-//·½¿é diomand
-//ºÚÌÒ spade
-
-class CCard
-{
-public:
-    CCard()
-        :m_type(eInvalid)
-        ,m_number(0)
+    enum eType
     {
-    }
+        eHeart = 0,     //ºìÌÒ 0
+        eDiamond,       //·½¿é 1
+        eClub,          //Ã·»¨ 2
+        eSpade,         //ºÚÌÒ 3
 
-    eType    m_type;
-    UINT     m_number;  //0-8, 9 J, 10 Q, 11 K
-};
+        eCardMax,
+        eInvalid=100,
+    };
 
-typedef std::vector<CCard>   VecCard;
+    enum eNumber
+    {
+        e1 = 0,
+        e2,
+        e3,
+        e4,
+        e5,
+        e6,
+        e7,
+        e8,
+        e9,
+        e10,    //9
+        eJ,     //10    
+        eQ,     //11
+        eK,     //12
 
+        eNumberMax,
+
+        eNumberInvalid = 100,
+    };
+
+    //Ï´ÅÆ shuffle
+
+    class CCard
+    {
+    public:
+        CCard();
+        CCard(int cardIdx);
+
+        bool    SetIdx(int cardIdx);
+        void    Disalbe();
+
+        static bool FRed(int cardIdx);
+
+        static eType    GetType(int cardIdx);
+        static eNumber  GetNumber(int cardIdx);
+        static int  GetIdx(eType type, eNumber cardNumber);
+
+        bool    FRed() const;
+        bool    CanAttach(const CCard& other) const;
+        eType    GetType() const;
+        eNumber  GetNumber() const;
+
+    protected:
+        eType       m_type;
+        eNumber     m_number;  //0-9(1-10), 11- J, 11- Q, 12- K
+    };
+
+    typedef std::vector<CCard>   VecCard;
+
+}; //namespace card
