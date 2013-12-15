@@ -17,6 +17,24 @@ CCard::CCard(int cardIdx)
    SetIdx(cardIdx);
 }
 
+CCard::CCard(eType type, eNumber num)
+    :m_type(type)
+    ,m_number(num)
+{
+}
+
+bool CCard::IsLegal() const
+{
+    if(m_type >= eHeart
+        && m_type < eCardMax
+        && m_number >= e1
+        && m_number < eNumberMax
+        )
+        return true;
+    return false;
+
+}
+
 void  CCard::Disalbe()
 {
     m_type = (eInvalid);
@@ -29,7 +47,7 @@ bool    CCard::SetIdx(int cardIdx)
         || cardIdx>= c_cardAll)
         return false;
 
-    m_number = GetNumber(cardIdx);
+    m_number = (eNumber)(cardIdx % c_cardNumberMax);
     m_type =  (eType)(cardIdx /c_cardNumberMax);
     return true;
 }
@@ -51,36 +69,36 @@ bool    CCard::FRed() const
 }
 //////////////////////////////////////////////////////////////////////////
 
-bool    CCard::FRed(int cardIdx)
-{
-    if(cardIdx < 0)
-        return false;
-    eType curtype = GetType(cardIdx);
+//bool    CCard::FRed(int cardIdx)
+//{
+//    if(cardIdx < 0)
+//        return false;
+//    eType curtype = GetType(cardIdx);
+//
+//    if(eHeart == curtype 
+//        || eDiamond == curtype )
+//        return true;
+//    return false;
+//}
 
-    if(eHeart == curtype 
-        || eDiamond == curtype )
-        return true;
-    return false;
-}
+//eType  CCard::GetType(int cardIdx)
+//{
+//    if(cardIdx < 0)
+//        return eCardMax;
+//    eType curtype = (eType)(cardIdx /c_cardNumberMax);
+//    return curtype;
+//}
 
-eType  CCard::GetType(int cardIdx)
-{
-    if(cardIdx < 0)
-        return eCardMax;
-    eType curtype = (eType)(cardIdx /c_cardNumberMax);
-    return curtype;
-}
-
-eNumber  CCard::GetNumber(int cardIdx)
-{
-    if(cardIdx <0
-        || cardIdx >= c_cardAll)
-        return eNumberMax;
-
-    const eNumber inum = (eNumber)(cardIdx % c_cardNumberMax);
-
-    return inum;
-}
+//eNumber  CCard::GetNumber(int cardIdx)
+//{
+//    if(cardIdx <0
+//        || cardIdx >= c_cardAll)
+//        return eNumberMax;
+//
+//    const eNumber inum = (eNumber)(cardIdx % c_cardNumberMax);
+//
+//    return inum;
+//}
 
 int  CCard::GetIdx(eType type, eNumber cardNumber)
 {

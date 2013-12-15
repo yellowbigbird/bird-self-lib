@@ -39,7 +39,6 @@ namespace Card
         eK,     //12
 
         eNumberMax,
-
         eNumberInvalid = 100,
     };
 
@@ -48,22 +47,24 @@ namespace Card
     class CCard
     {
     public:
-        CCard();
-        CCard(int cardIdx);
+        explicit CCard();
+        explicit CCard(int cardIdx);
+        explicit CCard(eType type, eNumber num);
 
-        bool    SetIdx(int cardIdx);
-        void    Disalbe();
+        bool        SetIdx(int cardIdx);
+        void        Disalbe();
+        bool        IsLegal() const;  //legal leagl
 
-        static bool FRed(int cardIdx);
+        //static bool FRed(int cardIdx);
 
-        static eType    GetType(int cardIdx);
-        static eNumber  GetNumber(int cardIdx);
+        //static eType    GetType(int cardIdx);
+        //static eNumber  GetNumber(int cardIdx);
         static int  GetIdx(eType type, eNumber cardNumber);
 
-        bool    FRed() const;
-        bool    CanAttach(const CCard& other) const;
-        eType    GetType() const;
-        eNumber  GetNumber() const;
+        bool        FRed() const;
+        bool        CanAttach(const CCard& other) const;
+        eType       GetType() const;
+        eNumber      GetNumber() const;
 
     protected:
         eType       m_type;

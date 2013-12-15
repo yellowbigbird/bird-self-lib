@@ -5,7 +5,8 @@ using namespace Card;
 
 class CCalculate
 {
-    typedef std::vector<int>    VecIdx;
+    //typedef std::vector<int>    VecIdx;
+
 public:
     CCalculate();
 
@@ -15,21 +16,19 @@ public:
 
     bool CheckInputDataLegal() const;
     bool FWin() const;
-    bool FSorted(const VecIdx& vecIdx) const;
+    bool FSorted(const VecCard& vecIdx) const;
     bool FCanMove() const;
     bool FCanMove(int colIdx) const;
-    bool FCanMoveToSorted(const VecIdx& vecIdx) const;
-    bool FCanPushToEnd(const VecIdx& vecIdx, int cardIdx) const;
+    bool FCanMoveToSorted(const VecCard& vecIdx) const;
+    bool FCanPushToEnd(const VecCard& vecIdx, CCard cardIdx) const;
     bool IsBenchHaveBlank() const;  
     int  GetCurMoveCardAmount() const;
-    void GetLastSortedList(const VecIdx& vecIdx,  int moveMax, VecIdx& vecIdxSorted) const;
+    void GetLastSortedList(const VecCard& vecIdx,  int moveMax, VecCard& vecIdxSorted) const;
 
 public:
+    std::vector<VecCard>         m_vecVecIdx;
+    VecCard                      m_vecIdxSorted;   //4 vec,save show card
+    VecCard                     m_vecBench;       //4 card  
 
-    std::vector<VecIdx>         m_vecVecIdx;
-    VecIdx                      m_vecIdxSorted;   //4 vec,save show card
-    VecIdx                      m_vecBench;       //4 card  
-
-    //VecCard             m_vecCardAll;   //4*13
 };
 
