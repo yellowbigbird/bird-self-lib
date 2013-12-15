@@ -200,12 +200,14 @@
     <ClCompile Include="card.cpp" />
     <ClCompile Include="FreeCellCalculateC++.cpp" />
     <ClCompile Include="FreeCellCalculateC++Dlg.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Step.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculate.h" />
@@ -213,7 +215,9 @@
     <ClInclude Include="FreeCellCalculateC++.h" />
     <ClInclude Include="FreeCellCalculateC++Dlg.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Step.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
