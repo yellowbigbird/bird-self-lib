@@ -558,9 +558,10 @@ bool CHttpSocket::ParseContent()
     return ifok;
 }
 
-const std::string&  CHttpSocket::GetContent() const
+bool CHttpSocket::GetContent(std::string& strdata) const
 {
-    return m_strContent;
+    strdata = m_strContent;
+    return true;
 }
 
 bool  CHttpSocket::GetValueFromHexString(const string& str, int& value) const

@@ -45,7 +45,7 @@ public:
     void            SetRequestHeader(const std::string& strHeader);
 	bool			SendRequest(const std::string& strHeader);
     bool			SendRequest();
-    bool		    SendRequestFastInfoSet(const std::string& strData);
+    //bool		    SendRequestFastInfoSet();
 	
 
 	BOOL			SetTimeout(int nTime,int nType=0);  //seconds
@@ -54,7 +54,7 @@ public:
 	bool			Socket();
 	BOOL			CloseSocket();
 
-    const std::string&      GetContent() const;
+    bool            GetContent(std::string& str) const;
     bool            ParseContent();
     bool            GetValueFromHexString(const std::string& str, int& value) const;
 

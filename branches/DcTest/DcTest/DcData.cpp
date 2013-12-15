@@ -122,7 +122,8 @@ bool CDcData::SendRequest()
 
     rsocket.FormatRequestHeaderSoap("", "", strFast);
 
-    fok = rsocket.SendRequestFastInfoSet(strFast);
+    //fok = rsocket.SendRequestFastInfoSet(strFast);
+    fok = rsocket.SendRequest();
     if(!fok)
         return false;
 
