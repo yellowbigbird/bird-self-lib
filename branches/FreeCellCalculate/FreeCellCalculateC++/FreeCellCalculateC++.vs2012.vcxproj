@@ -197,6 +197,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Calculate.cpp" />
+    <ClCompile Include="card.cpp" />
     <ClCompile Include="FreeCellCalculateC++.cpp" />
     <ClCompile Include="FreeCellCalculateC++Dlg.cpp" />
     <ClCompile Include="stdafx.cpp">
