@@ -36,6 +36,12 @@
     <ClCompile Include="State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="old.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="don_woods_solver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculate.h">
@@ -63,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="State.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="old.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

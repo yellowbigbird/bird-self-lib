@@ -19,11 +19,12 @@ void CCalculate::Run()
     m_stateStart.CheckInputDataLegal();
 
     while(true){
-        m_stateStart.doMove();
+        //m_stateStart.doMove();
         //push...
         //check if win
         //save the path
         Sleep(1);
+        break;
     }
     //bool fWin = FWin();
     //if(fWin)
