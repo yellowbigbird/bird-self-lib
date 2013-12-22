@@ -4,39 +4,46 @@
 using namespace std;
 using namespace Card;
 
+const UINT8 c_carInvalid = 0xff;
+
 CCard::CCard()
-    :m_type(eInvalid)
-    ,m_number(eNumberInvalid)
+    :m_numberType(c_carInvalid)
+    //:m_type(eInvalid)
+    //,m_number(eNumberInvalid)
 {
 }
 
 CCard::CCard(int cardIdx)
-    :m_type(eInvalid)
-    ,m_number(eNumberInvalid)
+    :m_numberType(cardIdx)
+    //:m_type(eInvalid)
+    //,m_number(eNumberInvalid)
 {
-   SetIdx(cardIdx);
+   //SetIdx(cardIdx);
 }
 
 CCard::CCard(eType type, eNumber num)
-    :m_type(type)
-    ,m_number(num)
+    //:m_type(type)
+    //,m_number(num)
 {
+    m_numberType = type* c_cardNumberMax + num;
 }
 
 bool CCard::operator==(const CCard& other ) const
 {
-    const bool ifok =  m_type == other.m_type
-        && m_number == other.m_number
+    const bool ifok = m_numberType == other.m_numberType
+        //m_type == other.m_type
+        //&& m_number == other.m_number
         ;
     return ifok;
 }
 
 bool CCard::IsLegal() const
 {
-    if(m_type >= eHeart
-        && m_type < eCardMax
-        && m_number >= e1
-        && m_number < eNumberMax
+    if(m_numberType< c_cardNumberMax
+        //m_type >= eHeart
+        //&& m_type < eCardMax
+        //&& m_number >= e1
+        //&& m_number < eNumberMax
         )
         return true;
     return false;
@@ -45,8 +52,8 @@ bool CCard::IsLegal() const
 
 void  CCard::Disalbe()
 {
-    m_type = (eInvalid);
-    m_number = (eNumberInvalid);
+    //m_type = (eInvalid);
+    //m_number = (eNumberInvalid);
 }
 
 bool    CCard::SetIdx(int cardIdx)
@@ -55,23 +62,28 @@ bool    CCard::SetIdx(int cardIdx)
         || cardIdx>= c_cardAll)
         return false;
 
-    m_number = (eNumber)(cardIdx % c_cardNumberMax);
-    m_type =  (eType)(cardIdx /c_cardNumberMax);
+    //m_number = (eNumber)(cardIdx % c_cardNumberMax);
+    //m_type =  (eType)(cardIdx /c_cardNumberMax);
+    m_numberType = cardIdx;
     return true;
 }
 
 eType    CCard::GetType() const
 {
-    return m_type;
+    //return m_type;
+    const eType type = (eType)(m_numberType/ c_cardNumberMax);
+    return type;
 }
 eNumber  CCard::GetNumber() const
 {
-    return m_number;
+    //return m_number;
+    const eNumber num =  (eNumber)(m_numberType % c_cardNumberMax);
+    return num;
 }
 bool    CCard::FRed() const
 {
-    if(eHeart == m_type 
-        || eDiamond == m_type )
+    if(eHeart == GetType() 
+        || eDiamond == GetType() )
         return true;
     return false;
 }

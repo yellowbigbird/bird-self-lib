@@ -69,8 +69,9 @@ namespace Card
         eNumber     GetNumber() const;
 
     protected:
-        eType       m_type;
-        eNumber     m_number;  //0-9(1-10), 11- J, 11- Q, 12- K
+        //eType       m_type;
+        //eNumber     m_number;  //0-9(1-10), 11- J, 11- Q, 12- K
+        UINT8       m_numberType;
     };
 
     typedef std::vector<CCard>   VecCard;
