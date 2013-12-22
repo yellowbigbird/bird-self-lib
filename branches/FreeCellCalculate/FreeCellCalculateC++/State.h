@@ -15,34 +15,48 @@ public:
     void InitData();
     void InputData();
 
-    double GetValue() const;
-    double CalculateValue();
+    UINT16 GetValue() const;
+    
+    void Update();
+
+    //CState& operater= (const CState& othe );
     bool operator == (const CState& other) const;
+    bool operator < (const CState& other) const;
 
     void GenerateSonState(std::vector<CState>& vecState);
-
-    bool MoveColToBench     (std::vector<CState>& vecState, UINT colIdx);
-    bool MoveColToSorted    (std::vector<CState>& vecState, UINT colIdx);
-    bool MoveColToCol       (std::vector<CState>& vecState, UINT colIdxSrc, UINT colIdxDest);
-    bool MoveBenchToSorted  (std::vector<CState>& vecState, UINT benchIdx);
-    bool MoveBenchToCol     (std::vector<CState>& vecState, UINT benchIdx, UINT colIdx);
-
+    
     bool CheckInputDataLegal() const;
     bool FWin() const;
     bool FSorted(const VecCard& vecIdx) const;
     bool FCanMove() const;
+    
+    bool IsBenchHaveBlank() const;  
+    int  GetCurMoveCardAmount() const;
+    void GetLastSortedList(const VecCard& vecCard,  int moveMax, VecCard& vecIdxSorted) const;
+
+protected:
+    double UpdateValue();
+    void UpdateString();
+    
+    bool MoveColToBench     (std::vector<CState>& vecState, UINT colIdx);
+    bool MoveColToSorted    (std::vector<CState>& vecState, UINT colIdx);
+    bool MoveColToCol       (std::vector<CState>& vecState, UINT colIdxSrc, UINT colIdxDest, const VecCard& vecLastSorted);
+    bool MoveBenchToSorted  (std::vector<CState>& vecState, UINT benchIdx);
+    bool MoveBenchToCol     (std::vector<CState>& vecState, UINT benchIdx, UINT colIdx);
+
+    void SetIdxFather(CState& stSon);
+
     bool FCanMove(int colIdx) const;
     bool FCanMoveToSorted(const VecCard& vecIdx) const;
     bool FCanPushToEnd(const VecCard& vecIdx, CCard cardIdx) const;
-    bool IsBenchHaveBlank() const;  
-    int  GetCurMoveCardAmount() const;
-    void GetLastSortedList(const VecCard& vecIdx,  int moveMax, VecCard& vecIdxSorted) const;
 
 public:    
     UINT                    m_id;
-    int                     m_idxFather;
+    UINT                    m_idxFather;
     VecInt                  m_idxSon;
-    double                  m_value;
+    UINT16                  m_value;
+    UINT8                   m_step;
+    std::string             m_str;
 
     VecCard                 m_vecIdxSorted;   //4 vec, save show card
     VecCard                 m_vecBench;       //4 card 

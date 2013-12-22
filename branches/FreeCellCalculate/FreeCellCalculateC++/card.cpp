@@ -7,14 +7,14 @@ using namespace Card;
 const UINT8 c_carInvalid = 0xff;
 
 CCard::CCard()
-    :m_numberType(c_carInvalid)
+    :m_num(c_carInvalid)
     //:m_type(eInvalid)
     //,m_number(eNumberInvalid)
 {
 }
 
 CCard::CCard(int cardIdx)
-    :m_numberType(cardIdx)
+    :m_num(cardIdx)
     //:m_type(eInvalid)
     //,m_number(eNumberInvalid)
 {
@@ -25,12 +25,12 @@ CCard::CCard(eType type, eNumber num)
     //:m_type(type)
     //,m_number(num)
 {
-    m_numberType = type* c_cardNumberMax + num;
+    m_num = type* c_cardNumberMax + num;
 }
 
 bool CCard::operator==(const CCard& other ) const
 {
-    const bool ifok = m_numberType == other.m_numberType
+    const bool ifok = m_num == other.m_num
         //m_type == other.m_type
         //&& m_number == other.m_number
         ;
@@ -39,7 +39,7 @@ bool CCard::operator==(const CCard& other ) const
 
 bool CCard::IsLegal() const
 {
-    if(m_numberType< c_cardNumberMax
+    if(m_num< c_cardAll
         //m_type >= eHeart
         //&& m_type < eCardMax
         //&& m_number >= e1
@@ -64,20 +64,20 @@ bool    CCard::SetIdx(int cardIdx)
 
     //m_number = (eNumber)(cardIdx % c_cardNumberMax);
     //m_type =  (eType)(cardIdx /c_cardNumberMax);
-    m_numberType = cardIdx;
+    m_num = cardIdx;
     return true;
 }
 
 eType    CCard::GetType() const
 {
     //return m_type;
-    const eType type = (eType)(m_numberType/ c_cardNumberMax);
+    const eType type = (eType)(m_num/ c_cardNumberMax);
     return type;
 }
 eNumber  CCard::GetNumber() const
 {
     //return m_number;
-    const eNumber num =  (eNumber)(m_numberType % c_cardNumberMax);
+    const eNumber num =  (eNumber)(m_num % c_cardNumberMax);
     return num;
 }
 bool    CCard::FRed() const
@@ -139,4 +139,14 @@ bool    CCard::CanAttach(const CCard& other) const
         )
         return true;
     return false;
+}
+
+string CCard::GetString() const
+{
+    if(!IsLegal() )
+        return " ";
+
+    char buf[3];
+    sprintf_s(buf, 3, "%2d", m_num);
+    return buf;
 }
