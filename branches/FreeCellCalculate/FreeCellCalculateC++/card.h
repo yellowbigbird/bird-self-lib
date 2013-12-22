@@ -51,6 +51,8 @@ namespace Card
         explicit CCard(int cardIdx);
         explicit CCard(eType type, eNumber num);
 
+        bool operator==(const CCard& other ) const;
+
         bool        SetIdx(int cardIdx);
         void        Disalbe();
         bool        IsLegal() const;  //legal leagl
@@ -64,7 +66,7 @@ namespace Card
         bool        FRed() const;
         bool        CanAttach(const CCard& other) const;
         eType       GetType() const;
-        eNumber      GetNumber() const;
+        eNumber     GetNumber() const;
 
     protected:
         eType       m_type;
@@ -72,5 +74,6 @@ namespace Card
     };
 
     typedef std::vector<CCard>   VecCard;
+    typedef VecCard::iterator   VecCardIt;
 
 }; //namespace card
