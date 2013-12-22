@@ -23,8 +23,9 @@ void CCalculate::Run()
     m_stateStart.InputData();
     m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
-    m_stateStart.CalculateValue();
-    m_vecStateAll.push_back(m_stateStart);
+    m_stateStart.Update();
+    AddToAll(m_stateStart);
+    //m_vecStateAll.push_back(m_stateStart);
 
     int lowStateIdx = -1;
     int sonStateIdx = 0;
@@ -80,7 +81,7 @@ void CCalculate::Run()
                 }
                 else{ //X not in both
                     //m_vecIdxOpen.push_back(sonStateIdx);
-                    SortInser(m_vecIdxOpen, sonStateIdx);
+                    SortInsert(m_vecIdxOpen, sonStateIdx);
                 }
             }
         }  //for
@@ -92,6 +93,9 @@ void CCalculate::Run()
         //按照估价值将OPEN表中的节点排序; //实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
         //SortOpen();
     }//while
+
+    int i = 0;
+    i++;
 
     //bool fWin = FWin();
     //if(fWin)
@@ -140,43 +144,59 @@ void CCalculate::Run()
          if( FindStInAll(entry, idFind) )
          {
              //stFather.m_idxSon.push_back(idFind);
-             SortInser(stFather.m_idxSon, idFind);
+             SortInsert(stFather.m_idxSon, idFind);
          }
          else{
              AddToAll(entry);
              CState& entryPushed = *m_vecStateAll.rbegin();
              //entryPushed.m_id = (UINT)m_vecStateAll.size();
              //stFather.m_idxSon.push_back(entryPushed.m_id);
-             SortInser(stFather.m_idxSon, entryPushed.m_id);
+             SortInsert(stFather.m_idxSon, entryPushed.m_id);
          }
      }
     
      //sort the son
      //sort(stFather.m_idxSon.begin(), stFather.m_idxSon.end(), );
-
  }
 
  bool CCalculate::FindStInAll(const CState& st, UINT& id) const
  {
-     for(UINT idx=0; idx< m_vecStateAll.size(); idx++)
-     {
-         if(st == m_vecStateAll[idx]){
-             id = idx;
-             return true;
-         }
-     }
-     return false;
+     //for(UINT idx=0; idx< m_vecStateAll.size(); idx++)
+     //{
+     //    if(st == m_vecStateAll[idx]){
+     //        id = idx;
+     //        return true;
+     //    }
+     //}
+     const string& str = st.m_str;
+     MapStateId::const_iterator it = m_mapStateId.find(str);
+     if(it == m_mapStateId.end() )
+         return false;
+
+     return true;
  }
 
 
- bool CCalculate::AddToAll(const CState& st)
+ bool CCalculate::AddToAll(CState& st)
  {
      //UINT idFind = 0;
      //if(FindStInAll(st, idFind) )  //don't check here
      //    return false;     
 
+     UINT id = (UINT)m_vecStateAll.size();
+     st.m_id = id;
+
      m_vecStateAll.push_back(st);
-     m_vecStateAll.rbegin()->m_id = (UINT)m_vecStateAll.size()-1;
+     
+     //m_vecStateAll.rbegin()->m_id = (UINT)id;
+     
+     //update map
+     if(st.m_str.empty() ){
+         ASSERT(false);
+     }
+     else{
+         m_mapStateId[st.m_str] = id;
+     }
      return true;
  }
 
@@ -203,7 +223,7 @@ void CCalculate::Run()
  //    //sort(m_vecIdxOpen.begin(), m_vecIdxClose.end() );  //idx , can't use this sort
  //}
 
- void  CCalculate::SortInser(VecInt& vecToInsert, int stateIdx) const
+ void  CCalculate::SortInsert(VecInt& vecToInsert, int stateIdx) const
  {
      const CState& staIsert = m_vecStateAll[stateIdx];
      const double valueInsert = staIsert.GetValue();

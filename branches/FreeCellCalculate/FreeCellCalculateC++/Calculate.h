@@ -4,7 +4,8 @@
 using namespace Card;
 
 #include "State.h"
-
+#include <map>
+#include <hash_map>
 
 
 class CCalculate
@@ -23,9 +24,9 @@ public:
     void EraseStateFromOpen(UINT idxInOpen);
 
     //void SortOpen();
-    void SortInser(VecInt& vecToInsert, int stateIdx) const;
+    void SortInsert(VecInt& vecToInsert, int stateIdx) const;
 
-    bool AddToAll(const CState& st);
+    bool AddToAll(CState& st);
     bool FindStInAll(const CState& st, UINT& id) const;
 
     double      m_valueOpen;    //save lowest value of open
@@ -33,5 +34,9 @@ public:
     VecState    m_vecStateAll;
     VecInt      m_vecIdxOpen;
     VecInt      m_vecIdxClose;
+
+    //typedef stdext::hash_map<CState, UINT>  MapStateId;
+    typedef std::map<std::string, UINT>  MapStateId;
+    MapStateId  m_mapStateId;
 };
 
