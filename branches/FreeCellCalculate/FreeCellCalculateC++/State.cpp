@@ -5,11 +5,11 @@
 using namespace std;
 
 const UINT c_id = 0xffffffff;
-const UINT16 c_valueInit = 100;
+const UINT16 c_valueInit = 1000;
 
 const UINT16 c_valueBench = 1;
-const UINT16 c_valueColumn = 5;
-const UINT16 c_valueSortedCard = 2;
+const UINT16 c_valueColumn = 10;
+const UINT16 c_valueSortedCard = 5;
 const UINT16 c_valueSortedInColumn = 1;
 const UINT16 c_valueSortedChain = 1;
 
