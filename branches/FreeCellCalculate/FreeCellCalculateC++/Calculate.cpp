@@ -5,7 +5,7 @@
 using namespace std;
 using namespace Card;
 
-
+const UINT c_maxVecState = 200000;
 //////////////////////////////////////////////////////////////////////////
 
 CCalculate::CCalculate()
@@ -15,9 +15,9 @@ CCalculate::CCalculate()
 
 void CCalculate::Run()
 {
-    m_vecStateAll.reserve(100000);
-    m_vecIdxOpen.reserve(100000);
-    m_vecIdxClose.reserve(100000);
+    //m_vecStateAll.reserve(c_maxVecState);
+    m_vecIdxOpen.reserve(c_maxVecState);
+    m_vecIdxClose.reserve(c_maxVecState);
 
     //m_stateStart.InitData();
     m_stateStart.InputData();
@@ -110,12 +110,20 @@ void CCalculate::Run()
      int stateIdx = 0;
      //int lowidx = -1;
      double valueLow = 10000, value = 0;
+     MapIdState::const_iterator itMap;
+
      for(UINT idx=0; idx< m_vecIdxOpen.size(); idx++)
      {
          stateIdx = m_vecIdxOpen[idx];
          if(stateIdx <0 || stateIdx >= m_vecStateAll.size() )
              continue;
-         const CState& entry = m_vecStateAll[stateIdx];
+
+         //const CState& entry = m_vecStateAll[stateIdx];
+         itMap = m_vecStateAll.find(stateIdx);
+         if(itMap == m_vecStateAll.end() )
+             return false;
+         const CState& entry = itMap->second;
+
          value = entry.GetValue();
          if(value < valueLow){
              valueLow = value;
@@ -148,10 +156,10 @@ void CCalculate::Run()
          }
          else{
              AddToAll(entry);
-             CState& entryPushed = *m_vecStateAll.rbegin();
+             //CState& entryPushed = *m_vecStateAll.rbegin();
              //entryPushed.m_id = (UINT)m_vecStateAll.size();
              //stFather.m_idxSon.push_back(entryPushed.m_id);
-             SortInsert(stFather.m_idxSon, entryPushed.m_id);
+             SortInsert(stFather.m_idxSon, entry.m_id);
          }
      }
     
@@ -186,7 +194,8 @@ void CCalculate::Run()
      UINT id = (UINT)m_vecStateAll.size();
      st.m_id = id;
 
-     m_vecStateAll.push_back(st);
+     //m_vecStateAll.push_back(st);
+     m_vecStateAll[id] = st;
      
      //m_vecStateAll.rbegin()->m_id = (UINT)id;
      
@@ -223,9 +232,14 @@ void CCalculate::Run()
  //    //sort(m_vecIdxOpen.begin(), m_vecIdxClose.end() );  //idx , can't use this sort
  //}
 
- void  CCalculate::SortInsert(VecInt& vecToInsert, int stateIdx) const
+ bool  CCalculate::SortInsert(VecInt& vecToInsert, int stateIdx) const
  {
-     const CState& staIsert = m_vecStateAll[stateIdx];
+     //const CState& staIsert = m_vecStateAll[stateIdx];
+     MapIdState::const_iterator itMap = m_vecStateAll.find(stateIdx);
+     if(itMap == m_vecStateAll.end() )
+         return false;
+     const CState& staIsert = itMap->second;
+     
      const double valueInsert = staIsert.GetValue();
      double value = 0;
 
@@ -236,13 +250,19 @@ void CCalculate::Run()
          it++)
      {
          idx = *it;
-         const CState& staComp = m_vecStateAll[idx];
+         //const CState& staComp = m_vecStateAll[idx];
+         itMap = m_vecStateAll.find(idx);
+         if(itMap == m_vecStateAll.end() )
+             continue;
+         const CState& staComp = itMap->second;
+
          value = staComp.GetValue();
          if(value > valueInsert)
          {
              vecToInsert.insert(it, stateIdx);
-             return;
+             return true;
          }
      }
      vecToInsert.push_back(stateIdx);
+     return true;
  }

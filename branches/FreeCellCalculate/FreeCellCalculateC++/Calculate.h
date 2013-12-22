@@ -24,19 +24,22 @@ public:
     void EraseStateFromOpen(UINT idxInOpen);
 
     //void SortOpen();
-    void SortInsert(VecInt& vecToInsert, int stateIdx) const;
+    bool SortInsert(VecInt& vecToInsert, int stateIdx) const;
 
     bool AddToAll(CState& st);
     bool FindStInAll(const CState& st, UINT& id) const;
 
     double      m_valueOpen;    //save lowest value of open
     CState      m_stateStart;
-    VecState    m_vecStateAll;
+    //VecState    m_vecStateAll;
     VecInt      m_vecIdxOpen;
     VecInt      m_vecIdxClose;
 
     //typedef stdext::hash_map<CState, UINT>  MapStateId;
     typedef std::map<std::string, UINT>  MapStateId;
+    typedef std::map<UINT, CState>  MapIdState;
+    
     MapStateId  m_mapStateId;
+    MapIdState  m_vecStateAll;
 };
 
