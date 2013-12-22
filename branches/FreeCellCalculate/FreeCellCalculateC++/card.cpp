@@ -23,6 +23,14 @@ CCard::CCard(eType type, eNumber num)
 {
 }
 
+bool CCard::operator==(const CCard& other ) const
+{
+    const bool ifok =  m_type == other.m_type
+        && m_number == other.m_number
+        ;
+    return ifok;
+}
+
 bool CCard::IsLegal() const
 {
     if(m_type >= eHeart
@@ -111,7 +119,7 @@ int  CCard::GetIdx(eType type, eNumber cardNumber)
     return cardIdx;
 }
 
-//must big attach small
+//must big attach small, K attach Q
 bool    CCard::CanAttach(const CCard& other) const
 {
     if(FRed() != other.FRed()

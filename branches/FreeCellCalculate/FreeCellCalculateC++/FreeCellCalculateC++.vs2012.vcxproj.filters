@@ -39,9 +39,6 @@
     <ClCompile Include="old.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="don_woods_solver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculate.h">
