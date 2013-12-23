@@ -50,7 +50,7 @@ bool CCard::IsLegal() const
 
 }
 
-void  CCard::Disalbe()
+void  CCard::Disable()
 {
     //m_type = (eInvalid);
     //m_number = (eNumberInvalid);
@@ -144,7 +144,7 @@ bool    CCard::CanAttach(const CCard& other) const
 string CCard::GetString() const
 {
     if(!IsLegal() )
-        return " ";
+        return "_";
 
     char buf[3];
     sprintf_s(buf, 3, "%2d", m_num);

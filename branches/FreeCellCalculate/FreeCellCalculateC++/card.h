@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 
 namespace Card
 {
@@ -54,7 +55,7 @@ namespace Card
         bool operator==(const CCard& other ) const;
 
         bool        SetIdx(int cardIdx);
-        void        Disalbe();
+        void        Disable();
         bool        IsLegal() const;  //legal leagl
 
         //static bool FRed(int cardIdx);
@@ -78,5 +79,8 @@ namespace Card
 
     typedef std::vector<CCard>   VecCard;
     typedef VecCard::iterator   VecCardIt;
+    typedef std::list<CCard>    ListCard;
+    typedef ListCard::const_iterator ListCardConstIt;
+    typedef ListCard::iterator  ListCardIt;
 
 }; //namespace card

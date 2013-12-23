@@ -21,7 +21,7 @@ void CCalculate::Run()
 
     //m_stateStart.InitData();
     m_stateStart.InputData();
-    m_stateStart.CheckInputDataLegal();
+    //m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
     m_stateStart.Update();
     AddToAll(m_stateStart);
@@ -136,16 +136,19 @@ void CCalculate::Run()
 
  void CCalculate::GenerateSonState(CState& stFather) 
  {
-     VecState vecState;
+     ListState vecState;
      stFather.GenerateSonState(vecState);
+
      UINT idFind = 0;
 
      if(vecState.size() < 1)
          stFather.m_idxSon.clear();
 
-     for(int i=0; i< vecState.size(); i++)
+     for(ListState::iterator it = vecState.begin();
+         it != vecState.end();
+         it++)
      {
-         CState& entry = vecState[i];
+         CState& entry = *it;
 
          //check if this state exist
          

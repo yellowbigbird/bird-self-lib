@@ -31,7 +31,7 @@ public:
 
     double      m_valueOpen;    //save lowest value of open
     CState      m_stateStart;
-    //VecState    m_vecStateAll;
+    
     VecInt      m_vecIdxOpen;
     VecInt      m_vecIdxClose;
 
@@ -39,6 +39,7 @@ public:
     typedef std::map<std::string, UINT>  MapStateId;
     typedef std::map<UINT, CState>  MapIdState;
     
+    //VecState    m_vecStateAll;
     MapStateId  m_mapStateId;
     MapIdState  m_vecStateAll;
 };
