@@ -25,7 +25,7 @@ namespace Card
 
     enum eNumber
     {
-        e1 = 0,
+        eA = 0,
         e2,
         e3,
         e4,

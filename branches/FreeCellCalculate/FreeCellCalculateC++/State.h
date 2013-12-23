@@ -23,7 +23,7 @@ public:
     bool operator == (const CState& other) const;
     bool operator < (const CState& other) const;
 
-    void GenerateSonState(std::list<CState>& vecState);
+    void GenerateSonState(std::list<CState>& vecState) ;
     
     //bool CheckInputDataLegal() const;
     bool FWin() const;
@@ -38,11 +38,16 @@ protected:
     double UpdateValue();
     void UpdateString();
     
-    bool MoveColToBench     (std::list<CState>& vecState, UINT colIdx);
-    bool MoveColToSorted    (std::list<CState>& vecState, UINT colIdx);
-    bool MoveColToCol       (std::list<CState>& vecState, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted);
-    bool MoveBenchToSorted  (std::list<CState>& vecState, UINT benchIdx);
-    bool MoveBenchToCol     (std::list<CState>& vecState, UINT benchIdx, UINT colIdx);
+    bool MoveColToBench     (std::list<CState>& vecState, UINT colIdx) ;
+    //bool MoveColToSorted    (std::list<CState>& vecState, UINT colIdx) ;
+    bool MoveColToCol       (std::list<CState>& vecState, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted) ;
+    //bool MoveBenchToSorted  (std::list<CState>& vecState, UINT benchIdx) ;
+    bool MoveBenchToCol     (std::list<CState>& vecState, UINT benchIdx, UINT colIdx) ;
+
+    bool MoveColToSorted    (UINT colIdx);
+    bool MoveBenchToSorted  (UINT benchIdx);
+
+    bool UpdateCardToSorted();
 
     void SetIdxFather(CState& stSon);
 

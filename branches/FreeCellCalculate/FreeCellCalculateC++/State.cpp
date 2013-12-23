@@ -13,7 +13,7 @@ const UINT16 c_valueSortedCard = 5;
 const UINT16 c_valueSortedInColumn = 1;
 const UINT16 c_valueSortedChain = 1;
 
-const int c_maxStep = 60+ c_cardAll;
+const int c_maxStep = 65  ; //c_cardAll
 
 //////////////////////////////////////////////////////////////////////////
 CState::CState()
@@ -206,7 +206,7 @@ bool CState::FCanMove(int curColIdx) const
     return false;
 }
 
-void CState::GenerateSonState(ListState& vecState) 
+void CState::GenerateSonState(ListState& vecState)
 {
     vecState.clear();
 
@@ -221,13 +221,13 @@ void CState::GenerateSonState(ListState& vecState)
 
     for(UINT colIdx=0; colIdx < m_vecVecIdx.size(); colIdx++)
     {
-        ListCard& vecCard = m_vecVecIdx[colIdx];
+        const ListCard& vecCard = m_vecVecIdx[colIdx];
 
         //get a max list of sorted card of this column     
         GetLastSortedList(vecCard, c_cardNumberMax, vecLastSorted ); //todo ,max 13 cards
 
         //move to sorted
-        MoveColToSorted(vecState, colIdx);
+        //MoveColToSorted(vecState, colIdx);
         //move to bench
         MoveColToBench(vecState, colIdx);
 
@@ -244,7 +244,7 @@ void CState::GenerateSonState(ListState& vecState)
         if(!card.IsLegal() )
             continue;
 
-        MoveBenchToSorted(vecState, benchIdx);
+        //MoveBenchToSorted(vecState, benchIdx);
 
         for(UINT colIdxDest =0; colIdxDest < m_vecVecIdx.size(); colIdxDest++)
         {
@@ -282,36 +282,63 @@ bool CState::MoveColToBench(ListState& vecState, UINT colIdx)
     return true;
 }
 
-bool CState::MoveColToSorted(ListState& vecState, UINT colIdx)
+//bool CState::MoveColToSorted(ListState& vecState, UINT colIdx)
+//{
+//    if(colIdx >= m_vecVecIdx.size() )
+//        return false;
+//    const ListCard& vecCard = m_vecVecIdx[colIdx];
+//    if(vecCard.size() < 1)
+//        return false;
+//    const CCard& card = *vecCard.rbegin();  //last one
+//    const eType type = card.GetType();
+//
+//    //check sort
+//    const CCard& cardSortLast = m_vecIdxSorted[type];
+//    if(  e1 == card.GetNumber() //must be A
+//        || (cardSortLast.IsLegal()
+//        && card.CanAttach(cardSortLast) )  
+//        )            
+//    {      
+//        vecState.push_back(*this);
+//        CState& staNew = *vecState.rbegin();
+//
+//        SetIdxFather(staNew);  //set father
+//
+//        staNew.m_vecIdxSorted[type] = card; //move to sorted
+//        ListCard& vecCardNew = staNew.m_vecVecIdx[colIdx];
+//        ListCardIt it = vecCardNew.end();
+//        it--;
+//        vecCardNew.erase(it);
+//        //vecCardNew.erase(vecCardNew.rbegin() );
+//
+//        staNew.Update();
+//        return true;
+//    }
+//    return false;
+//}
+
+bool CState::MoveColToSorted(UINT colIdx)
 {
     if(colIdx >= m_vecVecIdx.size() )
         return false;
-    const ListCard& vecCard = m_vecVecIdx[colIdx];
+    ListCard& vecCard = m_vecVecIdx[colIdx];
     if(vecCard.size() < 1)
         return false;
+
     const CCard& card = *vecCard.rbegin();  //last one
     const eType type = card.GetType();
+    const eNumber num = card.GetNumber();
 
-    //check sort
     const CCard& cardSortLast = m_vecIdxSorted[type];
-    if(  e1 == card.GetNumber() //must be A
+    if(  eA == num //must be A
         || (cardSortLast.IsLegal()
         && card.CanAttach(cardSortLast) )  
         )            
     {      
-        vecState.push_back(*this);
-        CState& staNew = *vecState.rbegin();
-
-        SetIdxFather(staNew);  //set father
-
-        staNew.m_vecIdxSorted[type] = card; //move to sorted
-        ListCard& vecCardNew = staNew.m_vecVecIdx[colIdx];
-        ListCardIt it = vecCardNew.end();
+        m_vecIdxSorted[type] = card; //move to sorted        
+        ListCardIt it = vecCard.end();
         it--;
-        vecCardNew.erase(it);
-        //vecCardNew.erase(vecCardNew.rbegin() );
-
-        staNew.Update();
+        vecCard.erase(it);
         return true;
     }
     return false;
@@ -337,7 +364,6 @@ bool CState::MoveColToCol(ListState& vecState
         it != vecLastSorted.end();
         idx++, it++)
     {
-        //const VecCard& vecCardSrc = m_vecVecIdx[colIdxSrc];
         const ListCard& vecCardDest = m_vecVecIdx[colIdxDest];
 
         const CCard& cardSrc = *it;
@@ -382,7 +408,42 @@ bool CState::MoveColToCol(ListState& vecState
     return false;
 }
 
-bool CState::MoveBenchToSorted(ListState& vecState, UINT benchIdx)
+//bool CState::MoveBenchToSorted(ListState& vecState, UINT benchIdx)
+//{
+//    if(benchIdx >= m_vecBench.size() )
+//        return false;
+//
+//    const CCard& card = m_vecBench[benchIdx];
+//    if(!card.IsLegal() )
+//        return false;
+//
+//    const eType type = card.GetType();
+//    const CCard& cardSortLast = m_vecIdxSorted[type];
+//    if(!card.CanAttach(cardSortLast) )
+//        return false;
+//    
+//    VecCardIt it = m_vecBench.begin();
+//    for(int idxSorted = 0; idxSorted< m_vecIdxSorted.size(); idxSorted++, it++)
+//    {
+//        //if(idxSorted != benchIdx)
+//        //    continue;
+//                
+//        vecState.push_back(*this);
+//        CState& staNew = *vecState.rbegin();
+//        SetIdxFather(staNew);
+//
+//        staNew.m_vecIdxSorted[type] = card;
+//        //staNew.m_vecBench.erase(staNew.m_vecBench.begin() + idx);
+//        staNew.m_vecBench[benchIdx].Disable();
+//
+//        staNew.Update();
+//        //vecState.push_back(staNew);
+//        break;
+//    }
+//    return true;
+//}
+
+bool CState::MoveBenchToSorted(UINT benchIdx)
 {
     if(benchIdx >= m_vecBench.size() )
         return false;
@@ -395,27 +456,12 @@ bool CState::MoveBenchToSorted(ListState& vecState, UINT benchIdx)
     const CCard& cardSortLast = m_vecIdxSorted[type];
     if(!card.CanAttach(cardSortLast) )
         return false;
-    
-    VecCardIt it = m_vecBench.begin();
-    for(int idxSorted = 0; idxSorted< m_vecIdxSorted.size(); idxSorted++, it++)
-    {
-        //if(idxSorted != benchIdx)
-        //    continue;
-                
-        vecState.push_back(*this);
-        CState& staNew = *vecState.rbegin();
-        SetIdxFather(staNew);
 
-        staNew.m_vecIdxSorted[type] = card;
-        //staNew.m_vecBench.erase(staNew.m_vecBench.begin() + idx);
-        staNew.m_vecBench[benchIdx].Disable();
-
-        staNew.Update();
-        //vecState.push_back(staNew);
-        break;
-    }
+    m_vecIdxSorted[type] = card;
+    m_vecBench[benchIdx].Disable();
     return true;
 }
+
 
 bool CState::MoveBenchToCol(ListState& vecState, UINT benchIdx, UINT colIdx)
 {
@@ -450,6 +496,36 @@ bool CState::MoveBenchToCol(ListState& vecState, UINT benchIdx, UINT colIdx)
     staNew.Update();
     //vecState.push_back(staNew);
 
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CState::UpdateCardToSorted()
+{
+    bool fCanMove = true;
+    while(fCanMove){
+        fCanMove = false;
+
+        //bench
+        for(UINT benchIdx=0; benchIdx< m_vecBench.size(); benchIdx++)
+        {
+            const CCard& card = m_vecBench[benchIdx];
+            if(!card.IsLegal() )
+                continue;
+
+             fCanMove = fCanMove || MoveBenchToSorted(benchIdx);
+        }
+
+        for(UINT colIdx=0; colIdx < m_vecVecIdx.size(); colIdx++)
+        {
+            ListCard& vecCard = m_vecVecIdx[colIdx];
+
+            //get a max list of sorted card of this column     
+            //GetLastSortedList(vecCard, c_cardNumberMax, vecLastSorted ); //todo ,max 13 cards
+            fCanMove = fCanMove || MoveColToSorted(colIdx);            
+        }
+    }
     return true;
 }
 
@@ -713,6 +789,9 @@ void CState::UpdateString()
 
 void  CState::Update()
 {
+    //must be before update value
+    UpdateCardToSorted();
+
     UpdateValue();
     UpdateString();
 }
@@ -745,9 +824,9 @@ void CState::InputData()
 
     curCol++;  //2
     ADD_CARD(eHeart, eJ);
-    ADD_CARD(eClub, e1);
+    ADD_CARD(eClub, eA);
     ADD_CARD(eHeart, eQ);
-    ADD_CARD(eSpade, e1);
+    ADD_CARD(eSpade, eA);
     ADD_CARD(eSpade, e4);
     ADD_CARD(eDiamond, e4);
     ADD_CARD(eSpade, e8);
@@ -772,7 +851,7 @@ void CState::InputData()
 
     curCol++; //5
     ADD_CARD(eSpade, eJ);
-    ADD_CARD(eHeart, e1);
+    ADD_CARD(eHeart, eA);
     ADD_CARD(eClub, e9);
     ADD_CARD(eClub, eK);
     ADD_CARD(eClub, eQ);
@@ -791,7 +870,7 @@ void CState::InputData()
     ADD_CARD(eHeart, e4);
     ADD_CARD(eSpade, e10);
     ADD_CARD(eDiamond, e9);
-    ADD_CARD(eDiamond, e1);
+    ADD_CARD(eDiamond, eA);
     ADD_CARD(eClub, e4);
     ADD_CARD(eHeart, e6);
 }
