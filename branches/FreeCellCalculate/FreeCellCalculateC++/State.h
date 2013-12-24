@@ -29,7 +29,9 @@ public:
     bool FWin() const;
     bool FSorted(const ListCard& vecIdx) const;
     bool FCanMove() const;
-    
+    	
+    void SetIdxFather(CState& stSon);
+
     //bool IsBenchHaveBlank() const;  
     int  GetCurMoveCardAmount() const;
     void GetLastSortedList(const ListCard& vecCard,  int moveMax, ListCard& vecIdxSorted) const;
@@ -49,7 +51,6 @@ protected:
 
     bool UpdateCardToSorted();
 
-    void SetIdxFather(CState& stSon);
 
     bool FCanMove           (int colIdx) const;
     bool FCanMoveToSorted   (const ListCard& vecIdx) const;
