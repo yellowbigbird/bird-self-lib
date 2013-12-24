@@ -154,8 +154,12 @@ void CCalculate::Run()
          
          if( FindStInAll(entry, idFind) )
          {
-             //stFather.m_idxSon.push_back(idFind);
+			 //check step
+			 CState& stOther = m_vecStateAll[idFind];			 
+			 if(entry.m_step > stOther.m_step)
+				 continue;
              SortInsert(stFather.m_idxSon, idFind);
+			 stFather.SetIdxFather(stOther);  //switch to short one's son
          }
          else{
              AddToAll(entry);
