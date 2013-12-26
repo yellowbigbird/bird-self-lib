@@ -14,9 +14,9 @@ namespace Card
 
     enum eType
     {
-        eHeart = 0,     //∫ÏÃ“ 0
+        eClub = 0,     //√∑ª® 0
         eDiamond,       //∑ΩøÈ 1
-        eClub,          //√∑ª® 2
+        eHeart,          // 2  ∫ÏÃ“
         eSpade,         //∫⁄Ã“ 3
 
         eCardMax,
@@ -54,6 +54,7 @@ namespace Card
 
         bool operator==(const CCard& other ) const;
 
+        bool        SetTypeNumber(eType ty, eNumber num);
         bool        SetIdx(int cardIdx);
         void        Disable();
         bool        IsLegal() const;  //legal leagl

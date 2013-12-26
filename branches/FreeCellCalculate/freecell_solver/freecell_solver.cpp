@@ -1243,11 +1243,12 @@ static void init_game(struct game *game, struct phase *init_phase)
 int main(int argc, char* argv[])
 {
 	game game1;
-    phase *p = &the_19334;	// done
-    //	struct phase *p = &the_30722;	// done
+    phase *p = 
+        //&the_19334;	// done
+    	 //&the_30722;	// done
     //	struct phase *p = &the_30722;	// done
     //	struct phase *p = &the_11760;	// done
-    //struct phase *p = &the_test_2;	// done
+     &the_test_2;	// done
     //	struct phase *p = &the_test_3;	// done
     int n;
 

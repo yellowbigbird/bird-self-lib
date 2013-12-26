@@ -68,6 +68,15 @@ bool    CCard::SetIdx(int cardIdx)
     return true;
 }
 
+bool  CCard::SetTypeNumber(eType ty, eNumber num)
+{
+    if(num >= c_cardNumberMax
+        || ty >= eCardMax)
+        return false;
+    m_num = ty * c_cardNumberMax + num;
+    return true;
+}
+
 eType    CCard::GetType() const
 {
     //return m_type;
