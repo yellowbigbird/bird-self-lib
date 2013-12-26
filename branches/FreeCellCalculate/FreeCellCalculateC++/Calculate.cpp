@@ -20,7 +20,9 @@ void CCalculate::Run()
     m_vecIdxClose.reserve(c_maxVecState);
 
     //m_stateStart.InitData();
-    m_stateStart.InputData();
+    //m_stateStart.InputData();
+    m_stateStart.GenerateCards(3);
+
     //m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
     m_stateStart.Update();

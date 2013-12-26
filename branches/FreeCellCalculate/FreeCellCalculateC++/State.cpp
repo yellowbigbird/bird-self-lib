@@ -799,6 +799,82 @@ void  CState::Update()
 
 #define ADD_CARD(color, number)       m_vecVecIdx[curCol].push_back(CCard(color, number) );
 
+bool  CState::GenerateCards(UINT gameNum)
+{
+    //int gameNum = 1;	// 牌局号
+    const int c_posAll = 168;
+    const int c_cardAll = 53;
+    int cards[c_posAll], order[c_cardAll];
+    int i,j,k;
+
+    for (i=0; i<168; i++)
+        cards[i] = -1;
+    for (i=0; i< c_cardAll; i++)
+        order[i] = i;
+
+    srand(gameNum);
+    for (i=0; i<52; i++)
+    {
+        j = rand() % order[52];
+        k = i/8 + (i & 7) * 21;
+        cards[k] = order[j];
+        order[j] = order[52-i-1];
+        --order[52];
+    }
+
+    for (i=0;i<c_posAll;i++)
+    {
+        if (cards[i] == -1){
+            printf("%-10d", -1);
+            TRACE("%-10d", -1);
+        }
+        else
+        {
+            k = ((cards[i]+1 % 13)+3) / 4;
+            k = k?k:13;	// 计算牌面大小
+            printf("%-2d(%-2X)    ", k, cards[i]);
+            TRACE("%-2d(%-2X)    ", k, cards[i]);
+        }
+    }
+
+    //convert to my format
+    int cardId = 0;
+    CCard card;
+    UINT colIdx = 0;
+    bool fMinus = true;
+    eNumber cardNumber = eA;
+    eType cardType = eDiamond;
+
+    for (i=0; i<c_posAll; i++)
+    {
+        cardId = cards[i];
+        if (cardId == -1){
+            //printf("%-10d", -1);
+            TRACE("%-10d", -1);
+            if(fMinus){
+                colIdx ++;
+                fMinus = false;
+            }
+        }
+        else
+        {
+            k = ((cardId +1 % 13)+3) / 4;
+            k = k?k:13;	// 计算牌面大小
+            cardNumber = (eNumber)(k-1);
+            cardType = eType(cardId %4);
+            card.SetTypeNumber( cardType, cardNumber);
+
+            //card.SetIdx(cardId-1);  //1-13
+            m_vecVecIdx[colIdx].push_back(card);
+
+            //printf("%-2d(%-2X)    ", k, cardId);
+            TRACE("%-2d(%-2X)    ", k, cardId);
+            fMinus = true;
+        }
+    }
+    return true;
+}
+
 void CState::InputData()
 {
     int curCol = 0;
