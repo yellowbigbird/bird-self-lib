@@ -16,24 +16,27 @@ public:
     CCalculate();
     
     void Run();
+    void SolutionAstar();
+    void SolutionDeep1st();
 
     bool FindLowestValueState(int& stateIdx, UINT& idxInOpen) const;
  
-    void GenerateSonState(CState& st);
+    UINT GenerateSonState(CState& st);
 
     void EraseStateFromOpen(UINT idxInOpen);
 
     //void SortOpen();
-    bool SortInsert(VecInt& vecToInsert, int stateIdx) const;
+    bool SortInsert(ListInt& vecToInsert, int stateIdx) const;
 
     bool AddToAll(CState& st);
     bool FindStInAll(const CState& st, UINT& id) const;
 
-    double      m_valueOpen;    //save lowest value of open
+protected:
+
     CState      m_stateStart;
     
-    VecInt      m_vecIdxOpen;
-    VecInt      m_vecIdxClose;
+    ListInt      m_vecIdxOpen;
+    ListInt      m_vecIdxClose;
 
     //typedef stdext::hash_map<CState, UINT>  MapStateId;
     typedef std::map<std::string, UINT>  MapStateId;

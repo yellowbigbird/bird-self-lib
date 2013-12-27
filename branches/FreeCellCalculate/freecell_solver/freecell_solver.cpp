@@ -971,6 +971,7 @@ static inline int step3_force_move_card_to_final(step *step, struct game *game)
 	return sum;
 }
 
+//how many sons
 static int do_step(struct step *step, struct game *game) 
 {
 	int sum = 0;

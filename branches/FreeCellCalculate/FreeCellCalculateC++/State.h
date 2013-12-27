@@ -3,7 +3,10 @@
 #include "card.h"
 using namespace Card;
 
+#include <list>
+
 typedef std::vector<int>       VecInt;
+typedef std::list<int>         ListInt;
 typedef VecInt::iterator       VecIntIt;
 
 class CState
@@ -13,7 +16,7 @@ public:
     //CState(const CState& other);
     
     void InitData();
-    void InputData();
+    //void InputData();
 
     UINT16 GetValue() const;
     
@@ -63,7 +66,8 @@ protected:
 public:    
     UINT                    m_id;
     UINT                    m_idxFather;
-    VecInt                  m_idxSon;
+    bool                    m_hasGeneratedSon;
+    ListInt                 m_idxSon;
     UINT16                  m_value;
     UINT8                   m_step;
     std::string             m_str;
