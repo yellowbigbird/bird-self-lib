@@ -20,32 +20,10 @@ CState::CState()
     :m_id(0xffffffff)
     ,m_value(c_valueInit)
     ,m_step(0)
+    ,m_hasGeneratedSon(false)
 {
     InitData();
 }
-
-//caution
-//if add member , must add to this func
-
-//#define COPY_MEMBER(var)    var(other.var)
-//CState::CState(const CState& other)
-//    :COPY_MEMBER(m_id)
-//    ,COPY_MEMBER(m_idxFather)
-//    ,COPY_MEMBER(m_idxSon)
-//    ,COPY_MEMBER(m_value)
-//    ,COPY_MEMBER(m_vecIdxSorted)
-//    ,COPY_MEMBER(m_vecBench)
-//    ,COPY_MEMBER(m_vecVecIdx)
-//    ,COPY_MEMBER(m_str)
-//    ,COPY_MEMBER(m_step)
-//{
-//
-//}
-
-//CState& operater= (const CState& othe )
-//{
-//
-//}
 
 bool CState::operator == (const CState& other) const
 {
@@ -78,21 +56,11 @@ void CState::InitData()
 
     //clear sorted idx
     m_vecIdxSorted.resize(c_size, cardInvalid);   //4
-    //for(int idx=0; idx< (int)m_vecIdxSorted.size(); idx++){
-    //    m_vecIdxSorted[idx] = -1;
-    //}
-
-    //bench
-    //m_vecBench.clear();  //4
+  
+    //bench   
     m_vecBench.resize(c_size, cardInvalid);
 
-    m_vecVecIdx.resize(c_colSize);  //8
-    //for(int idx=0; idx < (int)m_vecVecIdx.size(); idx++ )
-    //{
-    //    ListCard& listCard = m_vecVecIdx[idx];
-    //    //listCard.resize(0);
-    //    //listCard.reserve(10);
-    //}
+    m_vecVecIdx.resize(c_colSize);  //8   
 }
 
 
@@ -211,6 +179,7 @@ void CState::GenerateSonState(ListState& vecState)
     vecState.clear();
 
     if(!FCanMove() 
+        || m_hasGeneratedSon
         || m_idxSon.size() 
         || m_step > c_maxStep){
             return;
@@ -252,6 +221,8 @@ void CState::GenerateSonState(ListState& vecState)
         }
     }
         
+    //must be at last, the son copy father ,also copy all member
+    m_hasGeneratedSon = true;
 }
 
 bool CState::MoveColToBench(ListState& vecState, UINT colIdx)
@@ -386,6 +357,7 @@ bool CState::MoveColToCol(ListState& vecState
         //create new state
         vecState.push_back(*this);
         CState& staNew = *vecState.rbegin();
+        staNew.m_hasGeneratedSon = false;
 
         SetIdxFather(staNew);
 
@@ -874,79 +846,79 @@ bool  CState::GenerateCards(UINT gameNum)
     }
     return true;
 }
-
-void CState::InputData()
-{
-    int curCol = 0;
-    //m_vecVecIdx[curCol].push_back(GetIdx(, ) );
-
-    //0
-    ADD_CARD(eDiamond, e6);
-    ADD_CARD(eSpade, e9);
-    ADD_CARD(eHeart, e10);
-    ADD_CARD(eDiamond, eK);
-    ADD_CARD(eDiamond, e7);
-    ADD_CARD(eDiamond, eJ);
-    ADD_CARD(eHeart, e9);
-
-    curCol++; //1
-    ADD_CARD(eDiamond, eQ);
-    ADD_CARD(eClub, e2);
-    ADD_CARD(eHeart, e2);
-    ADD_CARD(eClub, eJ);
-    ADD_CARD(eHeart, e3);
-    ADD_CARD(eClub, e3);
-    ADD_CARD(eDiamond, e5);
-
-    curCol++;  //2
-    ADD_CARD(eHeart, eJ);
-    ADD_CARD(eClub, eA);
-    ADD_CARD(eHeart, eQ);
-    ADD_CARD(eSpade, eA);
-    ADD_CARD(eSpade, e4);
-    ADD_CARD(eDiamond, e4);
-    ADD_CARD(eSpade, e8);
-
-    curCol++; //3
-    ADD_CARD(eClub, e7);
-    ADD_CARD(eHeart, e7);
-    ADD_CARD(eDiamond, e3);
-    ADD_CARD(eHeart, e8);
-    ADD_CARD(eSpade, e6);
-    ADD_CARD(eSpade, eQ);
-    ADD_CARD(eClub, e8);
-
-    curCol++; //4
-    ADD_CARD(eSpade, e2);
-    ADD_CARD(eDiamond, e8);
-    ADD_CARD(eClub, e5);
-    ADD_CARD(eSpade, e5);
-    ADD_CARD(eHeart, eK);
-    ADD_CARD(eClub, e6);
-    //ADD_CARD(e, e);
-
-    curCol++; //5
-    ADD_CARD(eSpade, eJ);
-    ADD_CARD(eHeart, eA);
-    ADD_CARD(eClub, e9);
-    ADD_CARD(eClub, eK);
-    ADD_CARD(eClub, eQ);
-    ADD_CARD(eDiamond, e2);
-    //ADD_CARD(e, e);
-
-    curCol++;  //6
-    ADD_CARD(eSpade, e3);
-    ADD_CARD(eHeart, e5);
-    ADD_CARD(eClub, e10);
-    ADD_CARD(eDiamond, e10);
-    ADD_CARD(eSpade, e7);
-    ADD_CARD(eSpade, eK);
-
-    curCol++;  //6
-    ADD_CARD(eHeart, e4);
-    ADD_CARD(eSpade, e10);
-    ADD_CARD(eDiamond, e9);
-    ADD_CARD(eDiamond, eA);
-    ADD_CARD(eClub, e4);
-    ADD_CARD(eHeart, e6);
-}
+//
+//void CState::InputData()
+//{
+//    int curCol = 0;
+//    //m_vecVecIdx[curCol].push_back(GetIdx(, ) );
+//
+//    //0
+//    ADD_CARD(eDiamond, e6);
+//    ADD_CARD(eSpade, e9);
+//    ADD_CARD(eHeart, e10);
+//    ADD_CARD(eDiamond, eK);
+//    ADD_CARD(eDiamond, e7);
+//    ADD_CARD(eDiamond, eJ);
+//    ADD_CARD(eHeart, e9);
+//
+//    curCol++; //1
+//    ADD_CARD(eDiamond, eQ);
+//    ADD_CARD(eClub, e2);
+//    ADD_CARD(eHeart, e2);
+//    ADD_CARD(eClub, eJ);
+//    ADD_CARD(eHeart, e3);
+//    ADD_CARD(eClub, e3);
+//    ADD_CARD(eDiamond, e5);
+//
+//    curCol++;  //2
+//    ADD_CARD(eHeart, eJ);
+//    ADD_CARD(eClub, eA);
+//    ADD_CARD(eHeart, eQ);
+//    ADD_CARD(eSpade, eA);
+//    ADD_CARD(eSpade, e4);
+//    ADD_CARD(eDiamond, e4);
+//    ADD_CARD(eSpade, e8);
+//
+//    curCol++; //3
+//    ADD_CARD(eClub, e7);
+//    ADD_CARD(eHeart, e7);
+//    ADD_CARD(eDiamond, e3);
+//    ADD_CARD(eHeart, e8);
+//    ADD_CARD(eSpade, e6);
+//    ADD_CARD(eSpade, eQ);
+//    ADD_CARD(eClub, e8);
+//
+//    curCol++; //4
+//    ADD_CARD(eSpade, e2);
+//    ADD_CARD(eDiamond, e8);
+//    ADD_CARD(eClub, e5);
+//    ADD_CARD(eSpade, e5);
+//    ADD_CARD(eHeart, eK);
+//    ADD_CARD(eClub, e6);
+//    //ADD_CARD(e, e);
+//
+//    curCol++; //5
+//    ADD_CARD(eSpade, eJ);
+//    ADD_CARD(eHeart, eA);
+//    ADD_CARD(eClub, e9);
+//    ADD_CARD(eClub, eK);
+//    ADD_CARD(eClub, eQ);
+//    ADD_CARD(eDiamond, e2);
+//    //ADD_CARD(e, e);
+//
+//    curCol++;  //6
+//    ADD_CARD(eSpade, e3);
+//    ADD_CARD(eHeart, e5);
+//    ADD_CARD(eClub, e10);
+//    ADD_CARD(eDiamond, e10);
+//    ADD_CARD(eSpade, e7);
+//    ADD_CARD(eSpade, eK);
+//
+//    curCol++;  //6
+//    ADD_CARD(eHeart, e4);
+//    ADD_CARD(eSpade, e10);
+//    ADD_CARD(eDiamond, e9);
+//    ADD_CARD(eDiamond, eA);
+//    ADD_CARD(eClub, e4);
+//    ADD_CARD(eHeart, e6);
+//}
