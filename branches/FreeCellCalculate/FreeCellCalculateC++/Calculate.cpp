@@ -19,7 +19,7 @@ void CCalculate::Run()
     //m_vecIdxOpen.reserve(c_maxVecState);
     //m_vecIdxClose.reserve(c_maxVecState);
     m_mapDeadId.clear();
-    m_stateStart.GenerateCards(3);
+    m_stateStart.GenerateCards(10000);
 
     //m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
@@ -131,7 +131,7 @@ void CCalculate::SolutionDeep1st()
         MapIdState::iterator it = m_vecStateAll.find(curStateIdx);
         if(it == m_vecStateAll.end() ){
             TRACE("\nfail.\n");
-            ASSERT("invalid id" && false);
+            //ASSERT("invalid id" && false);
             break;
         }
 
@@ -195,8 +195,8 @@ void CCalculate::SolutionDeep1st()
             curStateIdx = curSt.m_idxFather;       
 
             //erase this state
-            m_mapDeadId.insert(curSt.m_id);
-            m_vecStateAll.erase(it);
+            //m_mapDeadId.insert(curSt.m_id);
+            //m_vecStateAll.erase(it);
         }
     }
 
