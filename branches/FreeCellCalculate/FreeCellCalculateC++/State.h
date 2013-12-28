@@ -9,6 +9,8 @@ typedef std::vector<int>       VecInt;
 typedef std::list<int>         ListInt;
 typedef VecInt::iterator       VecIntIt;
 
+class CCalculate;
+
 class CState
 {
 public:
@@ -26,7 +28,7 @@ public:
     bool operator == (const CState& other) const;
     bool operator < (const CState& other) const;
 
-    void GenerateSonState(std::list<CState>& vecState) ;
+    UINT GenerateSonState(CCalculate* ) ; //std::list<CState>& vecState
     bool GenerateCards(UINT boardNum); 
     
     //bool CheckInputDataLegal() const;
@@ -44,11 +46,11 @@ protected:
     double UpdateValue();
     void UpdateString();
     
-    bool MoveColToBench     (std::list<CState>& vecState, UINT colIdx) ;
+    bool MoveColToBench     (CCalculate*, UINT colIdx) ;
     //bool MoveColToSorted    (std::list<CState>& vecState, UINT colIdx) ;
-    bool MoveColToCol       (std::list<CState>& vecState, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted) ;
+    bool MoveColToCol       (CCalculate*, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted) ;
     //bool MoveBenchToSorted  (std::list<CState>& vecState, UINT benchIdx) ;
-    bool MoveBenchToCol     (std::list<CState>& vecState, UINT benchIdx, UINT colIdx) ;
+    bool MoveBenchToCol     (CCalculate*, UINT benchIdx, UINT colIdx) ;
 
     bool MoveColToSorted    (UINT colIdx);
     bool MoveBenchToSorted  (UINT benchIdx);
@@ -67,6 +69,7 @@ public:
     UINT                    m_id;
     UINT                    m_idxFather;
     bool                    m_hasGeneratedSon;
+    bool                    m_dead;
     ListInt                 m_idxSon;
     UINT16                  m_value;
     UINT8                   m_step;
@@ -79,3 +82,5 @@ public:
 
 //typedef std::vector<CState>     VecState;
 typedef std::list<CState>     ListState;
+typedef std::map<std::string, UINT>  MapStrId;
+typedef std::map<UINT, CState>  MapIdState;

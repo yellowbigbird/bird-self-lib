@@ -2,6 +2,8 @@
 #include "State.h"
 #include <assert.h>
 
+#include "Calculate.h"
+
 using namespace std;
 
 const UINT c_id = 0xffffffff;
@@ -13,7 +15,7 @@ const UINT16 c_valueSortedCard = 5;
 const UINT16 c_valueSortedInColumn = 1;
 const UINT16 c_valueSortedChain = 1;
 
-const int c_maxStep = 65  ; //c_cardAll
+const int c_maxStep = 70  ; //c_cardAll
 
 //////////////////////////////////////////////////////////////////////////
 CState::CState()
@@ -21,6 +23,7 @@ CState::CState()
     ,m_value(c_valueInit)
     ,m_step(0)
     ,m_hasGeneratedSon(false)
+    ,m_dead(false)
 {
     InitData();
 }
@@ -67,6 +70,9 @@ void CState::InitData()
 //all card sorted
 bool CState::FWin() const
 {
+    if(m_dead)
+        return false;
+
     //1st bench empty
     /*if(m_vecBench.size() >0)
     return false;*/
@@ -174,18 +180,22 @@ bool CState::FCanMove(int curColIdx) const
     return false;
 }
 
-void CState::GenerateSonState(ListState& vecState)
+UINT CState::GenerateSonState(CCalculate* pCal)  
 {
-    vecState.clear();
+    //vecState.clear();
 
     if(!FCanMove() 
         || m_hasGeneratedSon
         || m_idxSon.size() 
-        || m_step > c_maxStep){
-            return;
+        || m_step > c_maxStep
+        ||!pCal
+        ){
+            m_hasGeneratedSon= true;
+            return (UINT) m_idxSon.size();
     }
+    
+    CCalculate& rcal = * pCal;
 
-    //CState dummy = *this;
     ListCard vecLastSorted ;
 
     for(UINT colIdx=0; colIdx < m_vecVecIdx.size(); colIdx++)
@@ -198,11 +208,11 @@ void CState::GenerateSonState(ListState& vecState)
         //move to sorted
         //MoveColToSorted(vecState, colIdx);
         //move to bench
-        MoveColToBench(vecState, colIdx);
+        MoveColToBench(pCal, colIdx);
 
         for(UINT colIdxDest =0; colIdxDest < m_vecVecIdx.size(); colIdxDest++)
         {       
-            MoveColToCol(vecState, colIdx, colIdxDest, vecLastSorted );
+            MoveColToCol(pCal, colIdx, colIdxDest, vecLastSorted );
         }
     }
     
@@ -212,33 +222,77 @@ void CState::GenerateSonState(ListState& vecState)
         const CCard& card = m_vecBench[benchIdx];
         if(!card.IsLegal() )
             continue;
-
-        //MoveBenchToSorted(vecState, benchIdx);
-
+        
         for(UINT colIdxDest =0; colIdxDest < m_vecVecIdx.size(); colIdxDest++)
         {
-            MoveBenchToCol(vecState, benchIdx, colIdxDest);
+            MoveBenchToCol(pCal, benchIdx, colIdxDest);
         }
     }
         
     //must be at last, the son copy father ,also copy all member
     m_hasGeneratedSon = true;
+    return (UINT) m_idxSon.size();
 }
 
-bool CState::MoveColToBench(ListState& vecState, UINT colIdx)
+//return son's amount
+//UINT CCalculate::GenerateSonState(CState& stFather) 
+//{
+//    ListState vecState;
+//    stFather.GenerateSonState(vecState);
+//
+//    UINT idFind = 0;
+//    UINT sonAmount = 0;
+//
+//    if(vecState.size() < 1)
+//        stFather.m_idxSon.clear();
+//
+//    for(ListState::iterator it = vecState.begin();
+//        it != vecState.end();
+//        it++)
+//    {
+//        CState& entry = *it;
+//
+//        //check if this state exist
+//
+//        if( FindStInAll(entry, idFind) )
+//        {
+//            //check step
+//            CState& stOther = m_vecStateAll[idFind];			 
+//            if(entry.m_step > stOther.m_step)
+//                continue;
+//            SortInsert(stFather.m_idxSon, idFind);
+//            stFather.SetIdxFather(stOther);  //switch to short one's son
+//            sonAmount++;
+//        }
+//        else{
+//            AddToAll(entry);
+//            //CState& entryPushed = *m_vecStateAll.rbegin();
+//            //entryPushed.m_id = (UINT)m_vecStateAll.size();
+//            //stFather.m_idxSon.push_back(entryPushed.m_id);
+//            SortInsert(stFather.m_idxSon, entry.m_id);
+//            sonAmount++;
+//        }
+//    }
+//
+//    //sort the son
+//    //sort(stFather.m_idxSon.begin(), stFather.m_idxSon.end(), );
+//    return sonAmount;
+//}
+
+bool CState::MoveColToBench(CCalculate* pCal, UINT colIdx)
 {
-    if(colIdx>= m_vecVecIdx.size() 
+    UINT benchIdx = 0;
+    if(!pCal
+        || colIdx>= m_vecVecIdx.size() 
         || m_vecVecIdx[colIdx].size() < 1
-        //|| m_vecBench.size() >= c_size        
+        //|| m_vecBench.size() >= c_size     
+        || !FCanMoveToBench(benchIdx) 
         )
         return false;
-    UINT benchIdx = 0;
-    if(!FCanMoveToBench(benchIdx) )
-         return false;
-    
-    vecState.push_back(*this);
-    CState& staNew = *vecState.rbegin();
-
+    CCalculate& rcal = *pCal;
+        
+    //vecState.push_back(*this);
+    CState staNew = *this;
     SetIdxFather(staNew);  //set father
 
     ListCard& vecCardNew = staNew.m_vecVecIdx[colIdx];
@@ -250,6 +304,8 @@ bool CState::MoveColToBench(ListState& vecState, UINT colIdx)
     vecCardNew.erase(it);
 
     staNew.Update();
+
+    rcal.CheckAndInsertState(staNew, *this);
     return true;
 }
 
@@ -316,18 +372,20 @@ bool CState::MoveColToSorted(UINT colIdx)
 }
 
 //move more cards
-bool CState::MoveColToCol(ListState& vecState
+bool CState::MoveColToCol(CCalculate* pCal
                           , UINT colIdxSrc
                           , UINT colIdxDest
                           , const ListCard& vecLastSorted
                           )  
 {
-    if(colIdxSrc == colIdxDest
+    if(!pCal
+        ||colIdxSrc == colIdxDest
         || colIdxSrc >= m_vecVecIdx.size()
         || colIdxDest >= m_vecVecIdx.size() 
         || m_vecVecIdx[colIdxSrc].size() < 1)
         return false;
 
+    CCalculate& rcal = *pCal;
     int moveAmount = 0;
 
     UINT idx = 0;
@@ -355,8 +413,8 @@ bool CState::MoveColToCol(ListState& vecState
         }            
 
         //create new state
-        vecState.push_back(*this);
-        CState& staNew = *vecState.rbegin();
+        //vecState.push_back(*this);
+        CState staNew = *this;
         staNew.m_hasGeneratedSon = false;
 
         SetIdxFather(staNew);
@@ -374,6 +432,8 @@ bool CState::MoveColToCol(ListState& vecState
         vecSrcNew.erase(itStart, itEnd );
 
         staNew.Update();
+
+        rcal.CheckAndInsertState(staNew, *this);
     }
     
     //vecState.push_back(staNew);
@@ -435,11 +495,13 @@ bool CState::MoveBenchToSorted(UINT benchIdx)
 }
 
 
-bool CState::MoveBenchToCol(ListState& vecState, UINT benchIdx, UINT colIdx)
+bool CState::MoveBenchToCol(CCalculate* pCal, UINT benchIdx, UINT colIdx)
 {
-    if(benchIdx >= m_vecBench.size() 
+    if(!pCal
+        ||benchIdx >= m_vecBench.size() 
         || colIdx>= m_vecVecIdx.size() )
         return false;
+    CCalculate& rcal = *pCal;
 
     const CCard& cardSrc = m_vecBench[benchIdx];
     if(!cardSrc.IsLegal() )
@@ -453,20 +515,20 @@ bool CState::MoveBenchToCol(ListState& vecState, UINT benchIdx, UINT colIdx)
             return false;
     }
 
-    vecState.push_back(*this);
-    CState& staNew = *vecState.rbegin();
+    //vecState.push_back(*this);
+    CState staNew = *this;
 
     SetIdxFather(staNew);
 
     ListCard& vecNew = staNew.m_vecVecIdx[colIdx];
     vecNew.push_back(cardSrc);
 
-    //VecCardIt it = staNew.m_vecBench.begin() + benchIdx;
-    //staNew.m_vecBench.erase(it);
     staNew.m_vecBench[benchIdx].Disable();
 
     staNew.Update();
-    //vecState.push_back(staNew);
+
+    //check if staNew new
+    rcal.CheckAndInsertState(staNew, *this);
 
     return true;
 }
