@@ -6,7 +6,7 @@ using namespace Card;
 #include "State.h"
 #include <map>
 #include <hash_map>
-
+#include <set>
 
 class CCalculate
 {
@@ -21,7 +21,8 @@ public:
 
     bool FindLowestValueState(int& stateIdx, UINT& idxInOpen) const;
  
-    UINT GenerateSonState(CState& st);
+    //UINT GenerateSonState(CState& st);
+    bool CheckAndInsertState(CState& stSon,CState& stFather);
 
     void EraseStateFromOpen(UINT idxInOpen);
 
@@ -30,8 +31,9 @@ public:
 
     bool AddToAll(CState& st);
     bool FindStInAll(const CState& st, UINT& id) const;
+    bool FindStInDead(UINT id) const;
 
-protected:
+public:
 
     CState      m_stateStart;
     
@@ -39,11 +41,12 @@ protected:
     ListInt      m_vecIdxClose;
 
     //typedef stdext::hash_map<CState, UINT>  MapStateId;
-    typedef std::map<std::string, UINT>  MapStateId;
-    typedef std::map<UINT, CState>  MapIdState;
-    
+    typedef std::set<UINT>  SetId;
+    UINT        m_nextGenId;
+        
     //VecState    m_vecStateAll;
-    MapStateId  m_mapStateId;
+    MapStrId    m_mapStateId;
+    SetId       m_mapDeadId;
     MapIdState  m_vecStateAll;
 };
 

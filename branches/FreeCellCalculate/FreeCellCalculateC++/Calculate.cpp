@@ -18,12 +18,13 @@ void CCalculate::Run()
     //m_vecStateAll.reserve(c_maxVecState);
     //m_vecIdxOpen.reserve(c_maxVecState);
     //m_vecIdxClose.reserve(c_maxVecState);
-
+    m_mapDeadId.clear();
     m_stateStart.GenerateCards(3);
 
     //m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
     m_stateStart.Update();
+    m_nextGenId = 0;
     AddToAll(m_stateStart);
 
     //SolutionAstar();
@@ -114,16 +115,19 @@ void CCalculate::SolutionDeep1st()
     UINT loopCount = 0;
     UINT sonSum = 0;
     int curStateIdx = 0;
+    UINT sonIdx = 0;
 
     bool game_done = false;
-    while (true) 
+    bool fFindSon = true;
+    
+    while (!game_done) 
     {        
-        if(curStateIdx >= m_vecStateAll.size())
-            break;
+        //if(curStateIdx >= m_vecStateAll.size())
+        //    break;
 
-        TRACE("\n");
+        //TRACE("\n");
         loopCount++;
-       
+
         //get current state
         MapIdState::iterator it = m_vecStateAll.find(curStateIdx);
         if(it == m_vecStateAll.end() ){
@@ -133,7 +137,7 @@ void CCalculate::SolutionDeep1st()
         }
 
         CState& curSt =  it->second;
-        TRACE("loopcnt=%d, step=%d, value=%d", loopCount, curSt.m_step, curSt.m_value);
+        //TRACE("loopcnt=%d, step=%d, value=%d", loopCount, curSt.m_step, curSt.m_value);
         //printf("DEEP: %d  STEP: %d\n", s->level, s->id);
         game_done = curSt.FWin();
         if(game_done)
@@ -144,40 +148,52 @@ void CCalculate::SolutionDeep1st()
             sonSum = (UINT)curSt.m_idxSon.size();
         }
         else{
-            sonSum = GenerateSonState(curSt);
+            sonSum = curSt.GenerateSonState(this);
         }
 
+        fFindSon = false;
+        sonIdx = curStateIdx;
         if (sonSum) {
             // try to test the first sub step , lowest value
-            //s = list_entry(s->sub_list_head.next, struct step, sub);
-            for(ListInt::const_iterator intIt = curSt.m_idxSon.begin();
-                intIt != curSt.m_idxSon.end();
-                intIt++  )
+            while(curSt.m_idxSon.size() 
+                && !fFindSon)
             {
-                curStateIdx = *intIt;
+                ListInt::const_iterator intIt = curSt.m_idxSon.begin();
+
+                sonIdx = *intIt;                
                 curSt.m_idxSon.erase(intIt);
+
+                if(FindStInDead(sonIdx) )
+                    continue;  //for
+
+                fFindSon = true;
+
+                curStateIdx = sonIdx;
                 break;
-                //if(curStateIdx < 0)
-                //    continue;
+            } //while
+
+            //have deleted all son
+            if(
+                /*curSt.m_hasGeneratedSon
+                &&*/
+                curSt.m_idxSon.size() < 1)
+            {
+                //clear all
+                curSt.m_vecIdxSorted.clear();   //4 vec, save show card
+                curSt.m_vecBench.clear();       //4 card 
+                curSt.m_vecVecIdx.clear();
+                curSt.m_dead = true; //todo
             }
-        } 
-        else {
+        } //if sum
+              
+        if(!fFindSon)
+        {
             //no son , backward, find father.
-            curStateIdx = curSt.m_idxFather;
-            //if (s->sub.next != &s->up_step->sub_list_head) {
-            //    // try to test right step, s & it's right step are all up_step's sub step ...
-            //    s = list_entry(s->sub.next, struct step, sub);
-            //} else if (s->up_step) {
-            //    // if the up step exist(only root step have no up step), it will be try 
-            //    // again, but do_step routine return 0 immediately, so the top node's 
-            //    // right or up will be tested one by one ...
-            //    s = s->up_step;
-            //} else {
-            //    s = NULL;
-            //    //printf("fail\n");
-            //    TRACE("\nfail.\n");
-            //    break;
-            //}
+            curStateIdx = curSt.m_idxFather;       
+
+            //erase this state
+            m_mapDeadId.insert(curSt.m_id);
+            m_vecStateAll.erase(it);
         }
     }
 
@@ -186,178 +202,214 @@ void CCalculate::SolutionDeep1st()
     TRACE("win = %d", game_done);
 }
 
- bool CCalculate::FindLowestValueState(int& lowidx, UINT& idxInOpen) const
- {
-     int stateIdx = 0;
-     //int lowidx = -1;
-     double valueLow = 10000, value = 0;
-     MapIdState::const_iterator itMap;
+bool CCalculate::FindLowestValueState(int& lowidx, UINT& idxInOpen) const
+{
+    int stateIdx = 0;
+    //int lowidx = -1;
+    double valueLow = 10000, value = 0;
+    MapIdState::const_iterator itMap;
 
-     UINT idx=0;
-     for(ListInt::const_iterator it = m_vecIdxOpen.begin();
-         it != m_vecIdxOpen.end();
-         idx++, it++)
-     {
-         stateIdx = *it;
-         if(stateIdx <0 || stateIdx >= m_vecStateAll.size() )
-             continue;
+    UINT idx=0;
+    for(ListInt::const_iterator it = m_vecIdxOpen.begin();
+        it != m_vecIdxOpen.end();
+        idx++, it++)
+    {
+        stateIdx = *it;
+        if(stateIdx <0 || stateIdx >= m_vecStateAll.size() )
+            continue;
 
-         //const CState& entry = m_vecStateAll[stateIdx];
-         itMap = m_vecStateAll.find(stateIdx);
-         if(itMap == m_vecStateAll.end() )
-             return false;
-         const CState& entry = itMap->second;
+        //const CState& entry = m_vecStateAll[stateIdx];
+        itMap = m_vecStateAll.find(stateIdx);
+        if(itMap == m_vecStateAll.end() )
+            return false;
+        const CState& entry = itMap->second;
 
-         value = entry.GetValue();
-         if(value < valueLow){
-             valueLow = value;
-             lowidx = stateIdx;
-             idxInOpen = idx;
-         }
-     }
-     return (lowidx >= 0);
- }
+        value = entry.GetValue();
+        if(value < valueLow){
+            valueLow = value;
+            lowidx = stateIdx;
+            idxInOpen = idx;
+        }
+    }
+    return (lowidx >= 0);
+}
 
- //return son's amount
- UINT CCalculate::GenerateSonState(CState& stFather) 
- {
-     ListState vecState;
-     stFather.GenerateSonState(vecState);
+//return son's amount
+//UINT CCalculate::GenerateSonState(CState& stFather) 
+//{
+//    ListState vecState;
+//    stFather.GenerateSonState(vecState);
+//
+//    UINT idFind = 0;
+//    UINT sonAmount = 0;
+//
+//    if(vecState.size() < 1)
+//        stFather.m_idxSon.clear();
+//
+//    for(ListState::iterator it = vecState.begin();
+//        it != vecState.end();
+//        it++)
+//    {
+//        CState& entry = *it;
+//
+//        //check if this state exist
+//
+//        if( FindStInAll(entry, idFind) )
+//        {
+//            //check step
+//            CState& stOther = m_vecStateAll[idFind];			 
+//            if(entry.m_step > stOther.m_step)
+//                continue;
+//            SortInsert(stFather.m_idxSon, idFind);
+//            stFather.SetIdxFather(stOther);  //switch to short one's son
+//            sonAmount++;
+//        }
+//        else{
+//            AddToAll(entry);
+//            //CState& entryPushed = *m_vecStateAll.rbegin();
+//            //entryPushed.m_id = (UINT)m_vecStateAll.size();
+//            //stFather.m_idxSon.push_back(entryPushed.m_id);
+//            SortInsert(stFather.m_idxSon, entry.m_id);
+//            sonAmount++;
+//        }
+//    }
+//
+//    //sort the son
+//    //sort(stFather.m_idxSon.begin(), stFather.m_idxSon.end(), );
+//    return sonAmount;
+//}
 
-     UINT idFind = 0;
-     UINT sonAmount = 0;
+//true, is need this sta
+//false , drop this one
+bool  CCalculate::CheckAndInsertState(CState& stInsert, CState& stFather)
+{
+    UINT idFind = 0;
+    if( FindStInAll(stInsert, idFind) )
+    {
+        //id in dead
+        if(FindStInDead(idFind) )
+            return false;
 
-     if(vecState.size() < 1)
-         stFather.m_idxSon.clear();
+        //check step
+        CState& stOther = m_vecStateAll[idFind];			 
+        if(stInsert.m_step > stOther.m_step)
+            return false;
+        SortInsert(stFather.m_idxSon, idFind);
+        stFather.SetIdxFather(stOther);  //switch to short one's son
+    }
+    else{
+        AddToAll(stInsert);
+        SortInsert(stFather.m_idxSon, stInsert.m_id);
+        
+    }
+    return true;
+}
 
-     for(ListState::iterator it = vecState.begin();
-         it != vecState.end();
-         it++)
-     {
-         CState& entry = *it;
+bool CCalculate::FindStInAll(const CState& st, UINT& id) const
+{
+    //for(UINT idx=0; idx< m_vecStateAll.size(); idx++)
+    //{
+    //    if(st == m_vecStateAll[idx]){
+    //        id = idx;
+    //        return true;
+    //    }
+    //}
+    const string& str = st.m_str;
+    MapStrId::const_iterator it = m_mapStateId.find(str);
+    if(it == m_mapStateId.end() )
+        return false;
 
-         //check if this state exist
-         
-         if( FindStInAll(entry, idFind) )
-         {
-			 //check step
-			 CState& stOther = m_vecStateAll[idFind];			 
-			 if(entry.m_step > stOther.m_step)
-				 continue;
-             SortInsert(stFather.m_idxSon, idFind);
-			 stFather.SetIdxFather(stOther);  //switch to short one's son
-             sonAmount++;
-         }
-         else{
-             AddToAll(entry);
-             //CState& entryPushed = *m_vecStateAll.rbegin();
-             //entryPushed.m_id = (UINT)m_vecStateAll.size();
-             //stFather.m_idxSon.push_back(entryPushed.m_id);
-             SortInsert(stFather.m_idxSon, entry.m_id);
-             sonAmount++;
-         }
-     }
-    
-     //sort the son
-     //sort(stFather.m_idxSon.begin(), stFather.m_idxSon.end(), );
-     return sonAmount;
- }
+    return true;
+}
 
- bool CCalculate::FindStInAll(const CState& st, UINT& id) const
- {
-     //for(UINT idx=0; idx< m_vecStateAll.size(); idx++)
-     //{
-     //    if(st == m_vecStateAll[idx]){
-     //        id = idx;
-     //        return true;
-     //    }
-     //}
-     const string& str = st.m_str;
-     MapStateId::const_iterator it = m_mapStateId.find(str);
-     if(it == m_mapStateId.end() )
-         return false;
+bool  CCalculate::FindStInDead(UINT id) const
+{
+    SetId::const_iterator it = m_mapDeadId.find(id);
+    if(it == m_mapDeadId.end() )
+        return false;
 
-     return true;
- }
+    return true;
+}
 
 
- bool CCalculate::AddToAll(CState& st)
- {
-     //UINT idFind = 0;
-     //if(FindStInAll(st, idFind) )  //don't check here
-     //    return false;     
+bool CCalculate::AddToAll(CState& st)
+{
+    //UINT idFind = 0;
+    //if(FindStInAll(st, idFind) )  //don't check here
+    //    return false;     
 
-     UINT id = (UINT)m_vecStateAll.size();
-     st.m_id = id;
+    UINT id = m_nextGenId;
+    st.m_id = id;
+    m_nextGenId++;
 
-     //m_vecStateAll.push_back(st);
-     m_vecStateAll[id] = st;
-     
-     //m_vecStateAll.rbegin()->m_id = (UINT)id;
-     
-     //update map
-     if(st.m_str.empty() ){
-         ASSERT(false);
-     }
-     else{
-         m_mapStateId[st.m_str] = id;
-     }
-     return true;
- }
+    //m_vecStateAll.push_back(st);
+    m_vecStateAll[id] = st;
 
- //void CCalculate::EraseStateFromOpen(UINT idxInOpen)
- //{     
- //    VecInt::iterator it = m_vecIdxOpen.begin()+ idxInOpen;
- //    m_vecIdxOpen.erase(it);
+    //m_vecStateAll.rbegin()->m_id = (UINT)id;
 
- //    //int idx=0;
- //    //for(VecInt::iterator it = m_vecIdxOpen.begin();
- //    //    it != m_vecIdxOpen.end();
- //    //    it++, idx++)
- //    //{
- //    //    if(idx == idxInOpen){
- //    //        m_vecIdxOpen.erase(it);
- //    //        return;
- //    //    }
- //    //}
- //}
+    //update map
+    if(st.m_str.empty() ){
+        ASSERT(false);
+    }
+    else{
+        m_mapStateId[st.m_str] = id;
+    }
+    return true;
+}
 
- //void CCalculate::SortOpen() //todo
- //{
- //    //sort(m_vecIdxOpen.begin(), m_vecIdxClose.end() );  //idx , can't use this sort
- //}
+//void CCalculate::EraseStateFromOpen(UINT idxInOpen)
+//{     
+//    VecInt::iterator it = m_vecIdxOpen.begin()+ idxInOpen;
+//    m_vecIdxOpen.erase(it);
 
- bool  CCalculate::SortInsert(ListInt& vecToInsert, int stateIdx) const
- {
-     //const CState& staIsert = m_vecStateAll[stateIdx];
-     MapIdState::const_iterator itMap = m_vecStateAll.find(stateIdx);
-     if(itMap == m_vecStateAll.end() )
-         return false;
-     const CState& staIsert = itMap->second;
-     
-     const double valueInsert = staIsert.GetValue();
-     double value = 0;
+//    //int idx=0;
+//    //for(VecInt::iterator it = m_vecIdxOpen.begin();
+//    //    it != m_vecIdxOpen.end();
+//    //    it++, idx++)
+//    //{
+//    //    if(idx == idxInOpen){
+//    //        m_vecIdxOpen.erase(it);
+//    //        return;
+//    //    }
+//    //}
+//}
 
-     ListInt::iterator it;
-     int idx=0;
-     for(it = vecToInsert.begin(); 
-         it != vecToInsert.end();
-         it++)
-     {
-         idx = *it;
-         //const CState& staComp = m_vecStateAll[idx];
-         itMap = m_vecStateAll.find(idx);
-         if(itMap == m_vecStateAll.end() )
-             continue;
-         const CState& staComp = itMap->second;
+//void CCalculate::SortOpen() //todo
+//{
+//    //sort(m_vecIdxOpen.begin(), m_vecIdxClose.end() );  //idx , can't use this sort
+//}
 
-         value = staComp.GetValue();
-         if(value > valueInsert)
-         {
-             vecToInsert.insert(it, stateIdx);
-             return true;
-         }
-     }
-     vecToInsert.push_back(stateIdx);
-     return true;
- }
+bool  CCalculate::SortInsert(ListInt& vecToInsert, int stateIdx) const
+{
+    //const CState& staIsert = m_vecStateAll[stateIdx];
+    MapIdState::const_iterator itMap = m_vecStateAll.find(stateIdx);
+    if(itMap == m_vecStateAll.end() )
+        return false;
+    const CState& staIsert = itMap->second;
+
+    const double valueInsert = staIsert.GetValue();
+    double value = 0;
+
+    ListInt::iterator it;
+    int idx=0;
+    for(it = vecToInsert.begin(); 
+        it != vecToInsert.end();
+        it++)
+    {
+        idx = *it;
+        //const CState& staComp = m_vecStateAll[idx];
+        itMap = m_vecStateAll.find(idx);
+        if(itMap == m_vecStateAll.end() )
+            continue;
+        const CState& staComp = itMap->second;
+
+        value = staComp.GetValue();
+        if(value > valueInsert)
+        {
+            vecToInsert.insert(it, stateIdx);
+            return true;
+        }
+    }
+    vecToInsert.push_back(stateIdx);
+    return true;
+}
