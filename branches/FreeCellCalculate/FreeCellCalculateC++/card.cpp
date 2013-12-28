@@ -7,43 +7,60 @@ using namespace Card;
 const UINT8 c_carInvalid = 0xff;
 
 CCard::CCard()
+#if CARD_1_BYTE
     :m_num(c_carInvalid)
-    //:m_type(eInvalid)
-    //,m_number(eNumberInvalid)
+#else
+    :m_type(eInvalid)
+    ,m_number(eNumberInvalid)
+#endif
 {
 }
 
 CCard::CCard(int cardIdx)
+#if CARD_1_BYTE
     :m_num(cardIdx)
-    //:m_type(eInvalid)
-    //,m_number(eNumberInvalid)
+#else
+    :m_type(eInvalid)
+    ,m_number(eNumberInvalid)
+#endif
 {
    //SetIdx(cardIdx);
 }
 
 CCard::CCard(eType type, eNumber num)
-    //:m_type(type)
-    //,m_number(num)
+#if CARD_1_BYTE
 {
     m_num = type* c_cardNumberMax + num;
 }
+#else
+    :m_type(type)
+    ,m_number(num)
+{
+}
+#endif
+
 
 bool CCard::operator==(const CCard& other ) const
 {
-    const bool ifok = m_num == other.m_num
-        //m_type == other.m_type
-        //&& m_number == other.m_number
-        ;
+#if CARD_1_BYTE
+    const bool ifok = m_num == other.m_num;
+#else
+    const bool ifok =m_type == other.m_type
+        && m_number == other.m_number;
+#endif
     return ifok;
 }
 
 bool CCard::IsLegal() const
 {
-    if(m_num< c_cardAll
-        //m_type >= eHeart
-        //&& m_type < eCardMax
-        //&& m_number >= e1
-        //&& m_number < eNumberMax
+#if CARD_1_BYTE
+    if(m_num < c_cardAll
+#else
+    if(m_type >= eHeart
+        && m_type < eCardMax
+        //&& m_number >= eA
+        && m_number < eNumberMax
+#endif
         )
         return true;
     return false;
@@ -52,8 +69,12 @@ bool CCard::IsLegal() const
 
 void  CCard::Disable()
 {
-    //m_type = (eInvalid);
-    //m_number = (eNumberInvalid);
+#if CARD_1_BYTE
+    m_num = (UINT8)-1;
+#else
+    m_type = (eInvalid);
+    m_number = (eNumberInvalid);
+#endif
 }
 
 bool    CCard::SetIdx(int cardIdx)
@@ -62,9 +83,12 @@ bool    CCard::SetIdx(int cardIdx)
         || cardIdx>= c_cardAll)
         return false;
 
-    //m_number = (eNumber)(cardIdx % c_cardNumberMax);
-    //m_type =  (eType)(cardIdx /c_cardNumberMax);
+#if CARD_1_BYTE
     m_num = cardIdx;
+#else
+    m_number = (eNumber)(cardIdx % c_cardNumberMax);
+    m_type =  (eType)(cardIdx /c_cardNumberMax);
+#endif
     return true;
 }
 
@@ -73,21 +97,33 @@ bool  CCard::SetTypeNumber(eType ty, eNumber num)
     if(num >= c_cardNumberMax
         || ty >= eCardMax)
         return false;
+
+#if CARD_1_BYTE
     m_num = ty * c_cardNumberMax + num;
+#else
+    m_type = ty;
+    m_number = num;
+#endif
     return true;
 }
 
 eType    CCard::GetType() const
 {
-    //return m_type;
+#if CARD_1_BYTE
     const eType type = (eType)(m_num/ c_cardNumberMax);
     return type;
+#else
+    return m_type;
+#endif
 }
 eNumber  CCard::GetNumber() const
 {
-    //return m_number;
+#if CARD_1_BYTE
     const eNumber num =  (eNumber)(m_num % c_cardNumberMax);
     return num;
+#else
+    return m_number;
+#endif
 }
 bool    CCard::FRed() const
 {
@@ -141,9 +177,18 @@ int  CCard::GetIdx(eType type, eNumber cardNumber)
 }
 
 //must big attach small, K attach Q
-bool    CCard::CanAttach(const CCard& other) const
+bool    CCard::CanAttachInCol(const CCard& other) const
 {
     if(FRed() != other.FRed()
+        && (GetNumber() - other.GetNumber() ) == 1
+        )
+        return true;
+    return false;
+}
+
+bool    CCard::CanAttachSorted(const CCard& other) const
+{
+    if(GetType() == other.GetType()
         && (GetNumber() - other.GetNumber() ) == 1
         )
         return true;
@@ -155,7 +200,11 @@ string CCard::GetString() const
     if(!IsLegal() )
         return "_";
 
-    char buf[3];
-    sprintf_s(buf, 3, "%2d", m_num);
+    char buf[4];
+#if CARD_1_BYTE
+    sprintf_s(buf, 4, "%2d", m_num);
+#else
+    sprintf_s(buf, 4, "%d%d", m_type, m_number);
+#endif
     return buf;
 }

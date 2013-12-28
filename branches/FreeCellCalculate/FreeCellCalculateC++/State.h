@@ -68,8 +68,8 @@ protected:
 public:    
     UINT                    m_id;
     UINT                    m_idxFather;
-    bool                    m_hasGeneratedSon;
-    bool                    m_dead;
+    bool                    m_hasGenSon;
+    //bool                    m_dead;
     ListInt                 m_idxSon;
     UINT16                  m_value;
     UINT8                   m_step;

@@ -115,17 +115,16 @@ void CCalculate::SolutionDeep1st()
     UINT loopCount = 0;
     UINT sonSum = 0;
     int curStateIdx = 0;
+    int lastStateIdx = 0;
     UINT sonIdx = 0;
 
     bool game_done = false;
     bool fFindSon = true;
-    
+
+    TRACE("\n");
+
     while (!game_done) 
     {        
-        //if(curStateIdx >= m_vecStateAll.size())
-        //    break;
-
-        //TRACE("\n");
         loopCount++;
 
         //get current state
@@ -137,14 +136,17 @@ void CCalculate::SolutionDeep1st()
         }
 
         CState& curSt =  it->second;
-        //TRACE("loopcnt=%d, step=%d, value=%d", loopCount, curSt.m_step, curSt.m_value);
-        //printf("DEEP: %d  STEP: %d\n", s->level, s->id);
+        TRACE("loopcnt=%d, id=%d,step=%d, \n", loopCount, curSt.m_id, curSt.m_step ); //value=%d  curSt.m_value
+        if(26 == loopCount){
+            TRACE("\n");
+        }
+
         game_done = curSt.FWin();
         if(game_done)
             break;
 
         //get son sums
-        if(curSt.m_hasGeneratedSon){
+        if(curSt.m_hasGenSon){
             sonSum = (UINT)curSt.m_idxSon.size();
         }
         else{
@@ -153,12 +155,13 @@ void CCalculate::SolutionDeep1st()
 
         fFindSon = false;
         sonIdx = curStateIdx;
+        ListInt::const_iterator intIt;
         if (sonSum) {
             // try to test the first sub step , lowest value
             while(curSt.m_idxSon.size() 
                 && !fFindSon)
             {
-                ListInt::const_iterator intIt = curSt.m_idxSon.begin();
+                intIt = curSt.m_idxSon.begin();
 
                 sonIdx = *intIt;                
                 curSt.m_idxSon.erase(intIt);
@@ -168,27 +171,27 @@ void CCalculate::SolutionDeep1st()
 
                 fFindSon = true;
 
+                lastStateIdx = curStateIdx;
                 curStateIdx = sonIdx;
                 break;
             } //while
 
-            //have deleted all son
-            if(
-                /*curSt.m_hasGeneratedSon
-                &&*/
-                curSt.m_idxSon.size() < 1)
-            {
-                //clear all
-                curSt.m_vecIdxSorted.clear();   //4 vec, save show card
-                curSt.m_vecBench.clear();       //4 card 
-                curSt.m_vecVecIdx.clear();
-                curSt.m_dead = true; //todo
-            }
+            ////have deleted all son
+            //if( curSt.m_idxSon.size() < 1)
+            //{
+            //    //clear all
+            //    //curSt.m_vecIdxSorted.clear();   //4 vec, save show card
+            //    //curSt.m_vecBench.clear();       //4 card 
+            //    //curSt.m_vecVecIdx.clear();
+            //    curSt.m_dead = true; //todo
+            //}
         } //if sum
               
         if(!fFindSon)
         {
             //no son , backward, find father.
+            TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
+            lastStateIdx = curStateIdx;
             curStateIdx = curSt.m_idxFather;       
 
             //erase this state
