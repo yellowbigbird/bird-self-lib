@@ -3,9 +3,10 @@
 #include <vector>
 #include <list>
 
+#define CARD_1_BYTE  0
+
 namespace Card
 {
-
     const int c_size = 4;
     const int c_colSize = 8;
     const int c_cardNumberMax = 13;     //0-11
@@ -66,16 +67,21 @@ namespace Card
         static int  GetIdx(eType type, eNumber cardNumber);
 
         bool        FRed() const;
-        bool        CanAttach(const CCard& other) const;
+        bool        CanAttachInCol(const CCard& other) const;
+        bool        CanAttachSorted(const CCard& other) const;
         eType       GetType() const;
         eNumber     GetNumber() const;
 
         std::string GetString() const;
 
     protected:
-        //eType       m_type;
-        //eNumber     m_number;  //0-9(1-10), 11- J, 11- Q, 12- K
+        
+#if CARD_1_BYTE
         UINT8       m_num;
+#else
+        eType       m_type;
+        eNumber     m_number;  //0-9(1-10), 11- J, 11- Q, 12- K
+#endif
     };
 
     typedef std::vector<CCard>   VecCard;

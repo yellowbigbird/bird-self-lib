@@ -22,8 +22,8 @@ CState::CState()
     :m_id(0xffffffff)
     ,m_value(c_valueInit)
     ,m_step(0)
-    ,m_hasGeneratedSon(false)
-    ,m_dead(false)
+    ,m_hasGenSon(false)
+    //,m_dead(false)
 {
     InitData();
 }
@@ -70,8 +70,8 @@ void CState::InitData()
 //all card sorted
 bool CState::FWin() const
 {
-    if(m_dead)
-        return false;
+    //if(m_dead)
+    //    return false;
 
     //1st bench empty
     /*if(m_vecBench.size() >0)
@@ -111,7 +111,7 @@ bool CState::FSorted(const ListCard& cardArray) const
     {
         const CCard& curCard = *it;
         //card = (cardArray[idx]);  //setidx
-        if(cardPre.CanAttach(curCard)  ){
+        if(cardPre.CanAttachInCol(curCard)  ){
             cardPre = curCard;
             continue;
         }
@@ -184,13 +184,13 @@ UINT CState::GenerateSonState(CCalculate* pCal)
 {
     //vecState.clear();
 
-    if(!FCanMove() 
-        || m_hasGeneratedSon
+    if( m_hasGenSon
         || m_idxSon.size() 
         || m_step > c_maxStep
         ||!pCal
+        ||!FCanMove() 
         ){
-            m_hasGeneratedSon= true;
+            m_hasGenSon= true;
             return (UINT) m_idxSon.size();
     }
     
@@ -230,7 +230,7 @@ UINT CState::GenerateSonState(CCalculate* pCal)
     }
         
     //must be at last, the son copy father ,also copy all member
-    m_hasGeneratedSon = true;
+    m_hasGenSon = true;
     return (UINT) m_idxSon.size();
 }
 
@@ -359,7 +359,7 @@ bool CState::MoveColToSorted(UINT colIdx)
     const CCard& cardSortLast = m_vecIdxSorted[type];
     if(  eA == num //must be A
         || (cardSortLast.IsLegal()
-        && card.CanAttach(cardSortLast) )  
+        && card.CanAttachSorted(cardSortLast) )  
         )            
     {      
         m_vecIdxSorted[type] = card; //move to sorted        
@@ -398,7 +398,7 @@ bool CState::MoveColToCol(CCalculate* pCal
         const CCard& cardSrc = *it;
         if(vecCardDest.size() ){
             const CCard& cardDest = *vecCardDest.rbegin();
-            if(!cardDest.CanAttach(cardSrc) )
+            if(!cardDest.CanAttachInCol(cardSrc) )
                 continue;
         }
         else{
@@ -415,7 +415,7 @@ bool CState::MoveColToCol(CCalculate* pCal
         //create new state
         //vecState.push_back(*this);
         CState staNew = *this;
-        staNew.m_hasGeneratedSon = false;
+        staNew.m_hasGenSon = false;
 
         SetIdxFather(staNew);
 
@@ -486,7 +486,7 @@ bool CState::MoveBenchToSorted(UINT benchIdx)
 
     const eType type = card.GetType();
     const CCard& cardSortLast = m_vecIdxSorted[type];
-    if(!card.CanAttach(cardSortLast) )
+    if(!card.CanAttachSorted(cardSortLast) )
         return false;
 
     m_vecIdxSorted[type] = card;
@@ -511,7 +511,7 @@ bool CState::MoveBenchToCol(CCalculate* pCal, UINT benchIdx, UINT colIdx)
     const ListCard& vecCardDest = m_vecVecIdx[colIdx];
     if(vecCardDest.size() > 0 ){
         const CCard& cardCol = *vecCardDest.rbegin(); 
-        if(!cardCol.CanAttach(cardSrc) )
+        if(!cardCol.CanAttachInCol(cardSrc) )
             return false;
     }
 
@@ -538,6 +538,7 @@ bool CState::MoveBenchToCol(CCalculate* pCal, UINT benchIdx, UINT colIdx)
 bool CState::UpdateCardToSorted()
 {
     bool fCanMove = true;
+
     while(fCanMove){
         fCanMove = false;
 
@@ -547,8 +548,8 @@ bool CState::UpdateCardToSorted()
             const CCard& card = m_vecBench[benchIdx];
             if(!card.IsLegal() )
                 continue;
-
-             fCanMove = fCanMove || MoveBenchToSorted(benchIdx);
+            fCanMove = MoveBenchToSorted(benchIdx)
+                || fCanMove ;               
         }
 
         for(UINT colIdx=0; colIdx < m_vecVecIdx.size(); colIdx++)
@@ -557,7 +558,7 @@ bool CState::UpdateCardToSorted()
 
             //get a max list of sorted card of this column     
             //GetLastSortedList(vecCard, c_cardNumberMax, vecLastSorted ); //todo ,max 13 cards
-            fCanMove = fCanMove || MoveColToSorted(colIdx);            
+            fCanMove = MoveColToSorted(colIdx) || fCanMove ;            
         }
     }
     return true;
@@ -598,7 +599,7 @@ void CState::GetLastSortedList(const ListCard& vecCard
         const CCard& card = *it;
         if(0 != moveCount ){
             //check if can push
-            if(!card.CanAttach(cardPre) )
+            if(!card.CanAttachInCol(cardPre) )
                 break;
         }
         vecIdxSorted.insert(vecIdxSorted.begin(), card );
@@ -702,7 +703,7 @@ bool CState::FCanPushToEnd(const ListCard& vecIdx, const CCard& card) const
     const CCard& lastCard = (*vecIdx.rbegin() );
     //const CCard card(cardIdx);
 
-    if(lastCard.CanAttach(card) )
+    if(lastCard.CanAttachInCol(card) )
         return true;
 
     return false;
@@ -769,7 +770,7 @@ double CState::UpdateValue()
         {
             //const CCard& cardPre = *it;
             const CCard& card = *(it);
-            if(cardPre.CanAttach(card) ){
+            if(cardPre.CanAttachInCol(card) ){
                 valueGood += c_valueSortedInColumn + curChainLen * c_valueSortedChain;
                 curChainLen++;
             }
