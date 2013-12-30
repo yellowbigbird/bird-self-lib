@@ -19,7 +19,7 @@ void CCalculate::Run()
     //m_vecIdxOpen.reserve(c_maxVecState);
     //m_vecIdxClose.reserve(c_maxVecState);
     m_mapDeadId.clear();
-    m_stateStart.GenerateCards(10000);
+    m_stateStart.GenerateCards(1000);
 
     //m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
@@ -189,6 +189,11 @@ void CCalculate::SolutionDeep1st()
               
         if(!fFindSon)
         {
+#if _DEBUG
+            if(curSt.m_id == 2){
+                TRACE("id=2\n");
+            }
+#endif 
             //no son , backward, find father.
             TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
             lastStateIdx = curStateIdx;
@@ -239,48 +244,6 @@ bool CCalculate::FindLowestValueState(int& lowidx, UINT& idxInOpen) const
 
 //return son's amount
 //UINT CCalculate::GenerateSonState(CState& stFather) 
-//{
-//    ListState vecState;
-//    stFather.GenerateSonState(vecState);
-//
-//    UINT idFind = 0;
-//    UINT sonAmount = 0;
-//
-//    if(vecState.size() < 1)
-//        stFather.m_idxSon.clear();
-//
-//    for(ListState::iterator it = vecState.begin();
-//        it != vecState.end();
-//        it++)
-//    {
-//        CState& entry = *it;
-//
-//        //check if this state exist
-//
-//        if( FindStInAll(entry, idFind) )
-//        {
-//            //check step
-//            CState& stOther = m_vecStateAll[idFind];			 
-//            if(entry.m_step > stOther.m_step)
-//                continue;
-//            SortInsert(stFather.m_idxSon, idFind);
-//            stFather.SetIdxFather(stOther);  //switch to short one's son
-//            sonAmount++;
-//        }
-//        else{
-//            AddToAll(entry);
-//            //CState& entryPushed = *m_vecStateAll.rbegin();
-//            //entryPushed.m_id = (UINT)m_vecStateAll.size();
-//            //stFather.m_idxSon.push_back(entryPushed.m_id);
-//            SortInsert(stFather.m_idxSon, entry.m_id);
-//            sonAmount++;
-//        }
-//    }
-//
-//    //sort the son
-//    //sort(stFather.m_idxSon.begin(), stFather.m_idxSon.end(), );
-//    return sonAmount;
-//}
 
 //true, is need this sta
 //false , drop this one
