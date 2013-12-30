@@ -15,7 +15,7 @@ const UINT16 c_valueSortedCard = 5;
 const UINT16 c_valueSortedInColumn = 1;
 const UINT16 c_valueSortedChain = 1;
 
-const int c_maxStep = 65 + c_cardAll;
+const int c_maxStep = 65 ; //c_cardAll
 
 //////////////////////////////////////////////////////////////////////////
 CState::CState()
@@ -221,7 +221,7 @@ UINT CState::GenerateSonState(CCalculate* pCal)
         GetLastSortedList(vecCard, c_cardNumberMax, vecLastSorted ); //todo ,max 13 cards
 
         //move to sorted
-        MoveColToSorted(pCal, colIdx);
+        //MoveColToSorted(pCal, colIdx);
 
         //move to bench
         MoveColToBench(pCal, colIdx);
@@ -229,7 +229,6 @@ UINT CState::GenerateSonState(CCalculate* pCal)
         for(UINT colIdxDest =0; colIdxDest < m_vecVecIdx.size(); colIdxDest++)
         {       
             MoveColToCol(pCal, colIdx, colIdxDest, vecLastSorted );
-            MoveColToSorted(pCal, colIdx);
         }
     }
     
@@ -240,6 +239,8 @@ UINT CState::GenerateSonState(CCalculate* pCal)
         if(!card.IsLegal() )
             continue;
         
+        //MoveBenchToSorted(pCal, benchIdx);
+
         for(UINT colIdxDest =0; colIdxDest < m_vecVecIdx.size(); colIdxDest++)
         {
             MoveBenchToCol(pCal, benchIdx, colIdxDest);
@@ -790,7 +791,7 @@ void CState::UpdateString()
 void  CState::Update()
 {
     //must be before update value
-    //UpdateCardToSorted();
+    UpdateCardToSorted();
 
     UpdateValue();
     UpdateString();
