@@ -51,6 +51,21 @@ bool CState::operator < (const CState& other) const
     return false;
 }
 
+void CState::CopyFromFather(const CState& stFather)
+{
+    m_id = -1;
+    m_idxFather = stFather.m_id;
+    m_hasGenSon = false;
+    m_idxSon.clear();
+    m_value = c_valueInit;
+    m_step = stFather.m_step +1;
+    //m_str;
+
+    m_vecIdxSorted = stFather.m_vecIdxSorted;  
+    m_vecBench = stFather.m_vecBench   ;      
+    m_vecVecIdx = stFather.m_vecVecIdx;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 void CState::InitData()
@@ -248,9 +263,8 @@ bool CState::MoveColToBench(CCalculate* pCal, UINT colIdx)
         return false;
     CCalculate& rcal = *pCal;
         
-    //vecState.push_back(*this);
-    CState staNew = *this;
-    SetIdxFather(staNew);  //set father
+    CState staNew ;
+    staNew.CopyFromFather(*this);
 
     ListCard& vecCardNew = staNew.m_vecVecIdx[colIdx];
     ListCard::iterator it = vecCardNew.end();
@@ -287,8 +301,8 @@ bool CState::MoveColToSorted(CCalculate* pCal, UINT colIdx)
         && card.CanAttachSorted(cardSortLast) )  
         )            
     {      
-        CState staNew = *this;
-        SetIdxFather(staNew);  //set father
+        CState staNew;
+        staNew.CopyFromFather(*this);
         
         staNew.m_vecIdxSorted[type] = card; //move to sorted
         ListCard& vecCardNew = staNew.m_vecVecIdx[colIdx];
@@ -373,11 +387,8 @@ bool CState::MoveColToCol(CCalculate* pCal
         }            
 
         //create new state
-        //vecState.push_back(*this);
-        CState staNew = *this;
-        staNew.m_hasGenSon = false;
-
-        SetIdxFather(staNew);
+        CState staNew;
+        staNew.CopyFromFather(*this);
 
         for(ListCardConstIt itAdd = it;
             itAdd != vecLastSorted.end();
@@ -418,10 +429,8 @@ bool CState::MoveBenchToSorted(CCalculate* pcal, UINT benchIdx)
     
     VecCardIt it = m_vecBench.begin();
                    
-    CState staNew = *this;
-    staNew.m_hasGenSon = false;
-
-    SetIdxFather(staNew);
+    CState staNew ;
+    staNew.CopyFromFather(*this);
 
     staNew.m_vecIdxSorted[type] = card;
     staNew.m_vecBench[benchIdx].Disable();
@@ -473,11 +482,9 @@ bool CState::MoveBenchToCol(CCalculate* pCal, UINT benchIdx, UINT colIdx)
             return false;
     }
 
-    //vecState.push_back(*this);
-    CState staNew = *this;
-
-    SetIdxFather(staNew);
-
+    CState staNew ;
+    staNew.CopyFromFather(*this);
+    
     ListCard& vecNew = staNew.m_vecVecIdx[colIdx];
     vecNew.push_back(cardSrc);
 

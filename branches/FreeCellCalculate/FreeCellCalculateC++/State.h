@@ -15,7 +15,6 @@ class CState
 {
 public:
     CState();
-    //CState(const CState& other);
     
     void InitData();
     //void InputData();
@@ -23,6 +22,7 @@ public:
     UINT16 GetValue() const;
     
     void Update();
+    void CopyFromFather(const CState& other);
 
     //CState& operater= (const CState& othe );
     bool operator == (const CState& other) const;
