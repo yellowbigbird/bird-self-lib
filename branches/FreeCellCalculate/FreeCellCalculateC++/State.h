@@ -47,10 +47,11 @@ protected:
     void UpdateString();
     
     bool MoveColToBench     (CCalculate*, UINT colIdx) ;
-    //bool MoveColToSorted    (std::list<CState>& vecState, UINT colIdx) ;
-    bool MoveColToCol       (CCalculate*, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted) ;
-    //bool MoveBenchToSorted  (std::list<CState>& vecState, UINT benchIdx) ;
+    bool MoveColToCol       (CCalculate*, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted) ;    
     bool MoveBenchToCol     (CCalculate*, UINT benchIdx, UINT colIdx) ;
+
+    bool MoveBenchToSorted  (CCalculate*, UINT benchIdx) ;
+    bool MoveColToSorted    (CCalculate*, UINT colIdx) ;
 
     bool MoveColToSorted    (UINT colIdx);
     bool MoveBenchToSorted  (UINT benchIdx);
@@ -58,7 +59,7 @@ protected:
     bool UpdateCardToSorted();
 
 
-    bool FCanMove           (int colIdx) const;
+    bool FCanMove           (UINT colIdx) const;
     bool FCanMoveToSorted   (const ListCard& vecIdx) const;
     bool FCanMoveToBench    (UINT& benchIdx) const ;
     bool FCanPushToEnd      (const ListCard& vecCards, const CCard& cardIdx) const;
