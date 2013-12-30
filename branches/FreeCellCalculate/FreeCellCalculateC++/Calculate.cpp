@@ -136,11 +136,8 @@ void CCalculate::SolutionDeep1st()
         }
 
         CState& curSt =  it->second;
-        TRACE("loopcnt=%d, id=%d,step=%d, \n", loopCount, curSt.m_id, curSt.m_step ); //value=%d  curSt.m_value
-        if(26 == loopCount){
-            TRACE("\n");
-        }
-
+        //TRACE("loopcnt=%d, id=%d,step=%d, \n", loopCount, curSt.m_id, curSt.m_step ); //value=%d  curSt.m_value
+        
         game_done = curSt.FWin();
         if(game_done)
             break;
@@ -189,13 +186,8 @@ void CCalculate::SolutionDeep1st()
               
         if(!fFindSon)
         {
-#if _DEBUG
-            if(curSt.m_id == 2){
-                TRACE("id=2\n");
-            }
-#endif 
             //no son , backward, find father.
-            TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
+            //TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
             lastStateIdx = curStateIdx;
             curStateIdx = curSt.m_idxFather;       
 
