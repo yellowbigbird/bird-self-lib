@@ -6,6 +6,7 @@ using namespace std;
 using namespace Card;
 
 const UINT c_maxVecState = 200000;
+const bool C_DEL_DEAD = true;
 //////////////////////////////////////////////////////////////////////////
 
 CCalculate::CCalculate()
@@ -192,8 +193,10 @@ void CCalculate::SolutionDeep1st()
             curStateIdx = curSt.m_idxFather;       
 
             //erase this state
-            //m_mapDeadId.insert(curSt.m_id);
-            //m_vecStateAll.erase(it);
+            if(C_DEL_DEAD){
+                m_mapDeadId.insert(curSt.m_id);
+                m_vecStateAll.erase(it);
+            }
         }
     }
 
@@ -265,13 +268,6 @@ bool  CCalculate::CheckAndInsertState(CState& stInsert, CState& stFather)
 
 bool CCalculate::FindStInAll(const CState& st, UINT& id) const
 {
-    //for(UINT idx=0; idx< m_vecStateAll.size(); idx++)
-    //{
-    //    if(st == m_vecStateAll[idx]){
-    //        id = idx;
-    //        return true;
-    //    }
-    //}
     const string& str = st.m_str;
     MapStrId::const_iterator it = m_mapStateId.find(str);
     if(it == m_mapStateId.end() )
@@ -282,11 +278,17 @@ bool CCalculate::FindStInAll(const CState& st, UINT& id) const
 
 bool  CCalculate::FindStInDead(UINT id) const
 {
-    SetId::const_iterator it = m_mapDeadId.find(id);
-    if(it == m_mapDeadId.end() )
-        return false;
+    if(C_DEL_DEAD){
+        SetId::const_iterator it = m_mapDeadId.find(id);
+        if(it == m_mapDeadId.end() )
+            return false;
 
-    return true;
+        return true;
+    }
+    else{
+        //default return false
+        return false;
+    }
 }
 
 
@@ -339,7 +341,6 @@ bool CCalculate::AddToAll(CState& st)
 
 bool  CCalculate::SortInsert(ListInt& vecToInsert, int stateIdx) const
 {
-    //const CState& staIsert = m_vecStateAll[stateIdx];
     MapIdState::const_iterator itMap = m_vecStateAll.find(stateIdx);
     if(itMap == m_vecStateAll.end() )
         return false;
@@ -355,7 +356,6 @@ bool  CCalculate::SortInsert(ListInt& vecToInsert, int stateIdx) const
         it++)
     {
         idx = *it;
-        //const CState& staComp = m_vecStateAll[idx];
         itMap = m_vecStateAll.find(idx);
         if(itMap == m_vecStateAll.end() )
             continue;
