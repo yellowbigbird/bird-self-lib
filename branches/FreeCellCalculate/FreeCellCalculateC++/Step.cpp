@@ -3,7 +3,7 @@
 
 CStep::CStep()
     : m_colIdxSrc(eCol1)
-    , m_colIdxDest(0)
+    , m_colIdxDest(eCol1)
     , m_cardMoveAmount(0)
 {
 }

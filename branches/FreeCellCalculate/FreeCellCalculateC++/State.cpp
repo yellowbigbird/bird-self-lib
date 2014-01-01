@@ -678,10 +678,10 @@ bool CState::FCanPushToEnd(const ListCard& vecIdx, const CCard& card) const
 //can move 1 card, return true
 //bool CState::IsBenchHaveBlank() const  
 
-//bool CState::CheckInputDataLegal() const //todo
-//{   
-//    return true;
-//}
+bool CState::CheckInputDataLegal() const //todo
+{   
+    return true;
+}
 
 UINT16 CState::GetValue() const
 {
