@@ -5,7 +5,6 @@
 using namespace std;
 using namespace Card;
 
-const UINT c_maxVecState = 200000;
 const bool C_DEL_DEAD = true;
 //////////////////////////////////////////////////////////////////////////
 
@@ -16,9 +15,6 @@ CCalculate::CCalculate()
 
 void CCalculate::Run(UINT gameNum)
 {
-    //m_vecStateAll.reserve(c_maxVecState);
-    //m_vecIdxOpen.reserve(c_maxVecState);
-    //m_vecIdxClose.reserve(c_maxVecState);
     m_mapDeadId.clear();
     m_stateStart.GenerateCards(gameNum);
 
@@ -28,8 +24,14 @@ void CCalculate::Run(UINT gameNum)
     m_nextGenId = 0;
     AddToAll(m_stateStart);
 
+	bool fWin = false;
     //SolutionAstar();
-    SolutionDeep1st();
+    fWin = SolutionDeep1st();
+
+	//output
+	if(fWin){
+		OutputResult();
+	}
 
     int i = 0;
     i++;
@@ -111,13 +113,13 @@ void CCalculate::Run(UINT gameNum)
 //    }//while
 //}
 
-void CCalculate::SolutionDeep1st()
+bool CCalculate::SolutionDeep1st()
 {
     UINT loopCount = 0;
     UINT sonSum = 0;
-    int curStateIdx = 0;
     int lastStateIdx = 0;
     UINT sonIdx = 0;
+	m_curStateIdx = 0;
 
     bool game_done = false;
     bool fFindSon = true;
@@ -129,7 +131,7 @@ void CCalculate::SolutionDeep1st()
         loopCount++;
 
         //get current state
-        MapIdState::iterator it = m_vecStateAll.find(curStateIdx);
+        MapIdState::iterator it = m_vecStateAll.find(m_curStateIdx);
         if(it == m_vecStateAll.end() ){
             TRACE("\nfail.\n");
             //ASSERT("invalid id" && false);
@@ -140,8 +142,8 @@ void CCalculate::SolutionDeep1st()
         //TRACE("loopcnt=%d, id=%d,step=%d, \n", loopCount, curSt.m_id, curSt.m_step ); //value=%d  curSt.m_value
         
         game_done = curSt.FWin();
-        if(game_done)
-            break;
+        //if(game_done)
+        //    break;
 
         //get son sums
         if(curSt.m_hasGenSon){
@@ -152,7 +154,7 @@ void CCalculate::SolutionDeep1st()
         }
 
         fFindSon = false;
-        sonIdx = curStateIdx;
+        sonIdx = m_curStateIdx;
         ListInt::const_iterator intIt;
         if (sonSum) {
             // try to test the first sub step , lowest value
@@ -169,8 +171,8 @@ void CCalculate::SolutionDeep1st()
 
                 fFindSon = true;
 
-                lastStateIdx = curStateIdx;
-                curStateIdx = sonIdx;
+                lastStateIdx = m_curStateIdx;
+                m_curStateIdx = sonIdx;
                 break;
             } //while
 
@@ -189,8 +191,8 @@ void CCalculate::SolutionDeep1st()
         {
             //no son , backward, find father.
             //TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
-            lastStateIdx = curStateIdx;
-            curStateIdx = curSt.m_idxFather;       
+            lastStateIdx = m_curStateIdx;
+            m_curStateIdx = curSt.m_idxFather;       
 
             //erase this state
             if(C_DEL_DEAD){
@@ -198,11 +200,41 @@ void CCalculate::SolutionDeep1st()
                 m_vecStateAll.erase(it);
             }
         }
-    }
+    } //while 
 
-    int i =0;
-    i++;
     TRACE("win = %d", game_done);
+	return game_done;
+}
+
+void CCalculate::OutputResult()
+{
+	ListState listSt;
+	UINT curStIdx = m_curStateIdx;
+	while(true)
+	{
+		MapIdState::iterator it = m_vecStateAll.find(curStIdx);
+		if(it == m_vecStateAll.end() ){
+			TRACE("\nfail.\n");
+			break;
+		}
+		const CState& curSt = it->second;
+		listSt.insert(listSt.begin(), curSt);
+		curStIdx = curSt.m_idxFather;
+	}
+	if(listSt.size() < 1)
+		return;
+
+	string str;
+	ListState::const_iterator it = listSt.begin();
+	for(; it!= listSt.end(); it++)
+	{
+		const CState& curSt = *it;
+		//TRACE(curSt.m_str.c_str() );
+		//TRACE("\n" );
+		str += curSt.m_str;
+		str +="\n\n";
+	}
+	TRACE(str.c_str() );
 }
 
 bool CCalculate::FindLowestValueState(int& lowidx, UINT& idxInOpen) const

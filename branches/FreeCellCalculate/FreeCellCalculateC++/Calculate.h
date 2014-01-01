@@ -16,8 +16,10 @@ public:
     CCalculate();
     
     void Run(UINT gameNum);
-    void SolutionAstar();
-    void SolutionDeep1st();
+    bool SolutionAstar();
+    bool SolutionDeep1st();
+
+	void OutputResult();
 
     bool FindLowestValueState(int& stateIdx, UINT& idxInOpen) const;
  
@@ -43,6 +45,8 @@ public:
     //typedef stdext::hash_map<CState, UINT>  MapStateId;
     typedef std::set<UINT>  SetId;
     UINT        m_nextGenId;
+	
+    UINT		m_curStateIdx ;
         
     //VecState    m_vecStateAll;
     MapStrId    m_mapStateId;
