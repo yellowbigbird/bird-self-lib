@@ -14,13 +14,13 @@ CCalculate::CCalculate()
 
 }
 
-void CCalculate::Run()
+void CCalculate::Run(UINT gameNum)
 {
     //m_vecStateAll.reserve(c_maxVecState);
     //m_vecIdxOpen.reserve(c_maxVecState);
     //m_vecIdxClose.reserve(c_maxVecState);
     m_mapDeadId.clear();
-    m_stateStart.GenerateCards(1000);
+    m_stateStart.GenerateCards(gameNum);
 
     //m_stateStart.CheckInputDataLegal();
     m_stateStart.m_id = 0;
