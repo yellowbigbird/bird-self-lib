@@ -56,8 +56,9 @@ bool CCard::IsLegal() const
 #if CARD_1_BYTE
     if(m_num < c_cardAll
 #else
-    if(m_type >= eHeart
-        && m_type < eCardMax
+    if(
+		//m_type >= eHeart
+        m_type < eCardMax
         //&& m_number >= eA
         && m_number < eNumberMax
 #endif
