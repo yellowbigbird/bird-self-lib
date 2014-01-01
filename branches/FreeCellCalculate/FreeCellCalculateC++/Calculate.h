@@ -15,7 +15,7 @@ class CCalculate
 public:
     CCalculate();
     
-    void Run();
+    void Run(UINT gameNum);
     void SolutionAstar();
     void SolutionDeep1st();
 

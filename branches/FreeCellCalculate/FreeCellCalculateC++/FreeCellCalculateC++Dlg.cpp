@@ -19,6 +19,7 @@
 
 CFreeCellCalculateCDlg::CFreeCellCalculateCDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CFreeCellCalculateCDlg::IDD, pParent)
+	, m_dwGameNumber(1)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -26,6 +27,7 @@ CFreeCellCalculateCDlg::CFreeCellCalculateCDlg(CWnd* pParent /*=NULL*/)
 void CFreeCellCalculateCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT1, m_dwGameNumber);
 }
 
 BEGIN_MESSAGE_MAP(CFreeCellCalculateCDlg, CDialog)
@@ -96,6 +98,8 @@ void CFreeCellCalculateCDlg::OnBnClickedOk()
 
 void CFreeCellCalculateCDlg::OnBnClickedButton1()
 {
+	UpdateData();	//control to value
+
     CCalculate cal;
-    cal.Run();
+    cal.Run(m_dwGameNumber);
 }
