@@ -5,6 +5,7 @@ using namespace Card;
 
 #include <list>
 
+typedef std::vector<byte>       VecByte;
 typedef std::vector<int>       VecInt;
 typedef std::list<int>         ListInt;
 typedef VecInt::iterator       VecIntIt;
@@ -45,7 +46,9 @@ public:
 
 protected:
     double UpdateValue();
-    void UpdateString();
+    std::string UpdateString() const;
+    void UpdateVectorInt(VecByte& vecData) const;
+    void UpdateHash();
     
     bool MoveColToBench     (CCalculate*, UINT colIdx) ;
     bool MoveColToCol       (CCalculate*, UINT colIdxSrc, UINT colIdxDest, const ListCard& vecLastSorted) ;    
@@ -75,7 +78,8 @@ public:
     ListInt                 m_idxSon;
     UINT16                  m_value;
     UINT8                   m_step;
-    std::string             m_str;
+    UINT                    m_hash;
+    //std::string             m_str;
 
     VecCard                 m_vecIdxSorted;   //4 vec, save show card
     VecCard                 m_vecBench;       //4 card 
@@ -85,5 +89,5 @@ public:
 
 //typedef std::vector<CState>     VecState;
 typedef std::list<CState>     ListState;
-typedef std::map<std::string, UINT>  MapStrId;
+typedef std::map<UINT, UINT>  MapHashId;
 typedef std::map<UINT, CState>  MapIdState;

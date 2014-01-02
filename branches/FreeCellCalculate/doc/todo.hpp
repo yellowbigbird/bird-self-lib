@@ -12,5 +12,5 @@ multithread
 
 get calc time.
 
-修改hash 方式
+//修改hash 方式
 

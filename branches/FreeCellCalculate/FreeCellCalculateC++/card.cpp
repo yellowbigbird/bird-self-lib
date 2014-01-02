@@ -93,6 +93,18 @@ bool    CCard::SetIdx(int cardIdx)
     return true;
 }
 
+byte CCard::GetIdx() const
+{    
+    if(!IsLegal() )
+        return -1;
+#if CARD_1_BYTE
+    return m_num;
+#else
+    byte retbyte = m_type * c_cardNumberMax + m_number;
+    return retbyte;
+#endif
+}
+
 bool  CCard::SetTypeNumber(eType ty, eNumber num)
 {
     if(num >= c_cardNumberMax

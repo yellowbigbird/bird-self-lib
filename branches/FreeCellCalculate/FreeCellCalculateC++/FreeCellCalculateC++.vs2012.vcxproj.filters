@@ -39,6 +39,9 @@
     <ClCompile Include="old.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="jhash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculate.h">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="old.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jhash.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
