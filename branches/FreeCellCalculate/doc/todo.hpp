@@ -15,3 +15,5 @@ get calc time.
 
 //修改hash 方式
 
+release can't get result....
+
