@@ -3,7 +3,7 @@
 #include <vector>
 #include <list>
 
-#define CARD_1_BYTE  0
+#define CARD_1_BYTE  1
 
 namespace Card
 {
@@ -21,7 +21,7 @@ namespace Card
         eSpade,         //ºÚÌÒ 3
 
         eCardMax,
-        eInvalid=100,
+        eX=100,
     };
 
     enum eNumber
@@ -41,7 +41,7 @@ namespace Card
         eK,     //12
 
         eNumberMax,
-        eNumberInvalid = 100,
+        eNumX = 100,
     };
 
     //Ï´ÅÆ shuffle

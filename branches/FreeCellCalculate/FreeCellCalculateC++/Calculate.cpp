@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Calculate.h"
+#include "Step.h"
+
 #include <algorithm>
 
 using namespace std;
@@ -10,7 +12,6 @@ const bool C_DEL_DEAD = true;
 
 CCalculate::CCalculate()
 {
-
 }
 
 void CCalculate::Run(UINT gameNum)
@@ -30,9 +31,9 @@ void CCalculate::Run(UINT gameNum)
     fWin = SolutionDeep1st();
 
 	//output
-	if(fWin){
-		OutputResult();
-	}
+	//if(fWin){
+    OutputResult();
+	//}
 
     int i = 0;
     i++;
@@ -209,8 +210,10 @@ bool CCalculate::SolutionDeep1st()
 
 void CCalculate::OutputResult()
 {
-	ListState listSt;
+	VecState listSt;
 	UINT curStIdx = m_curStateIdx;
+
+    //get all state
 	while(true)
 	{
 		MapIdState::iterator it = m_vecStateAll.find(curStIdx);
@@ -225,15 +228,35 @@ void CCalculate::OutputResult()
 	if(listSt.size() < 1)
 		return;
 
-	string str;
-	ListState::const_iterator it = listSt.begin();
-	for(; it!= listSt.end(); it++)
+    //get all steps
+    VecStep vecStep;
+	string str;	
+    CStep step;
+    bool fok = false;
+    const int c_bufSize = 5;
+    char buf[c_bufSize];
+    string strNumber;
+
+	for(VecState::const_iterator it = listSt.begin();
+        it!= listSt.end()-1;
+        it++)
 	{
-		const CState& curSt = *it;
+		const CState& stCur = *it;
+        const CState& stNext = *(it+1);
+
+        str += "step ";
+        _itoa_s(stCur.m_step, buf, 10);
+        strNumber = buf;
+        str += strNumber;
+        str += ": ";
+        str +="\n";
+
+        fok = stCur.GenerateStep(&step, str, stNext);
+        ASSERT(fok);
 		//TRACE(curSt.m_str.c_str() );
 		//TRACE("\n" );
 		//str += curSt.m_str;
-		str +="\n\n";
+		str +="\n";
 	}
 	TRACE(str.c_str() );
 }

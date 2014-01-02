@@ -2,7 +2,8 @@
 //bug, check invalid state
 //move card to bench ,replace card
 
-output result
+//output result
+output to window
 
 //can input game number.
 
