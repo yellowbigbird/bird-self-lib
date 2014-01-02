@@ -28,3 +28,7 @@ public:
     eType   m_colIdxDest;
     UINT8   m_cardMoveAmount;
 };
+typedef std::vector<CStep>      VecStep;
+typedef std::list<CStep>        ListStep;
+
+

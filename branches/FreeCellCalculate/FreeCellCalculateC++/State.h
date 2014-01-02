@@ -11,6 +11,7 @@ typedef std::list<int>         ListInt;
 typedef VecInt::iterator       VecIntIt;
 
 class CCalculate;
+class CStep;
 
 class CState
 {
@@ -31,6 +32,7 @@ public:
 
     UINT GenerateSonState(CCalculate* ) ; //std::list<CState>& vecState
     bool GenerateCards(UINT boardNum); 
+    bool GenerateStep(CStep* step, std::string& str, const CState& stNext) const;
     
     bool CheckDataLegal() const;
 
@@ -43,6 +45,7 @@ public:
     //bool IsBenchHaveBlank() const;  
     int  GetCurMoveCardAmount() const;
     void GetLastSortedList(const ListCard& vecCard,  int moveMax, ListCard& vecIdxSorted) const;
+
 
 protected:
     double UpdateValue();
@@ -87,7 +90,7 @@ public:
     VecListCard				m_vecVecIdx;
 };
 
-//typedef std::vector<CState>     VecState;
+typedef std::vector<CState>     VecState;
 typedef std::list<CState>     ListState;
 typedef std::map<UINT, UINT>  MapHashId;
 typedef std::map<UINT, CState>  MapIdState;

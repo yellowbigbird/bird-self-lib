@@ -10,8 +10,8 @@ CCard::CCard()
 #if CARD_1_BYTE
     :m_num(c_carInvalid)
 #else
-    :m_type(eInvalid)
-    ,m_number(eNumberInvalid)
+    :m_type(eX)
+    ,m_number(eNumX)
 #endif
 {
 }
@@ -20,8 +20,8 @@ CCard::CCard(int cardIdx)
 #if CARD_1_BYTE
     :m_num(cardIdx)
 #else
-    :m_type(eInvalid)
-    ,m_number(eNumberInvalid)
+    :m_type(eX)
+    ,m_number(eNumX)
 #endif
 {
    //SetIdx(cardIdx);
@@ -73,8 +73,8 @@ void  CCard::Disable()
 #if CARD_1_BYTE
     m_num = (UINT8)-1;
 #else
-    m_type = (eInvalid);
-    m_number = (eNumberInvalid);
+    m_type = (eX);
+    m_number = (eNumX);
 #endif
 }
 
@@ -129,6 +129,7 @@ eType    CCard::GetType() const
     return m_type;
 #endif
 }
+
 eNumber  CCard::GetNumber() const
 {
 #if CARD_1_BYTE
@@ -138,6 +139,7 @@ eNumber  CCard::GetNumber() const
     return m_number;
 #endif
 }
+
 bool    CCard::FRed() const
 {
     if(eHeart == GetType() 
@@ -213,11 +215,35 @@ string CCard::GetString() const
     if(!IsLegal() )
         return "_";
 
-    char buf[4];
-#if CARD_1_BYTE
-    sprintf_s(buf, 4, "%2d", m_num);
-#else
-    sprintf_s(buf, 4, "%d%d", m_type, m_number);
-#endif
-    return buf;
+    string strRet;
+    string strColor;
+    const eType ty = GetType();
+    switch(ty){
+    case  eClub:    
+        strColor = "C";
+        break;
+    case eDiamond:    
+        strColor = "D";
+        break;
+    case eHeart:
+        strColor = "H";
+        break;
+    case eSpade:
+        strColor = "S";
+        break;
+    }
+
+    const eNumber num =GetNumber();
+    char bufNum[4];
+    sprintf_s(bufNum, 4, "%d", num+1);
+    strRet = strColor + bufNum;
+    return strRet;
+
+//    char buf[4];
+//#if CARD_1_BYTE
+//    sprintf_s(buf, 4, "%2d", m_num);
+//#else
+//    sprintf_s(buf, 4, "%d%d", m_type, m_number);
+//#endif
+    //return buf;
 }

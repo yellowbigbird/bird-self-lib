@@ -5,6 +5,7 @@
 
 #include "Calculate.h"
 #include "jhash.h"
+#include "step.h"
 
 using namespace std;
 
@@ -980,7 +981,86 @@ bool  CState::GenerateCards(UINT gameNum)
     }
     return true;
 }
-//
+
+bool CState::GenerateStep(CStep* pstep
+                          , string& str
+                          ,const CState& stNext) const
+{
+    if(!pstep
+        || *this == stNext)
+        return false;
+    CStep& step = *pstep;
+
+    const int c_bufSize = 5;
+    char buf[c_bufSize];
+    //buf[1] = 0;
+
+    //check sorted
+    //if enable auto-move, move to sorted, not in count
+    for(UINT idx=0; idx< m_vecIdxSorted.size(); idx++)
+    {
+        const CCard& cardCur = m_vecIdxSorted[idx];
+        const CCard& cardNext = stNext.m_vecIdxSorted[idx];
+        if(cardCur == cardNext)
+            continue;
+        str += "sorted change to ";
+        str += cardNext.GetString();
+        str += ", ";
+    }
+
+    //check bench
+    for(UINT idx=0; idx< m_vecBench.size(); idx++)
+    {
+        const CCard& cardCur = m_vecBench[idx];
+        const CCard& cardNext = stNext.m_vecBench[idx];
+        if(cardCur == cardNext)
+            continue;
+        str += "bench ";
+        //sprintf_s(buf, 2, "%d", idx);
+        //str += buf;
+        _itoa_s(idx+1, buf, 10);
+        str += buf;
+
+        str +=" change from ";
+        str += cardCur.GetString();
+        str += " to ";
+        str += cardNext.GetString();
+        str += ", ";
+    }
+
+    //check col
+    for(UINT colIdx =0; colIdx < m_vecVecIdx.size(); colIdx++)
+    {
+        const ListCard& listCur = m_vecVecIdx[colIdx];
+        const ListCard& listNext = stNext.m_vecVecIdx[colIdx];
+
+        if(listCur == listNext)
+            continue;
+
+        //sprintf_s(buf, 2, "%d", colIdx);
+
+        str += "col ";
+        //str += buf;
+        _itoa_s(colIdx +1, buf, 10);
+        str += buf;
+        str +=" change from ";
+        if(listCur.empty() )
+            str += "_";
+        else
+            str += listCur.rbegin()->GetString();
+        
+        str += " to ";
+        if(listNext.empty() )
+            str += "_";
+        else 
+            str += listNext.rbegin()->GetString();
+        
+        str += ", ";
+    }
+
+    return true;
+}
+
 //void CState::InputData()
 //{
 //    int curCol = 0;
