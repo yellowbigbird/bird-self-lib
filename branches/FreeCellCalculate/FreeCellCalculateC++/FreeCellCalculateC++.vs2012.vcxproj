@@ -81,8 +81,8 @@
     <IntDir>$(SolutionDir)\bin\obj\$(Platform)_$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\obj\$(Platform)_$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -204,6 +204,7 @@
     <ClCompile Include="card.cpp" />
     <ClCompile Include="FreeCellCalculateC++.cpp" />
     <ClCompile Include="FreeCellCalculateC++Dlg.cpp" />
+    <ClCompile Include="jhash.cpp" />
     <ClCompile Include="old.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -219,6 +220,7 @@
     <ClInclude Include="card.h" />
     <ClInclude Include="FreeCellCalculateC++.h" />
     <ClInclude Include="FreeCellCalculateC++Dlg.h" />
+    <ClInclude Include="jhash.h" />
     <ClInclude Include="old.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="State.h" />

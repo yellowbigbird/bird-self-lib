@@ -49,7 +49,7 @@ public:
     UINT		m_curStateIdx ;
         
     //VecState    m_vecStateAll;
-    MapStrId    m_mapStateId;
+    MapHashId    m_mapStateId;
     SetId       m_mapDeadId;
     MapIdState  m_vecStateAll;
 };

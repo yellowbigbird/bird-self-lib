@@ -4,6 +4,7 @@
 //#include <ASSERT>
 
 #include "Calculate.h"
+#include "jhash.h"
 
 using namespace std;
 
@@ -33,7 +34,8 @@ bool CState::operator == (const CState& other) const
 {
     const bool fEqual =
         m_value == other.m_value
-        && m_str == other.m_str
+        && m_hash == other.m_hash
+        //&& m_str == other.m_str
         //m_id == other.m_id
         //m_vecVecIdx == other.m_vecVecIdx
         //&& m_vecIdxSorted == other.m_vecIdxSorted
@@ -44,11 +46,11 @@ bool CState::operator == (const CState& other) const
 
 bool CState::operator < (const CState& other) const
 {
-    if(
+    if( m_hash< other.m_hash
         //m_value < other.m_value         
-        m_str < other.m_str
-        )
-        return true;
+            //m_str < other.m_str
+                )
+                return true;
     return false;
 }
 
@@ -807,9 +809,9 @@ double CState::UpdateValue()
     return m_value;
 }
 
-void CState::UpdateString()
+string CState::UpdateString() const
 {
-    string& str = m_str;
+    string str ;
     str = "";
 
     //bench
@@ -840,6 +842,52 @@ void CState::UpdateString()
         }
         str+=",";
     }
+    return str;
+}
+
+void  CState::UpdateVectorInt(VecByte& vecData)const
+{
+    vecData.reserve(100);
+
+    //bench
+    for(UINT idx=0; idx< m_vecBench.size(); idx++ )    {
+        const CCard& card = m_vecBench[idx];
+        vecData.push_back(card.GetIdx() );        
+    }
+    vecData.push_back(',');
+
+    //sorted
+    for(UINT idx=0; idx< m_vecIdxSorted.size(); idx++)
+    {
+        const CCard& card = m_vecIdxSorted[idx];
+        vecData.push_back(card.GetIdx() );  
+    }
+    vecData.push_back(',');
+
+    //column
+    UINT colIdx=0, cardIdx = 0;
+    ListCardConstIt it ;
+    for(colIdx=0; colIdx< m_vecVecIdx.size(); colIdx++)
+    {
+        const ListCard& cards = m_vecVecIdx[colIdx];
+        for(it = cards.begin(); 
+            it != cards.end(); 
+            it++)
+        {
+            const CCard& card = *it;
+            vecData.push_back(card.GetIdx() );
+        }
+        vecData.push_back(',');
+    }
+}
+
+void CState::UpdateHash()
+{
+    VecByte vecData;
+    UpdateVectorInt(vecData);
+
+    //u32 jhash(const void *key, u32 length, u32 initval);
+    m_hash = jhash(&vecData[0], (UINT)vecData.size() );
 }
 
 void  CState::Update()
@@ -850,7 +898,8 @@ void  CState::Update()
 	CheckDataLegal();
 
     UpdateValue();
-    UpdateString();
+    //UpdateString();
+    UpdateHash();
 }
 //////////////////////////////////////////////////////////////////////////
 

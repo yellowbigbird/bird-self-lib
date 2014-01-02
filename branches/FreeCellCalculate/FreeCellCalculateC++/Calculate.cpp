@@ -232,7 +232,7 @@ void CCalculate::OutputResult()
 		const CState& curSt = *it;
 		//TRACE(curSt.m_str.c_str() );
 		//TRACE("\n" );
-		str += curSt.m_str;
+		//str += curSt.m_str;
 		str +="\n\n";
 	}
 	TRACE(str.c_str() );
@@ -301,8 +301,9 @@ bool  CCalculate::CheckAndInsertState(CState& stInsert, CState& stFather)
 
 bool CCalculate::FindStInAll(const CState& st, UINT& id) const
 {
-    const string& str = st.m_str;
-    MapStrId::const_iterator it = m_mapStateId.find(str);
+    //const string& str = st.m_str;
+
+    MapHashId::const_iterator it = m_mapStateId.find(st.m_hash);
     if(it == m_mapStateId.end() )
         return false;
 
@@ -341,11 +342,12 @@ bool CCalculate::AddToAll(CState& st)
     //m_vecStateAll.rbegin()->m_id = (UINT)id;
 
     //update map
-    if(st.m_str.empty() ){
+    //if(st.m_str.empty() ){
+    if(0 == st.m_hash){
         ASSERT(false);
     }
     else{
-        m_mapStateId[st.m_str] = id;
+        m_mapStateId[st.m_hash] = id;  //m_str
     }
     return true;
 }

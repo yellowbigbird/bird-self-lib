@@ -55,8 +55,14 @@ namespace Card
 
         bool operator==(const CCard& other ) const;
 
+        eType       GetType() const;
+        eNumber     GetNumber() const;
+
         bool        SetTypeNumber(eType ty, eNumber num);
+
+        byte        GetIdx() const;
         bool        SetIdx(int cardIdx);
+
         void        Disable();
         bool        IsLegal() const;  //legal leagl
 
@@ -69,8 +75,7 @@ namespace Card
         bool        FRed() const;
         bool        CanAttachInCol(const CCard& other) const;
         bool        CanAttachSorted(const CCard& other) const;
-        eType       GetType() const;
-        eNumber     GetNumber() const;
+        
 
         std::string GetString() const;
 
