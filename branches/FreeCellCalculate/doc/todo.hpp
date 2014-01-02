@@ -1,6 +1,6 @@
-
-bug, check invalid state
-move card to bench ,replace card
+﻿
+//bug, check invalid state
+//move card to bench ,replace card
 
 output result
 
@@ -12,5 +12,5 @@ multithread
 
 get calc time.
 
-
+修改hash 方式
 

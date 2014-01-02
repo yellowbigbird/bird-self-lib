@@ -31,7 +31,8 @@ public:
     UINT GenerateSonState(CCalculate* ) ; //std::list<CState>& vecState
     bool GenerateCards(UINT boardNum); 
     
-    bool CheckInputDataLegal() const;
+    bool CheckDataLegal() const;
+
     bool FWin() const;
     bool FSorted(const ListCard& vecIdx) const;
     bool FCanMove() const;
@@ -78,7 +79,8 @@ public:
 
     VecCard                 m_vecIdxSorted;   //4 vec, save show card
     VecCard                 m_vecBench;       //4 card 
-    std::vector<ListCard>   m_vecVecIdx;
+	typedef std::vector<ListCard>  VecListCard;
+    VecListCard				m_vecVecIdx;
 };
 
 //typedef std::vector<CState>     VecState;

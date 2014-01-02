@@ -18,7 +18,8 @@ void CCalculate::Run(UINT gameNum)
     m_mapDeadId.clear();
     m_stateStart.GenerateCards(gameNum);
 
-    //m_stateStart.CheckInputDataLegal();
+    m_stateStart.CheckDataLegal();
+
     m_stateStart.m_id = 0;
     m_stateStart.Update();
     m_nextGenId = 0;
