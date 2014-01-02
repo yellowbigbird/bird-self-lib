@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "State.h"
 #include <assert.h>
+//#include <ASSERT>
 
 #include "Calculate.h"
 
@@ -15,7 +16,7 @@ const UINT16 c_valueSortedCard = 5;
 const UINT16 c_valueSortedInColumn = 1;
 const UINT16 c_valueSortedChain = 1;
 
-const int c_maxStep = 65 ; //c_cardAll
+const int c_maxStep = 70 ; //c_cardAll
 
 //////////////////////////////////////////////////////////////////////////
 CState::CState()
@@ -678,8 +679,61 @@ bool CState::FCanPushToEnd(const ListCard& vecIdx, const CCard& card) const
 //can move 1 card, return true
 //bool CState::IsBenchHaveBlank() const  
 
-bool CState::CheckInputDataLegal() const //todo
+bool CState::CheckDataLegal() const //todo
 {   
+	//check cards number
+	vector<int> vecCardAmount;
+	vecCardAmount.resize(c_size);
+	eType et ;
+	eNumber en;
+
+	//foreach col
+	for(VecListCard::const_iterator itVecList = m_vecVecIdx.begin();
+		itVecList != m_vecVecIdx.end();
+		itVecList ++)
+	{
+		const ListCard& listCard = *itVecList;
+		for(ListCard::const_iterator itList = listCard.begin();
+			itList != listCard.end();
+			itList++)
+		{
+			const CCard& card = *itList;
+			et = card.GetType();
+			en = card.GetNumber();
+			vecCardAmount[et]++;
+		}
+	}
+
+	//bench
+	for(int idx=0; idx< m_vecBench.size(); idx++){
+		const CCard& cd = m_vecBench[idx];
+		if(!cd.IsLegal() )
+			continue;
+		et = cd.GetType();
+		en = cd.GetNumber();
+		vecCardAmount[et]++;
+	}
+
+	//sorted
+	for(int idx=0; idx< m_vecIdxSorted.size(); idx++){
+		const CCard& cd = m_vecIdxSorted[idx];
+		if(!cd.IsLegal() )
+			continue;
+		et = cd.GetType();
+		en = cd.GetNumber();
+		vecCardAmount[et]+= en +1;
+	}
+
+	//check number
+	for(int idx=0; idx< vecCardAmount.size(); idx++ )
+	{
+		if(c_cardNumberMax != vecCardAmount[idx] ){
+			ASSERT(false);
+			TRACE("ST check fail, id=", m_id);
+			return false;
+		}
+	}
+
     return true;
 }
 
@@ -792,6 +846,8 @@ void  CState::Update()
 {
     //must be before update value
     UpdateCardToSorted();
+
+	CheckDataLegal();
 
     UpdateValue();
     UpdateString();
