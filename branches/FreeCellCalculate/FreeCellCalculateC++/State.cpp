@@ -222,7 +222,12 @@ UINT CState::GenerateSonState(CCalculate* pCal)
         const ListCard& vecCard = m_vecVecIdx[colIdx];
 
         //get a max list of sorted card of this column     
-        GetLastSortedList(vecCard, c_cardNumberMax, vecLastSorted ); //todo ,max 13 cards
+        const int curMoveMax = GetCurMoveCardAmount();
+        if(curMoveMax < 1)  {
+            ASSERT(false);
+            continue;
+        }
+        GetLastSortedList(vecCard, curMoveMax, vecLastSorted ); //win7 version , move max limit
 
         //move to sorted
         //MoveColToSorted(pCal, colIdx);
@@ -578,6 +583,7 @@ void CState::GetLastSortedList(const ListCard& vecCard
     }
 }
 
+//win7 version, current now, max move amount == empty bench count + empty col
 int  CState::GetCurMoveCardAmount() const
 {
     int amount = 1;
@@ -908,7 +914,7 @@ void  CState::Update()
 
 bool  CState::GenerateCards(UINT gameNum)
 {
-    //int gameNum = 1;	// 牌局号
+    //int gameNum = 1;	
     const int c_posAll = 168;
     const int c_cardAll = 53;
     int cards[c_posAll], order[c_cardAll];
@@ -938,7 +944,7 @@ bool  CState::GenerateCards(UINT gameNum)
         else
         {
             k = ((cards[i]+1 % 13)+3) / 4;
-            k = k?k:13;	// 计算牌面大小
+            k = k?k:13;	
             printf("%-2d(%-2X)    ", k, cards[i]);
             TRACE("%-2d(%-2X)    ", k, cards[i]);
         }
@@ -991,7 +997,7 @@ bool CState::GenerateStep(CStep* pstep
         return false;
     CStep& step = *pstep;
 
-    const int c_bufSize = 5;
+    const int c_bufSize = 100;
     char buf[c_bufSize];
     //buf[1] = 0;
 
@@ -1015,20 +1021,35 @@ bool CState::GenerateStep(CStep* pstep
         const CCard& cardNext = stNext.m_vecBench[idx];
         if(cardCur == cardNext)
             continue;
-        str += "bench ";
-        //sprintf_s(buf, 2, "%d", idx);
-        //str += buf;
-        _itoa_s(idx+1, buf, 10);
-        str += buf;
+        
+        if(!cardCur.IsLegal()){
+            step.m_colIdxDest = CStep::eBench1 + idx;
+            step.m_card = cardNext;
+        }
+        else if(!cardNext.IsLegal() ){
+            step.m_colIdxSrc = CStep::eBench1 + idx;
+            step.m_card = cardCur;
+        }
+        else{
+            ASSERT(false);
+        }
 
-        str +=" change from ";
-        str += cardCur.GetString();
-        str += " to ";
-        str += cardNext.GetString();
-        str += ", ";
+        //str += "bench ";
+        ////sprintf_s(buf, 2, "%d", idx);
+        ////str += buf;
+        //_itoa_s(idx+1, buf, 10);
+        //str += buf;
+
+        //str +=" change from ";
+        //str += cardCur.GetString();
+        //str += " to ";
+        //str += cardNext.GetString();
+        //str += ", ";
     }
 
     //check col
+    //int moveAmount = 0;
+    int listNextSize = 0, listCurSize = 0;
     for(UINT colIdx =0; colIdx < m_vecVecIdx.size(); colIdx++)
     {
         const ListCard& listCur = m_vecVecIdx[colIdx];
@@ -1037,102 +1058,45 @@ bool CState::GenerateStep(CStep* pstep
         if(listCur == listNext)
             continue;
 
-        //sprintf_s(buf, 2, "%d", colIdx);
+        listNextSize = (int)listNext.size();
+        listCurSize = (int)listCur.size();
 
-        str += "col ";
+        if(listCurSize <  listNextSize){
+            step.m_colIdxDest = CStep::eCol1 + colIdx;
+            step.m_cardMoveAmount = listNextSize - listCurSize;
+        }
+        else if(listNextSize < listCurSize ){
+            step.m_colIdxSrc = CStep::eCol1 + colIdx;
+            step.m_cardMoveAmount = listCurSize - listNextSize;            
+        }
+        else{
+            ASSERT(false);
+        }
+        
+        //str += "col ";
+        ////str += buf;
+        //_itoa_s(colIdx +1, buf, 10);
         //str += buf;
-        _itoa_s(colIdx +1, buf, 10);
-        str += buf;
-        str +=" change from ";
-        if(listCur.empty() )
-            str += "_";
-        else
-            str += listCur.rbegin()->GetString();
-        
-        str += " to ";
-        if(listNext.empty() )
-            str += "_";
-        else 
-            str += listNext.rbegin()->GetString();
-        
-        str += ", ";
+        //str +=" change from ";
+        //if(listCur.empty() )
+        //    str += "_";
+        //else
+        //    str += listCur.rbegin()->GetString();
+        //
+        //str += " to ";
+        //if(listNext.empty() )
+        //    str += "_";
+        //else 
+        //    str += listNext.rbegin()->GetString();
+        //
+        //str += ", ";
     }
-
+    string strSrc, strDest;
+    strSrc = step.GetColIdxStr((CStep::eType)step.m_colIdxSrc);
+    strDest = step.GetColIdxStr((CStep::eType) step.m_colIdxDest);
+    sprintf_s(buf, c_bufSize, "move from %s to %s, %d card = %s,",
+        strSrc.c_str(), strDest.c_str(), step.m_cardMoveAmount, step.m_card.GetString().c_str() );
+    str += buf;
     return true;
 }
 
-//void CState::InputData()
-//{
-//    int curCol = 0;
-//    //m_vecVecIdx[curCol].push_back(GetIdx(, ) );
-//
-//    //0
-//    ADD_CARD(eDiamond, e6);
-//    ADD_CARD(eSpade, e9);
-//    ADD_CARD(eHeart, e10);
-//    ADD_CARD(eDiamond, eK);
-//    ADD_CARD(eDiamond, e7);
-//    ADD_CARD(eDiamond, eJ);
-//    ADD_CARD(eHeart, e9);
-//
-//    curCol++; //1
-//    ADD_CARD(eDiamond, eQ);
-//    ADD_CARD(eClub, e2);
-//    ADD_CARD(eHeart, e2);
-//    ADD_CARD(eClub, eJ);
-//    ADD_CARD(eHeart, e3);
-//    ADD_CARD(eClub, e3);
-//    ADD_CARD(eDiamond, e5);
-//
-//    curCol++;  //2
-//    ADD_CARD(eHeart, eJ);
-//    ADD_CARD(eClub, eA);
-//    ADD_CARD(eHeart, eQ);
-//    ADD_CARD(eSpade, eA);
-//    ADD_CARD(eSpade, e4);
-//    ADD_CARD(eDiamond, e4);
-//    ADD_CARD(eSpade, e8);
-//
-//    curCol++; //3
-//    ADD_CARD(eClub, e7);
-//    ADD_CARD(eHeart, e7);
-//    ADD_CARD(eDiamond, e3);
-//    ADD_CARD(eHeart, e8);
-//    ADD_CARD(eSpade, e6);
-//    ADD_CARD(eSpade, eQ);
-//    ADD_CARD(eClub, e8);
-//
-//    curCol++; //4
-//    ADD_CARD(eSpade, e2);
-//    ADD_CARD(eDiamond, e8);
-//    ADD_CARD(eClub, e5);
-//    ADD_CARD(eSpade, e5);
-//    ADD_CARD(eHeart, eK);
-//    ADD_CARD(eClub, e6);
-//    //ADD_CARD(e, e);
-//
-//    curCol++; //5
-//    ADD_CARD(eSpade, eJ);
-//    ADD_CARD(eHeart, eA);
-//    ADD_CARD(eClub, e9);
-//    ADD_CARD(eClub, eK);
-//    ADD_CARD(eClub, eQ);
-//    ADD_CARD(eDiamond, e2);
-//    //ADD_CARD(e, e);
-//
-//    curCol++;  //6
-//    ADD_CARD(eSpade, e3);
-//    ADD_CARD(eHeart, e5);
-//    ADD_CARD(eClub, e10);
-//    ADD_CARD(eDiamond, e10);
-//    ADD_CARD(eSpade, e7);
-//    ADD_CARD(eSpade, eK);
-//
-//    curCol++;  //6
-//    ADD_CARD(eHeart, e4);
-//    ADD_CARD(eSpade, e10);
-//    ADD_CARD(eDiamond, e9);
-//    ADD_CARD(eDiamond, eA);
-//    ADD_CARD(eClub, e4);
-//    ADD_CARD(eHeart, e6);
-//}

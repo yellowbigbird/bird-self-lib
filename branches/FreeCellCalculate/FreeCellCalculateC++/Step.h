@@ -1,4 +1,5 @@
 #pragma once
+#include "card.h"
 
 class CStep
 {
@@ -23,10 +24,13 @@ public:
 		eMax,
 	};
 
+    std::string GetColIdxStr(eType  colIdx);
+
     //column 8-11 means "bench"
-    eType   m_colIdxSrc;
-    eType   m_colIdxDest;
+    UINT8   m_colIdxSrc;
+    UINT8   m_colIdxDest;
     UINT8   m_cardMoveAmount;
+    Card::CCard   m_card;
 };
 typedef std::vector<CStep>      VecStep;
 typedef std::list<CStep>        ListStep;
