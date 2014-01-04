@@ -23,6 +23,7 @@ using namespace UtilString;
 CFreeCellCalculateCDlg::CFreeCellCalculateCDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CFreeCellCalculateCDlg::IDD, pParent)
 	, m_dwGameNumber(1)
+    , m_timePassed(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -32,6 +33,7 @@ void CFreeCellCalculateCDlg::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     DDX_Text(pDX, IDC_EDIT1, m_dwGameNumber);
     DDX_Control(pDX, IDC_LIST1, m_listResult);
+    DDX_Text(pDX, IDC_EDIT_TIME, m_timePassed);
 }
 
 BEGIN_MESSAGE_MAP(CFreeCellCalculateCDlg, CDialog)
@@ -103,11 +105,22 @@ void CFreeCellCalculateCDlg::OnBnClickedOk()
 
 void CFreeCellCalculateCDlg::OnBtnCalc()
 {
+    m_vecStr.clear();
+    UpdateList();
+    m_timePassed = 0;
+
 	UpdateData();	//control to value
+
+    const DWORD tick0 = GetTickCount();
 
     CCalculate cal;
     cal.Run(m_dwGameNumber);
     m_vecStr = cal.m_vecStrStep;
+
+    const DWORD tick1 = GetTickCount();
+
+    m_timePassed = (tick1 - tick0)/1000;
+    UpdateData(FALSE);	//value to control
 
     UpdateList();
 }
