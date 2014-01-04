@@ -3,7 +3,7 @@
 //move card to bench ,replace card
 
 //output result
-output to window
+//output to window
 
 //can input game number.
 
