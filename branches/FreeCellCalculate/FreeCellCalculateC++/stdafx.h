@@ -62,4 +62,6 @@
 #include <list>
 #include <map>
 
+typedef std::map<UINT, UINT>        MapHashId;
+typedef std::vector<std::string>    VecStr ;
 

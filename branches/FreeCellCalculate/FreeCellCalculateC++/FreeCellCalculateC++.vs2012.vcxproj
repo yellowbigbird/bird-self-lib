@@ -214,6 +214,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Step.cpp" />
+    <ClCompile Include="UtilString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculate.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Step.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UtilString.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\FreeCellCalculateC++.ico" />

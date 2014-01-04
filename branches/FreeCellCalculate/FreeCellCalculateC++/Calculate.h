@@ -8,6 +8,9 @@ using namespace Card;
 #include <hash_map>
 #include <set>
 
+
+
+
 class CCalculate
 {
     //typedef std::vector<int>    VecIdx;
@@ -52,5 +55,6 @@ public:
     MapHashId    m_mapStateId;
     SetId       m_mapDeadId;
     MapIdState  m_vecStateAll;
+    VecStr      m_vecStrStep;
 };
 

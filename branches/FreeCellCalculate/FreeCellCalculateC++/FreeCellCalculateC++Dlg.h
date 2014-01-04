@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxcmn.h"
 
 
 // CFreeCellCalculateCDlg dialog
@@ -21,16 +22,22 @@ public:
 
 // Implementation
 protected:
-	HICON m_hIcon;
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
+    void InitList();
+    void UpdateList();
+
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
     afx_msg void OnBnClickedOk();
-    afx_msg void OnBnClickedButton1();
-
+    afx_msg void OnBtnCalc();
+    
 protected:
-	DWORD m_dwGameNumber;
+    DWORD       m_dwGameNumber;
+    HICON       m_hIcon;
+    CListCtrl   m_listResult;
+    
+    VecStr      m_vecStr;
 };
