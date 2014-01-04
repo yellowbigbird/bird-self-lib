@@ -18,7 +18,10 @@ class CCalculate
 public:
     CCalculate();
     
-    void Run(UINT gameNum);
+    void StartCalc(UINT gameNum);
+    void Run();
+    void Init();
+
     bool SolutionAstar();
     bool SolutionDeep1st();
 
@@ -37,6 +40,8 @@ public:
     bool AddToAll(CState& st);
     bool FindStInAll(const CState& st, UINT& id) const;
     bool FindStInDead(UINT id) const;
+    
+    static DWORD  WINAPI ThreadFunc(void* pServer);
 
 public:
 
@@ -50,11 +55,14 @@ public:
     UINT        m_nextGenId;
 	
     UINT		m_curStateIdx ;
+    UINT        m_gameNum;
         
     //VecState    m_vecStateAll;
     MapHashId    m_mapStateId;
     SetId       m_mapDeadId;
     MapIdState  m_vecStateAll;
     VecStr      m_vecStrStep;
+    bool        m_fThreadRunning;
+    bool        m_fEnd;
 };
 

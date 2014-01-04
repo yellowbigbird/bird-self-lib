@@ -17,6 +17,18 @@
 
 using namespace std;
 using namespace UtilString;
+
+const int c_idUpdateTime = 1000;
+
+
+BEGIN_MESSAGE_MAP(CFreeCellCalculateCDlg, CDialog)
+    ON_WM_PAINT()
+    ON_WM_TIMER()
+    ON_WM_QUERYDRAGICON()
+    //}}AFX_MSG_MAP
+    ON_BN_CLICKED(IDOK, &CFreeCellCalculateCDlg::OnBnClickedOk)
+    ON_BN_CLICKED(IDC_BUTTON1, &CFreeCellCalculateCDlg::OnBtnCalc)
+END_MESSAGE_MAP()
 //////////////////////////////////////////////////////////////////////////
 // CFreeCellCalculateCDlg dialog
 
@@ -24,8 +36,14 @@ CFreeCellCalculateCDlg::CFreeCellCalculateCDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CFreeCellCalculateCDlg::IDD, pParent)
 	, m_dwGameNumber(1)
     , m_timePassed(0)
+    , m_pCalc(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+    m_pCalc = new CCalculate();
+}
+
+CFreeCellCalculateCDlg::~CFreeCellCalculateCDlg()
+{
 }
 
 void CFreeCellCalculateCDlg::DoDataExchange(CDataExchange* pDX)
@@ -34,18 +52,8 @@ void CFreeCellCalculateCDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDIT1, m_dwGameNumber);
     DDX_Control(pDX, IDC_LIST1, m_listResult);
     DDX_Text(pDX, IDC_EDIT_TIME, m_timePassed);
+    DDX_Control(pDX, IDC_BUTTON1, m_btnCalc);
 }
-
-BEGIN_MESSAGE_MAP(CFreeCellCalculateCDlg, CDialog)
-	ON_WM_PAINT()
-	ON_WM_QUERYDRAGICON()
-	//}}AFX_MSG_MAP
-    ON_BN_CLICKED(IDOK, &CFreeCellCalculateCDlg::OnBnClickedOk)
-    ON_BN_CLICKED(IDC_BUTTON1, &CFreeCellCalculateCDlg::OnBtnCalc)
-END_MESSAGE_MAP()
-
-
-// CFreeCellCalculateCDlg message handlers
 
 BOOL CFreeCellCalculateCDlg::OnInitDialog()
 {
@@ -105,24 +113,48 @@ void CFreeCellCalculateCDlg::OnBnClickedOk()
 
 void CFreeCellCalculateCDlg::OnBtnCalc()
 {
+    if(!m_pCalc){
+        ASSERT(false);
+        return;
+    }
+
     m_vecStr.clear();
     UpdateList();
     m_timePassed = 0;
 
 	UpdateData();	//control to value
 
-    const DWORD tick0 = GetTickCount();
+    m_tickStart = GetTickCount();
 
-    CCalculate cal;
-    cal.Run(m_dwGameNumber);
-    m_vecStr = cal.m_vecStrStep;
+    m_pCalc->StartCalc(m_dwGameNumber);    
 
+    SetTimer(c_idUpdateTime, 1000, NULL);
+    m_btnCalc.EnableWindow(FALSE);
+}
+
+void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
+{
+    if(!m_pCalc){
+        ASSERT(false);
+        return;
+    }
+
+    //update time
     const DWORD tick1 = GetTickCount();
-
-    m_timePassed = (tick1 - tick0)/1000;
+    m_timePassed = (tick1 - m_tickStart)/1000.0;
     UpdateData(FALSE);	//value to control
 
+    CCalculate& rcalc = *m_pCalc;
+    if(!rcalc.m_fEnd)
+        return;
+
+    m_vecStr = rcalc.m_vecStrStep;
+    
     UpdateList();
+
+    //end timer
+    KillTimer(c_idUpdateTime);
+    m_btnCalc.EnableWindow(TRUE);
 }
 
 void CFreeCellCalculateCDlg::InitList()

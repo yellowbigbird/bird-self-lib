@@ -14,7 +14,7 @@ multithread
 
 //can calculate
 
-get calc time. GetTickCount
+//get calc time. GetTickCount
 
 //修改hash 方式
 
