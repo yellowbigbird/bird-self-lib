@@ -11,38 +11,72 @@ const bool C_DEL_DEAD = true;
 //////////////////////////////////////////////////////////////////////////
 
 CCalculate::CCalculate()
+    :m_fThreadRunning(false)
+    ,m_fEnd(false)
 {
 }
 
-void CCalculate::Run(UINT gameNum)
+void CCalculate::StartCalc(UINT gameNum)
+{
+    m_gameNum = gameNum;
+
+    DWORD dwThreadId = 0;
+    HANDLE hThread = ::CreateThread(NULL, 0, CCalculate::ThreadFunc, (LPVOID*)this, 0, &dwThreadId);
+    if (!hThread)
+    {
+        m_fThreadRunning = false;
+        return ;
+    }    
+    m_fThreadRunning = true;
+    CloseHandle(hThread);	
+}
+
+DWORD CCalculate::ThreadFunc(void* pServer)
+{
+    CCalculate* pthis = (CCalculate*)(pServer);
+    if(!pthis)
+        return 0;
+    pthis->Run();
+    //while(pthis->m_fThreadRunning)
+    //{      
+    //    Sleep(1);
+    //}
+    return 0;
+}
+
+void CCalculate::Run()
+{
+    Init();
+    
+    bool fWin = false;
+
+    //SolutionAstar();
+    fWin = SolutionDeep1st();
+        
+	//output
+    OutputResult();
+    m_fEnd = true;
+}
+
+void  CCalculate::Init()
 {
     m_mapDeadId.clear();
     m_vecStrStep.clear();
-    m_stateStart.GenerateCards(gameNum);
+    m_vecStateAll.clear();
+    m_mapStateId.clear();
+    m_vecStrStep.clear();
+
+    m_stateStart.InitData();
+    m_stateStart.GenerateCards(m_gameNum);
 
     m_stateStart.CheckDataLegal();
 
+    m_fEnd = false;
     m_stateStart.m_id = 0;
     m_stateStart.Update();
     m_nextGenId = 0;
+
     AddToAll(m_stateStart);
-
-	bool fWin = false;
-    const DWORD tick0 = GetTickCount();
-    //SolutionAstar();
-    fWin = SolutionDeep1st();
-
-    const DWORD tick1 = GetTickCount();
-    const UINT tickUsed = tick1 - tick0;
-    
-	//output
-	//if(fWin){
-    OutputResult();
-	//}
-
-    int i = 0;
-    i++;
-
 }
 
 //void CCalculate::SolutionAstar()

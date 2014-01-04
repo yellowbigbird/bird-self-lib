@@ -77,11 +77,14 @@ void CState::InitData()
     CCard cardInvalid;
 
     //clear sorted idx
+    m_vecIdxSorted.clear();
     m_vecIdxSorted.resize(c_size, cardInvalid);   //4
   
     //bench   
+    m_vecBench.clear();
     m_vecBench.resize(c_size, cardInvalid);
 
+    m_vecVecIdx.clear();
     m_vecVecIdx.resize(c_colSize);  //8   
 }
 
