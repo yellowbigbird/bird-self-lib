@@ -17,12 +17,12 @@ std::string CStep::GetColIdxStr(eType  colIdx)
     if(colIdx >= eCol1
         && colIdx <= eCol8){
             str = "Col ";
-            str += '0' + colIdx - eCol1;
+            str += '1' + colIdx - eCol1;
     }
     else if(colIdx >= eBench1
         && colIdx <= eBench4){
         str = "Bench ";
-        str += '0' + colIdx - eBench1; 
+        str += '1' + colIdx - eBench1; 
     }
     else{
         str = "sorted";
