@@ -43,7 +43,7 @@ public:
     void SetIdxFather(CState& stSon);
 
     //bool IsBenchHaveBlank() const;  
-    int  GetCurMoveCardAmount() const;
+    int  GetCurMoveCardAmount(int colDestIdx = c_colSize) const;
     void GetLastSortedList(const ListCard& vecCard,  int moveMax, ListCard& vecIdxSorted) const;
 
 

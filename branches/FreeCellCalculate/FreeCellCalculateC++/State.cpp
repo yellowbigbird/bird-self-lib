@@ -216,19 +216,12 @@ UINT CState::GenerateSonState(CCalculate* pCal)
     CCalculate& rcal = * pCal;
 
     ListCard vecLastSorted ;
+    int curMoveMax =0;
 
     for(UINT colIdx=0; colIdx < m_vecVecIdx.size(); colIdx++)
     {
         const ListCard& vecCard = m_vecVecIdx[colIdx];
-
-        //get a max list of sorted card of this column     
-        const int curMoveMax = GetCurMoveCardAmount();
-        if(curMoveMax < 1)  {
-            ASSERT(false);
-            continue;
-        }
-        GetLastSortedList(vecCard, curMoveMax, vecLastSorted ); //win7 version , move max limit
-
+              
         //move to sorted
         //MoveColToSorted(pCal, colIdx);
 
@@ -237,6 +230,17 @@ UINT CState::GenerateSonState(CCalculate* pCal)
 
         for(UINT colIdxDest =0; colIdxDest < m_vecVecIdx.size(); colIdxDest++)
         {       
+            if(colIdxDest == colIdx)
+                continue;
+
+            //get a max list of sorted card of this column     
+            curMoveMax = GetCurMoveCardAmount(colIdxDest);
+            if(curMoveMax < 1)  {
+                ASSERT(false);
+                continue;
+            }
+            GetLastSortedList(vecCard, curMoveMax, vecLastSorted ); //win7 version , move max limit
+
             MoveColToCol(pCal, colIdx, colIdxDest, vecLastSorted );
         }
     }
@@ -371,6 +375,7 @@ bool CState::MoveColToCol(CCalculate* pCal
 
     CCalculate& rcal = *pCal;
     int moveAmount = 0;
+     const ListCard& vecCardSrc = m_vecVecIdx[colIdxSrc];
 
     UINT idx = 0;
     for(ListCardConstIt it = vecLastSorted.begin();
@@ -394,7 +399,13 @@ bool CState::MoveColToCol(CCalculate* pCal
         if(moveAmount< 1){
             ASSERT(false);
             break;
-        }            
+        }        
+
+        //不能从一行 完全移动到领一个空行
+        if(moveAmount == vecCardSrc.size() 
+            && vecCardDest.size() < 1){
+                continue;
+        }
 
         //create new state
         CState staNew;
@@ -584,25 +595,29 @@ void CState::GetLastSortedList(const ListCard& vecCard
 }
 
 //win7 version, current now, max move amount == empty bench count + empty col
-int  CState::GetCurMoveCardAmount() const
+//最大移动张数计算方式：（可用单元+1）×（闲置列+1）
+int  CState::GetCurMoveCardAmount(int colDestIdx) const
 {
-    int amount = 1;
-
     //get empty bench
-    //amount += c_size - (int)m_vecBench.size();
+    int benchCount = 0;
     for(int idx=0; idx< m_vecBench.size(); idx++)
     {
         if(!m_vecBench[idx].IsLegal())  //-1 ==
-            amount++;
+            benchCount++;
     }
 
     //get empty column
+    int colCount = 0;
     for(int colIdx = 0; colIdx < (int)m_vecVecIdx.size(); colIdx++)
     {
-        if(m_vecVecIdx[colIdx].size() < 1)
-            amount++;
+        if(m_vecVecIdx[colIdx].size() >0
+            || colIdx == colDestIdx ){
+                continue;
+        }
+        colCount++;
     }
-    return amount;
+    const int moveMax = (benchCount+1)* (colCount+1);
+    return moveMax;
 }
 
 bool CState::FCanMoveToBench(UINT& benchIdx) const 
@@ -999,6 +1014,7 @@ bool CState::GenerateStep(CStep* pstep
 
     const int c_bufSize = 100;
     char buf[c_bufSize];
+    string strSort;
     //buf[1] = 0;
 
     //check sorted
@@ -1009,9 +1025,9 @@ bool CState::GenerateStep(CStep* pstep
         const CCard& cardNext = stNext.m_vecIdxSorted[idx];
         if(cardCur == cardNext)
             continue;
-        str += "sorted change to ";
-        str += cardNext.GetString();
-        str += ", ";
+        strSort = ", sorted change to ";
+        strSort += cardNext.GetString();
+        strSort += ", ";
     }
 
     //check bench
@@ -1097,6 +1113,7 @@ bool CState::GenerateStep(CStep* pstep
     sprintf_s(buf, c_bufSize, "move from %s to %s, %d card = %s,",
         strSrc.c_str(), strDest.c_str(), step.m_cardMoveAmount, step.m_card.GetString().c_str() );
     str += buf;
+    str += strSort;
     return true;
 }
 

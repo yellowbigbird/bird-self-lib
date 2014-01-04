@@ -195,7 +195,11 @@ bool CCalculate::SolutionDeep1st()
             //no son , backward, find father.
             //TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
             lastStateIdx = m_curStateIdx;
-            m_curStateIdx = curSt.m_idxFather;       
+            m_curStateIdx = curSt.m_idxFather; 
+            if(0 == m_curStateIdx ){
+                //go back to 0
+                TRACE("go back to root.\n");
+            }
 
             //erase this state
             if(C_DEL_DEAD){
@@ -260,7 +264,7 @@ void CCalculate::OutputResult()
 		//str +="\n";
         m_vecStrStep.push_back(str);
 	}
-	TRACE(str.c_str() );
+	//TRACE(str.c_str() );
 }
 
 bool CCalculate::FindLowestValueState(int& lowidx, UINT& idxInOpen) const
