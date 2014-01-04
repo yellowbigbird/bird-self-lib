@@ -17,6 +17,7 @@ CCalculate::CCalculate()
 void CCalculate::Run(UINT gameNum)
 {
     m_mapDeadId.clear();
+    m_vecStrStep.clear();
     m_stateStart.GenerateCards(gameNum);
 
     m_stateStart.CheckDataLegal();
@@ -244,7 +245,7 @@ void CCalculate::OutputResult()
 		const CState& stCur = *it;
         const CState& stNext = *(it+1);
 
-        str += "step ";
+        str = "step ";
         _itoa_s(stCur.m_step, buf, 10);
         strNumber = buf;
         str += strNumber;
@@ -256,7 +257,8 @@ void CCalculate::OutputResult()
 		//TRACE(curSt.m_str.c_str() );
 		//TRACE("\n" );
 		//str += curSt.m_str;
-		str +="\n";
+		//str +="\n";
+        m_vecStrStep.push_back(str);
 	}
 	TRACE(str.c_str() );
 }
