@@ -28,9 +28,13 @@ void CCalculate::Run(UINT gameNum)
     AddToAll(m_stateStart);
 
 	bool fWin = false;
+    const DWORD tick0 = GetTickCount();
     //SolutionAstar();
     fWin = SolutionDeep1st();
 
+    const DWORD tick1 = GetTickCount();
+    const UINT tickUsed = tick1 - tick0;
+    
 	//output
 	//if(fWin){
     OutputResult();

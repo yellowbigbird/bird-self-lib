@@ -40,4 +40,6 @@ protected:
     CListCtrl   m_listResult;
     
     VecStr      m_vecStr;
+
+    UINT        m_timePassed;  //in sec
 };
