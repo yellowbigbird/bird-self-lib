@@ -412,6 +412,14 @@
 				RelativePath=".\Step.h"
 				>
 			</File>
+			<File
+				RelativePath=".\UtilString.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UtilString.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
