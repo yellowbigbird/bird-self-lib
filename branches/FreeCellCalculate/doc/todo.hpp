@@ -7,6 +7,7 @@ bug max move amount incorrect
 //output to window
 //输出 sort到后面
 输出有bug
+输出到文件
 
 //can input game number.
 

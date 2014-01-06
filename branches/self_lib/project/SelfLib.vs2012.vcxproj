@@ -204,6 +204,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\util\DebugFile.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="..\src\selflib_dll.h" />
     <ClInclude Include="..\src\stdafx.h" />
@@ -224,6 +225,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\util\Crc32.cpp" />
+    <ClCompile Include="..\src\util\DebugFile.cpp" />
     <ClCompile Include="..\src\util\Utils.cpp" />
     <ClCompile Include="..\src\util\UtilsFile.cpp" />
     <ClCompile Include="..\src\util\UtilString.cpp" />

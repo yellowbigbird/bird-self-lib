@@ -8,7 +8,8 @@
 
 #include "card.h"
 #include "Calculate.h"
-#include "UtilString.h"
+#include <util/UtilString.h>
+#include <util/DebugFile.h>
 
 //////////////////////////////////////////////////////////////////////////
 #ifdef _DEBUG

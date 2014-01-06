@@ -2,6 +2,7 @@
 #include "Calculate.h"
 #include "Step.h"
 
+#include <util/DebugFile.h>
 #include <algorithm>
 
 using namespace std;
@@ -170,7 +171,7 @@ bool CCalculate::SolutionDeep1st()
     bool game_done = false;
     bool fFindSon = true;
 
-    TRACE("\n");
+    AddDebug();
 
     while (!game_done && m_fThreadRunning) 
     {        
@@ -179,8 +180,9 @@ bool CCalculate::SolutionDeep1st()
         //get current state
         MapIdState::iterator it = m_vecStateAll.find(m_curStateIdx);
         if(it == m_vecStateAll.end() ){
-            TRACE("\nfail.\n");
-            //ASSERT("invalid id" && false);
+            //TRACE("\nfail.\n");
+            ASSERT("invalid id" && false);
+            AddDebug("fail.");
             break;
         }
 
@@ -237,11 +239,15 @@ bool CCalculate::SolutionDeep1st()
         {
             //no son , backward, find father.
             //TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
+            AddDebug("no son, go back to step =%d\n", curSt.m_step-1);
+
             lastStateIdx = m_curStateIdx;
             m_curStateIdx = curSt.m_idxFather; 
             if(0 == m_curStateIdx ){
                 //go back to 0
-                TRACE("go back to root.\n");
+                AddDebug("go back to root.\n");
+            }
+            else{
             }
 
             //erase this state
@@ -253,7 +259,7 @@ bool CCalculate::SolutionDeep1st()
     } //while 
 
     m_fThreadRunning = false;
-    TRACE("win = %d", game_done);
+    AddDebug("win = %d", game_done);
 	return game_done;
 }
 

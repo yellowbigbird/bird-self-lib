@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication1", "Cons
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "freecell_solver.vs2012", "freecell_solver\freecell_solver.vs2012.vcxproj", "{BF9167A5-35CE-4801-A8FB-61425EE9AD95}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SelfLib", "..\self_lib\project\SelfLib.vs2012.vcxproj", "{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -50,6 +52,18 @@ Global
 		{BF9167A5-35CE-4801-A8FB-61425EE9AD95}.Release|Win32.ActiveCfg = Release|Win32
 		{BF9167A5-35CE-4801-A8FB-61425EE9AD95}.Release|Win32.Build.0 = Release|Win32
 		{BF9167A5-35CE-4801-A8FB-61425EE9AD95}.Release|x64.ActiveCfg = Release|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Debug|Win32.Build.0 = Debug|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Debug|x64.ActiveCfg = Debug|x64
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Debug|x64.Build.0 = Debug|x64
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|Win32.ActiveCfg = Release|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|Win32.Build.0 = Release|Win32
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|x64.ActiveCfg = Release|x64
+		{C6E70890-8FFA-44BC-9FB0-FA6B0B4DF355}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

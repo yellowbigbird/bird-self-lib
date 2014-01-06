@@ -71,24 +71,24 @@
     <_ProjectFileVersion>11.0.60610.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\bin\$(Platform)_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\bin\obj\$(Platform)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin_vs12\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin_vs12\obj\$(Platform)_$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin\$(Platform)_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\bin\obj\$(Platform)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin_vs12\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin_vs12\obj\$(Platform)_$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)\bin\$(Platform)_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\bin\obj\$(Platform)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin_vs12\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin_vs12\obj\$(Platform)_$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)\bin\obj\$(Platform)_$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin_vs12\obj\$(Platform)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin_vs12\$(Platform)_$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -105,6 +105,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\self_lib\src</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -130,6 +131,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\self_lib\src</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -157,6 +159,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\self_lib\src</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -186,6 +189,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\self_lib\src</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -214,7 +218,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Step.cpp" />
-    <ClCompile Include="UtilString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculate.h" />
@@ -228,7 +231,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Step.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="UtilString.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\FreeCellCalculateC++.ico" />
@@ -241,6 +243,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\self_lib\project\SelfLib.vs2012.vcxproj">
+      <Project>{c6e70890-8ffa-44bc-9fb0-fa6b0b4df355}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

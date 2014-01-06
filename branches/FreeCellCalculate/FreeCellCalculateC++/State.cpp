@@ -7,6 +7,8 @@
 #include "jhash.h"
 #include "step.h"
 
+#include <util/DebugFile.h>
+
 using namespace std;
 
 const UINT c_id = 0xffffffff;
