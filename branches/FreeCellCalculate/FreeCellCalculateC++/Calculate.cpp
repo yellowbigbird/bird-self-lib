@@ -239,7 +239,10 @@ bool CCalculate::SolutionDeep1st()
         {
             //no son , backward, find father.
             //TRACE("no son, delete id =%d,goto father=%d \n", curSt.m_id, curSt.m_idxFather);
-            AddDebug("no son, go back to step =%d\n", curSt.m_step-1);
+            char	szMessage[1024];
+            int ret = sprintf_s(szMessage, 1024, "no son, go back to step =%d", curSt.m_step-1);
+            //AddDebug("no son, go back to step =%d", curSt.m_step-1);
+            AddDebug(szMessage);
 
             lastStateIdx = m_curStateIdx;
             m_curStateIdx = curSt.m_idxFather; 
