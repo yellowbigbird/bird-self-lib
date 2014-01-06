@@ -57,6 +57,9 @@
     <ClInclude Include="..\src\CIni\Ini.h">
       <Filter>ini</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\util\DebugFile.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\stdafx.cpp">
@@ -76,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="..\src\CIni\Ini.cpp">
       <Filter>ini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\DebugFile.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
