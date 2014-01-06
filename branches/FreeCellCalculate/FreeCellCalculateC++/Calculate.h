@@ -20,6 +20,7 @@ public:
     
     void StartCalc(UINT gameNum);
     void Run();
+    void Stop();
     void Init();
 
     bool SolutionAstar();
