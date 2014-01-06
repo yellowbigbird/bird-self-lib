@@ -30,12 +30,14 @@ protected:
 	virtual BOOL OnInitDialog();
     void InitList();
     void UpdateList();
+    void OnStop();
 
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
     afx_msg void OnBnClickedOk();
     afx_msg void OnBtnCalc();
+    afx_msg void OnBtnStop();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     
 protected:

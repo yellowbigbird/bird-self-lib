@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CFreeCellCalculateCDlg, CDialog)
     //}}AFX_MSG_MAP
     ON_BN_CLICKED(IDOK, &CFreeCellCalculateCDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDC_BUTTON1, &CFreeCellCalculateCDlg::OnBtnCalc)
+    ON_BN_CLICKED(IDC_BUT_STOP, &CFreeCellCalculateCDlg::OnBtnStop)
 END_MESSAGE_MAP()
 //////////////////////////////////////////////////////////////////////////
 // CFreeCellCalculateCDlg dialog
@@ -132,6 +133,14 @@ void CFreeCellCalculateCDlg::OnBtnCalc()
     m_btnCalc.EnableWindow(FALSE);
 }
 
+void CFreeCellCalculateCDlg::OnStop()
+{
+    UpdateList();
+
+    //end timer
+    KillTimer(c_idUpdateTime);
+    m_btnCalc.EnableWindow(TRUE);
+}
 void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
 {
     if(!m_pCalc){
@@ -150,11 +159,7 @@ void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
 
     m_vecStr = rcalc.m_vecStrStep;
     
-    UpdateList();
-
-    //end timer
-    KillTimer(c_idUpdateTime);
-    m_btnCalc.EnableWindow(TRUE);
+    OnStop();
 }
 
 void CFreeCellCalculateCDlg::InitList()
@@ -184,4 +189,14 @@ void CFreeCellCalculateCDlg::UpdateList()
     m_listResult.SetRedraw(TRUE);
     m_listResult.Invalidate();
     m_listResult.UpdateWindow();
+}
+
+
+void CFreeCellCalculateCDlg::OnBtnStop()      
+{
+    if(!m_pCalc)
+        return;
+    m_pCalc->Stop();
+
+    OnStop();
 }

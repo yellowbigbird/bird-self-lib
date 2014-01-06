@@ -31,6 +31,11 @@ void CCalculate::StartCalc(UINT gameNum)
     CloseHandle(hThread);	
 }
 
+void CCalculate::Stop()
+{
+    m_fThreadRunning = false;
+}
+
 DWORD CCalculate::ThreadFunc(void* pServer)
 {
     CCalculate* pthis = (CCalculate*)(pServer);
@@ -167,7 +172,7 @@ bool CCalculate::SolutionDeep1st()
 
     TRACE("\n");
 
-    while (!game_done) 
+    while (!game_done && m_fThreadRunning) 
     {        
         loopCount++;
 
@@ -247,6 +252,7 @@ bool CCalculate::SolutionDeep1st()
         }
     } //while 
 
+    m_fThreadRunning = false;
     TRACE("win = %d", game_done);
 	return game_done;
 }
