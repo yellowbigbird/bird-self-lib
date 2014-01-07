@@ -9,7 +9,7 @@ using namespace Card;
 #include <set>
 
 
-
+typedef std::set<UINT>  SetId;
 
 class CCalculate
 {
@@ -33,7 +33,7 @@ public:
     //UINT GenerateSonState(CState& st);
     bool CheckAndInsertState(CState& stSon,CState& stFather);
 
-    void EraseStateFromOpen(UINT idxInOpen);
+    void EraseStateFromOpen(UINT id);
 
     //void SortOpen();
     bool SortInsert(ListInt& vecToInsert, int stateIdx) const;
@@ -48,11 +48,12 @@ public:
 
     CState      m_stateStart;
     
-    ListInt      m_vecIdxOpen;
-    ListInt      m_vecIdxClose;
+    ListInt     m_vecIdxOpen;
+    SetId       m_vecIdxClose;
+    SetId       m_mapDeadId;
 
     //typedef stdext::hash_map<CState, UINT>  MapStateId;
-    typedef std::set<UINT>  SetId;
+    
     UINT        m_nextGenId;
 	
     UINT		m_curStateIdx ;
@@ -60,7 +61,6 @@ public:
         
     //VecState    m_vecStateAll;
     MapHashId    m_mapStateId;
-    SetId       m_mapDeadId;
     MapIdState  m_vecStateAll;
     VecStr      m_vecStrStep;
     bool        m_fThreadRunning;
