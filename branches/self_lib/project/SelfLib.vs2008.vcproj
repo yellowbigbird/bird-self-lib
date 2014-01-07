@@ -437,6 +437,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\util\DebugFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\util\DebugFile.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\util\Utils.cpp"
 				>
 			</File>
