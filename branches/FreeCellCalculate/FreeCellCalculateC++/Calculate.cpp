@@ -9,6 +9,8 @@ using namespace std;
 using namespace Card;
 
 const bool C_DEL_DEAD = true;
+const bool C_USE_A_STAR = true;
+
 //////////////////////////////////////////////////////////////////////////
 
 CCalculate::CCalculate()
@@ -56,8 +58,10 @@ void CCalculate::Run()
     
     bool fWin = false;
 
-    //SolutionAstar();
-    fWin = SolutionDeep1st();
+    if(C_USE_A_STAR)
+        fWin = SolutionAstar();
+    else
+        fWin = SolutionDeep1st();
         
 	//output
     OutputResult();
@@ -66,7 +70,10 @@ void CCalculate::Run()
 
 void  CCalculate::Init()
 {
+    m_vecIdxOpen.clear();
+    m_vecIdxClose.clear();
     m_mapDeadId.clear();
+
     m_vecStrStep.clear();
     m_vecStateAll.clear();
     m_mapStateId.clear();
@@ -87,11 +94,13 @@ void  CCalculate::Init()
 
 bool CCalculate::SolutionAstar()
 {
-    int lowStateIdx = -1;
+    //int lowStateIdx = -1;
+    m_curStateIdx = 0;
     int sonStateIdx = 0;
-    UINT idxInOpen = 0;
+    //UINT idxInOpen = 0;
     UINT idxWin = 0;
     bool fFindLow = false;
+    bool game_done = false;
     UINT loopCount = 0;
 	UINT sonSum = 0;
     double   valueOpen = 0;    //save lowest value of open
@@ -100,7 +109,9 @@ bool CCalculate::SolutionAstar()
     m_vecIdxOpen.push_back(0);
     valueOpen = m_stateStart.GetValue();
 
-    while(m_vecIdxOpen.size() )
+    while(m_vecIdxOpen.size() 
+        && !game_done
+        && m_fThreadRunning)
     {
         loopCount++;
 
@@ -108,15 +119,19 @@ bool CCalculate::SolutionAstar()
         //fFindLow = FindLowestValueState(lowStateIdx, idxInOpen);
         //if(!fFindLow)
         //break;
-        lowStateIdx = *m_vecIdxOpen.begin();
-        CState& stN = m_vecStateAll[lowStateIdx];
-        TRACE("step=%d, value=%d", stN.m_step, stN.m_value);
+        m_curStateIdx = *m_vecIdxOpen.begin();
+        CState& stN = m_vecStateAll[m_curStateIdx];
 
-        if(stN.FWin() ){
-            idxWin = stN.m_id;
-            AddDebug("win.");
-            break;
-        }
+        char	szMessage[1024];
+        int ret = sprintf_s(szMessage, 1024, "step=%d, value=%d", stN.m_step, stN.m_value);
+        //AddDebug(szMessage );
+
+        game_done = stN.FWin();
+        //if( game_done){
+        //    idxWin = stN.m_id;
+        //    AddDebug("win.");
+        //    break;
+        //}
 
         //get son sums
         if(stN.m_hasGenSon){
@@ -136,7 +151,7 @@ bool CCalculate::SolutionAstar()
             double valueSon = stX.GetValue();
 
             //if X in Open 
-            VecInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
+            ListInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
             if(itResult != m_vecIdxOpen.end() ){  //todo
                 if(stX.GetValue() < valueOpen)
                 {
@@ -147,8 +162,8 @@ bool CCalculate::SolutionAstar()
             }
             else {
                 //if x in close
-                itResult = find( m_vecIdxClose.begin(), m_vecIdxClose.end(), sonStateIdx );
-                if(itResult != m_vecIdxClose.end() ){
+                SetId::const_iterator setIdConIt = m_vecIdxClose.find(sonStateIdx);
+                if(setIdConIt != m_vecIdxClose.end() ){
                     continue;
                 }
                 else{ //X not in both
@@ -159,12 +174,15 @@ bool CCalculate::SolutionAstar()
         }  //for
 
         //erase N in open, put into Close
-        m_vecIdxClose.push_back(stN.m_id);
-        EraseStateFromOpen(idxInOpen);
+        m_vecIdxClose.insert(stN.m_id);
+        EraseStateFromOpen(m_curStateIdx);
 
         //按照估价值将OPEN表中的节点排序; //实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
         //SortOpen();
     }//while
+
+    m_fThreadRunning = false;
+    AddDebug("win = %d", game_done);
 	return true;
 }
 
@@ -442,22 +460,22 @@ bool CCalculate::AddToAll(CState& st)
     return true;
 }
 
-//void CCalculate::EraseStateFromOpen(UINT idxInOpen)
-//{     
-//    VecInt::iterator it = m_vecIdxOpen.begin()+ idxInOpen;
-//    m_vecIdxOpen.erase(it);
+void CCalculate::EraseStateFromOpen(UINT id)
+{     
+    ListInt::iterator it = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), id ); 
+    m_vecIdxOpen.erase(it);
 
-//    //int idx=0;
-//    //for(VecInt::iterator it = m_vecIdxOpen.begin();
-//    //    it != m_vecIdxOpen.end();
-//    //    it++, idx++)
-//    //{
-//    //    if(idx == idxInOpen){
-//    //        m_vecIdxOpen.erase(it);
-//    //        return;
-//    //    }
-//    //}
-//}
+    //int idx=0;
+    //for(VecInt::iterator it = m_vecIdxOpen.begin();
+    //    it != m_vecIdxOpen.end();
+    //    it++, idx++)
+    //{
+    //    if(idx == idxInOpen){
+    //        m_vecIdxOpen.erase(it);
+    //        return;
+    //    }
+    //}
+}
 
 //void CCalculate::SortOpen() //todo
 //{
