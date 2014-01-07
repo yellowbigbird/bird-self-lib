@@ -3,6 +3,8 @@
 //move card to bench ,replace card
 bug max move amount incorrect
 
+a* 算法
+
 //output result
 //output to window
 //输出 sort到后面

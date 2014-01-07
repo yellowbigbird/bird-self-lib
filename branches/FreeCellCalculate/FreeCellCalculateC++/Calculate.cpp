@@ -85,80 +85,88 @@ void  CCalculate::Init()
     AddToAll(m_stateStart);
 }
 
-//void CCalculate::SolutionAstar()
-//{
-//    int lowStateIdx = -1;
-//    int sonStateIdx = 0;
-//    UINT idxInOpen = 0;
-//    UINT idxWin = 0;
-//    bool fFindLow = false;
-//    UINT loopCount = 0;
-//    double      valueOpen = 0;    //save lowest value of open
-//
-//    //push start in open
-//    m_vecIdxOpen.push_back(0);
-//    valueOpen = m_stateStart.GetValue();
-//
-//    while(m_vecIdxOpen.size() )
-//    {
-//        loopCount++;
-//
-//        //从OPEN表中取估价值f最小的节点n;
-//        //fFindLow = FindLowestValueState(lowStateIdx, idxInOpen);
-//        //if(!fFindLow)
-//        //break;
-//        lowStateIdx = *m_vecIdxOpen.begin();
-//        CState& stN = m_vecStateAll[lowStateIdx];
-//        TRACE("step=%d, value=%d", stN.m_step, stN.m_value);
-//
-//        if(stN.FWin() ){
-//            idxWin = stN.m_id;
-//            TRACE("win.\n");
-//            break;
-//        }
-//
-//        GenerateSonState(stN);
-//
-//        //foreach cur state every son
-//        for(ListInt::iterator intIt = stN.m_idxSon.begin();
-//            intIt != stN.m_idxSon.end() ;
-//            intIt++)
-//        {
-//            sonStateIdx = *intIt;
-//            CState& stX = m_vecStateAll[sonStateIdx];
-//            double valueSon = stX.GetValue();
-//
-//            //if X in Open 
-//            VecInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
-//            if(itResult != m_vecIdxOpen.end() ){  //todo
-//                if(stX.GetValue() < valueOpen)
-//                {
-//                    stX.m_idxFather = stN.m_id; //set N is X's father
-//                    //stN.m_idxSon ; //todo
-//                    valueOpen = stX.GetValue();
-//                }
-//            }
-//            else {
-//                //if x in close
-//                itResult = find( m_vecIdxClose.begin(), m_vecIdxClose.end(), sonStateIdx );
-//                if(itResult != m_vecIdxClose.end() ){
-//                    continue;
-//                }
-//                else{ //X not in both
-//                    //m_vecIdxOpen.push_back(sonStateIdx);
-//                    SortInsert(m_vecIdxOpen, sonStateIdx);
-//                }
-//            }
-//        }  //for
-//
-//        //erase N in open, put into Close
-//        m_vecIdxClose.push_back(stN.m_id);
-//        EraseStateFromOpen(idxInOpen);
-//
-//        //按照估价值将OPEN表中的节点排序; //实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
-//        //SortOpen();
-//    }//while
-//}
+bool CCalculate::SolutionAstar()
+{
+    int lowStateIdx = -1;
+    int sonStateIdx = 0;
+    UINT idxInOpen = 0;
+    UINT idxWin = 0;
+    bool fFindLow = false;
+    UINT loopCount = 0;
+	UINT sonSum = 0;
+    double   valueOpen = 0;    //save lowest value of open
+
+    //push start in open
+    m_vecIdxOpen.push_back(0);
+    valueOpen = m_stateStart.GetValue();
+
+    while(m_vecIdxOpen.size() )
+    {
+        loopCount++;
+
+        //从OPEN表中取估价值f最小的节点n;
+        //fFindLow = FindLowestValueState(lowStateIdx, idxInOpen);
+        //if(!fFindLow)
+        //break;
+        lowStateIdx = *m_vecIdxOpen.begin();
+        CState& stN = m_vecStateAll[lowStateIdx];
+        TRACE("step=%d, value=%d", stN.m_step, stN.m_value);
+
+        if(stN.FWin() ){
+            idxWin = stN.m_id;
+            AddDebug("win.");
+            break;
+        }
+
+        //get son sums
+        if(stN.m_hasGenSon){
+            sonSum = (UINT)stN.m_idxSon.size();
+        }
+        else{
+            sonSum = stN.GenerateSonState(this);
+        }
+
+        //foreach cur state every son
+        for(ListInt::iterator intIt = stN.m_idxSon.begin();
+            intIt != stN.m_idxSon.end() ;
+            intIt++)
+        {
+            sonStateIdx = *intIt;
+            CState& stX = m_vecStateAll[sonStateIdx];
+            double valueSon = stX.GetValue();
+
+            //if X in Open 
+            VecInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
+            if(itResult != m_vecIdxOpen.end() ){  //todo
+                if(stX.GetValue() < valueOpen)
+                {
+                    stX.m_idxFather = stN.m_id; //set N is X's father
+                    //stN.m_idxSon ; //todo
+                    valueOpen = stX.GetValue();
+                }
+            }
+            else {
+                //if x in close
+                itResult = find( m_vecIdxClose.begin(), m_vecIdxClose.end(), sonStateIdx );
+                if(itResult != m_vecIdxClose.end() ){
+                    continue;
+                }
+                else{ //X not in both
+                    //m_vecIdxOpen.push_back(sonStateIdx);
+                    SortInsert(m_vecIdxOpen, sonStateIdx);
+                }
+            }
+        }  //for
+
+        //erase N in open, put into Close
+        m_vecIdxClose.push_back(stN.m_id);
+        EraseStateFromOpen(idxInOpen);
+
+        //按照估价值将OPEN表中的节点排序; //实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
+        //SortOpen();
+    }//while
+	return true;
+}
 
 bool CCalculate::SolutionDeep1st()
 {
