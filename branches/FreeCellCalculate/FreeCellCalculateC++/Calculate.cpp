@@ -19,10 +19,8 @@ CCalculate::CCalculate()
 {
 }
 
-void CCalculate::StartCalc(UINT gameNum)
+void CCalculate::StartCalc()
 {
-    m_gameNum = gameNum;
-
     DWORD dwThreadId = 0;
     HANDLE hThread = ::CreateThread(NULL, 0, CCalculate::ThreadFunc, (LPVOID*)this, 0, &dwThreadId);
     if (!hThread)
@@ -79,10 +77,8 @@ void  CCalculate::Init()
     m_mapStateId.clear();
     m_vecStrStep.clear();
 
-    m_stateStart.InitData();
-    m_stateStart.GenerateCards(m_gameNum);
-
-    m_stateStart.CheckDataLegal();
+    //m_stateStart.InitData();
+    //m_stateStart.CheckDataLegal();
 
     m_fEnd = false;
     m_stateStart.m_id = 0;

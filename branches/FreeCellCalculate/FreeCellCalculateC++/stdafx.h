@@ -67,3 +67,6 @@ typedef std::map<UINT, UINT>        MapHashId;
 typedef std::vector<std::string>    VecStr ;
 
 #include "card.h"
+
+#define SAFE_DELETE(p) { if(p) { delete (p); (p)=NULL; } }
+
