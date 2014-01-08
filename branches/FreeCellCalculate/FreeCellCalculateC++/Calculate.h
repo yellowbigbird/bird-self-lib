@@ -18,7 +18,7 @@ class CCalculate
 public:
     CCalculate();
     
-    void StartCalc(UINT gameNum);
+    void StartCalc();
     void Run();
     void Stop();
     void Init();
@@ -45,25 +45,25 @@ public:
     static DWORD  WINAPI ThreadFunc(void* pServer);
 
 public:
-
     CState      m_stateStart;
+    ListState   m_stateFather;
     
     ListInt     m_vecIdxOpen;
     SetId       m_vecIdxClose;
     SetId       m_mapDeadId;
-
-    //typedef stdext::hash_map<CState, UINT>  MapStateId;
-    
-    UINT        m_nextGenId;
-	
+        
+    UINT        m_nextGenId;	
     UINT		m_curStateIdx ;
-    UINT        m_gameNum;
+    
         
     //VecState    m_vecStateAll;
-    MapHashId    m_mapStateId;
+    MapHashId   m_mapStateId;
     MapIdState  m_vecStateAll;
     VecStr      m_vecStrStep;
+
     bool        m_fThreadRunning;
     bool        m_fEnd;
 };
+
+
 

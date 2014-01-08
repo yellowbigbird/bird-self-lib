@@ -8,6 +8,8 @@
 
 #include "card.h"
 #include "Calculate.h"
+#include "ThreadPool.h"
+
 #include <util/UtilString.h>
 #include <util/DebugFile.h>
 
@@ -38,14 +40,16 @@ CFreeCellCalculateCDlg::CFreeCellCalculateCDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CFreeCellCalculateCDlg::IDD, pParent)
 	, m_dwGameNumber(1)
     , m_timePassed(0)
-    , m_pCalc(NULL)
+    , m_pool(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-    m_pCalc = new CCalculate();
+    m_pool = new CThreadPool();
+    ASSERT(m_pool);
 }
 
 CFreeCellCalculateCDlg::~CFreeCellCalculateCDlg()
 {
+    SAFE_DELETE(m_pool);
 }
 
 void CFreeCellCalculateCDlg::DoDataExchange(CDataExchange* pDX)
@@ -115,7 +119,7 @@ void CFreeCellCalculateCDlg::OnBnClickedOk()
 
 void CFreeCellCalculateCDlg::OnBtnCalc()
 {
-    if(!m_pCalc){
+    if(!m_pool){
         ASSERT(false);
         return;
     }
@@ -128,7 +132,7 @@ void CFreeCellCalculateCDlg::OnBtnCalc()
 
     m_tickStart = GetTickCount();
 
-    m_pCalc->StartCalc(m_dwGameNumber);    
+    m_pool->StartCalc(m_dwGameNumber);    
 
     SetTimer(c_idUpdateTime, 1000, NULL);
     m_btnCalc.EnableWindow(FALSE);
@@ -144,7 +148,7 @@ void CFreeCellCalculateCDlg::OnStop()
 }
 void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
 {
-    if(!m_pCalc){
+    if(!m_pool){
         ASSERT(false);
         return;
     }
@@ -154,11 +158,11 @@ void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
     m_timePassed = (tick1 - m_tickStart)/1000.0;
     UpdateData(FALSE);	//value to control
 
-    CCalculate& rcalc = *m_pCalc;
+    CThreadPool& rcalc = *m_pool;
     if(!rcalc.m_fEnd)
         return;
 
-    m_vecStr = rcalc.m_vecStrStep;
+    //m_vecStr = rcalc.m_vecStrStep;
     
     OnStop();
 }
@@ -195,9 +199,9 @@ void CFreeCellCalculateCDlg::UpdateList()
 
 void CFreeCellCalculateCDlg::OnBtnStop()      
 {
-    if(!m_pCalc)
+    if(!m_pool)
         return;
-    m_pCalc->Stop();
+    m_pool->Stop();
 
     OnStop();
 }

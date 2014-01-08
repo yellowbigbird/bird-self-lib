@@ -7,6 +7,7 @@
 #include "afxwin.h"
 
 class CCalculate;
+class CThreadPool;
 
 // CFreeCellCalculateCDlg dialog
 class CFreeCellCalculateCDlg : public CDialog
@@ -49,7 +50,8 @@ protected:
     VecStr      m_vecStr;
 
     double      m_timePassed;  //in sec
-    CCalculate* m_pCalc;
+    //CCalculate* m_pCalc;
+    CThreadPool*    m_pool;
     CButton     m_btnCalc;
 
 };
