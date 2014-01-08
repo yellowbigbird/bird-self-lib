@@ -779,6 +779,9 @@ double CState::UpdateValue()
     }
     UINT valueGood = 0;
 
+	//step
+	valueGood += m_step;
+
     //bench
     const int benchBlank = GetBenchEmptyCount();
     valueGood += benchBlank* c_valueBench;
