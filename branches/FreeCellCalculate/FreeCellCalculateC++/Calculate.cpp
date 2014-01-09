@@ -177,7 +177,11 @@ bool CCalculate::SolutionAstar()
     }//while
 
     m_fThreadRunning = false;
-    AddDebug("win = %d", m_fWin);
+
+    char	szMessage[1024];
+    //memset(szMessage, 0, 1024);
+    int ret = sprintf_s(szMessage, 1024, "win = %d", m_fWin);
+    AddDebug(szMessage);
 	return true;
 }
 
@@ -285,6 +289,7 @@ bool CCalculate::SolutionDeep1st()
     m_fThreadRunning = false;
 
     char	szMessage[1024];
+    memset(szMessage, 0, 1024);
     int ret = sprintf_s(szMessage, 1024, "win = %d", game_done);
     AddDebug(szMessage);
 	return game_done;

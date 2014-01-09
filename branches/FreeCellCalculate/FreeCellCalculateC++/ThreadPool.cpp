@@ -2,6 +2,7 @@
 #include "ThreadPool.h"
 
 #include "Calculate.h"
+#include "util/DebugFile.h"
 
 using namespace std;
 
@@ -60,13 +61,23 @@ void CThreadPool::Init()
 void CThreadPool::Clear()
 {
     CCalculate* pcal = NULL;
-    for(ListCalc::iterator it = m_threadArray.begin();
-        it != m_threadArray.end();
-        it++)
+    try
     {
-        pcal = *it;
-        SAFE_DELETE(pcal);
+        for(ListCalc::iterator it = m_threadArray.begin();
+            it != m_threadArray.end();
+            it++)
+        {
+            pcal = *it;
+            SAFE_DELETE(pcal);
+        }
     }
+    catch (CException* e)
+    {
+        ASSERT(false);
+        //e.GetErrorMessage();
+        AddDebug("SAFE_DELETE CException.");
+    }
+    
     m_threadArray.clear();
 
     m_vecStrStep.clear();
