@@ -788,7 +788,7 @@ double CState::UpdateValue()
     UINT valueGood = 0;
 
 	//step
-	valueGood += m_step;
+	valueGood -= m_step;
 
     //bench
     const int benchBlank = GetBenchEmptyCount();
@@ -841,7 +841,7 @@ double CState::UpdateValue()
         }
     }
 
-    //get minus value
+    //get minus value, distance to the end, the value is less the better
     m_value = c_valueInit - valueGood;
     
     return m_value;

@@ -4,6 +4,7 @@
 bug max move amount incorrect
 
 //a* 算法
+a* 需要减少内存占用
 
 //output result
 //output to window

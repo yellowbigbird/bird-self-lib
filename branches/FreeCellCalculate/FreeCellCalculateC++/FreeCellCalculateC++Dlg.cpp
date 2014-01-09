@@ -124,6 +124,8 @@ void CFreeCellCalculateCDlg::OnBtnCalc()
         return;
     }
 
+    m_btnCalc.EnableWindow(FALSE);
+
     m_vecStr.clear();
     UpdateList();
     m_timePassed = 0;
@@ -135,7 +137,6 @@ void CFreeCellCalculateCDlg::OnBtnCalc()
     m_pool->StartCalc(m_dwGameNumber);    
 
     SetTimer(c_idUpdateTime, 1000, NULL);
-    m_btnCalc.EnableWindow(FALSE);
 }
 
 void CFreeCellCalculateCDlg::OnStop()
