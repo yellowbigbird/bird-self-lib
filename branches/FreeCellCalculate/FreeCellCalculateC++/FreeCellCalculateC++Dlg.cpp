@@ -146,6 +146,7 @@ void CFreeCellCalculateCDlg::OnStop()
     KillTimer(c_idUpdateTime);
     m_btnCalc.EnableWindow(TRUE);
 }
+
 void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
 {
     if(!m_pool){
@@ -162,7 +163,7 @@ void CFreeCellCalculateCDlg::OnTimer(UINT_PTR nIDEvent)
     if(!rcalc.m_fEnd)
         return;
 
-    //m_vecStr = rcalc.m_vecStrStep;
+    m_vecStr = rcalc.m_vecStrStep;
     
     OnStop();
 }
