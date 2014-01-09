@@ -24,7 +24,8 @@ const int c_maxStep = 70 ; //c_cardAll
 
 //////////////////////////////////////////////////////////////////////////
 CState::CState()
-    :m_id(0xffffffff)
+    :m_hash(-1)
+    //m_id(0xffffffff)
     ,m_value(c_valueInit)
     ,m_step(0)
     ,m_hasGenSon(false)
@@ -33,11 +34,24 @@ CState::CState()
     InitData();
 }
 
+CState::~CState()
+{
+    Clear();
+}
+
+void CState::Clear()
+{
+    m_vecIdxSorted.clear(); 
+    m_vecBench.clear();      
+    m_vecVecIdx.clear();
+}
+
 bool CState::operator == (const CState& other) const
 {
     const bool fEqual =
         m_value == other.m_value
         && m_hash == other.m_hash
+        && m_hasGenSon == other.m_hasGenSon
         //&& m_str == other.m_str
         //m_id == other.m_id
         //m_vecVecIdx == other.m_vecVecIdx
@@ -59,8 +73,8 @@ bool CState::operator < (const CState& other) const
 
 void CState::CopyFromFather(const CState& stFather)
 {
-    m_id = -1;
-    m_idxFather = stFather.m_id;
+    //m_id = -1;
+    m_idxFather = stFather.m_hash;
     m_hasGenSon = false;
     m_idxSon.clear();
     m_value = c_valueInit;
@@ -89,7 +103,7 @@ void CState::InitData()
     m_vecVecIdx.clear();
     m_vecVecIdx.resize(c_colSize);  //8   
 
-    m_id = -1;
+    //m_id = -1;
     m_idxFather = -1;
     m_hasGenSon = false;
     m_idxSon.clear();
@@ -565,7 +579,7 @@ bool CState::UpdateCardToSorted()
 
 void CState::SetIdxFather(CState& stSon)
 {
-    stSon.m_idxFather = m_id;
+    stSon.m_idxFather = m_hash;
     stSon.m_step = m_step+1;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -766,7 +780,8 @@ bool CState::CheckDataLegal() const //todo
 	{
 		if(c_cardNumberMax != vecCardAmount[idx] ){
 			ASSERT(false);
-			TRACE("ST check fail, id=", m_id);
+			//TRACE("ST check fail, id=%d", m_id);
+            AddDebug("ST check fail, id=%d", m_hash);
 			return false;
 		}
 	}

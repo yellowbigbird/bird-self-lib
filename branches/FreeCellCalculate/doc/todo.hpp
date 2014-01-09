@@ -2,6 +2,7 @@
 //bug, check invalid state
 //move card to bench ,replace card
 bug max move amount incorrect
+bug: 5 stop 后再次开始, crash
 
 //a* 算法
 a* 需要减少内存占用

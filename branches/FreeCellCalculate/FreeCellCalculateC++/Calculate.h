@@ -17,6 +17,7 @@ class CCalculate
 
 public:
     CCalculate();
+    virtual ~CCalculate();
     
     void StartCalc();
     void Run();
@@ -41,7 +42,9 @@ public:
     bool AddToAll(CState& st);
     bool FindStInAll(const CState& st, UINT& id) const;
     bool FindStInDead(UINT id) const;
-    
+
+protected:
+    void Clear();
     static DWORD  WINAPI ThreadFunc(void* pServer);
 
 public:
@@ -53,14 +56,14 @@ public:
     
     ListInt     m_vecIdxOpen;
     SetId       m_vecCloseHash; //save hash
-    SetId       m_mapDeadId;
+    SetId       m_mapDeadId; //save hash
         
-    UINT        m_nextGenId;	
+    //UINT        m_nextGenId;	
     UINT		m_curStateIdx ;    
         
     //VecState    m_vecStateAll;
-    MapHashId   m_mapStateId;
-    MapIdState  m_vecStateAll;
+    //MapHashId   m_mapStateId;
+    MapIdState  m_vecStateAll;      //map<hash, state>
     VecStr      m_vecStrStep;
 
 };

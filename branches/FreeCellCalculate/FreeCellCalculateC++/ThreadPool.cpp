@@ -31,6 +31,19 @@ void CThreadPool::StartCalc(UINT gameNum)
 
 void CThreadPool::Stop()
 {
+    CCalculate* pCal = NULL;
+    for(ListCalc::iterator it = m_threadArray.begin();
+        it != m_threadArray.end();
+        it++)
+    {
+        pCal = *it;
+        if(!pCal){
+            ASSERT(false);
+            continue;
+        }
+        pCal->Stop();
+    }
+
     m_fThreadRunning = false;
 }
 
@@ -99,7 +112,7 @@ void CThreadPool::AddThreads()
             if(0 == it->first)
                 continue;
             CState& st = it->second;
-            st.m_id = 0;
+            //st.m_id = 0;
 
             pCal = new CCalculate();
             if(!pCal){
