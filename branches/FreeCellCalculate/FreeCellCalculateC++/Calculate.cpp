@@ -19,6 +19,25 @@ CCalculate::CCalculate()
 {
 }
 
+CCalculate::~CCalculate()
+{
+    Stop();
+    Clear();
+}
+
+void CCalculate::Clear()
+{
+    m_stateStart.Clear();
+    m_stateFather.clear();
+
+    m_vecIdxOpen.clear();
+    m_vecCloseHash.clear(); //save hash
+    m_mapDeadId.clear(); //save hash
+    
+    m_vecStateAll.clear();      //map<hash, state>
+    m_vecStrStep.clear();
+}
+
 void CCalculate::StartCalc()
 {
     DWORD dwThreadId = 0;
@@ -73,16 +92,16 @@ void  CCalculate::Init()
 
     m_vecStrStep.clear();
     m_vecStateAll.clear();
-    m_mapStateId.clear();
+    //m_mapStateId.clear();
     m_vecStrStep.clear();
 
     //m_stateStart.InitData();
     //m_stateStart.CheckDataLegal();
 
     m_fWin = false;
-    m_stateStart.m_id = 0;
+    //m_stateStart.m_id = 0;
     m_stateStart.Update();
-    m_nextGenId = 0;
+    //m_nextGenId = 0;
 
     AddToAll(m_stateStart);
 }
@@ -101,7 +120,7 @@ bool CCalculate::SolutionAstar()
     double   valueOpen = 0;    //save lowest value of open
 
     //push start in open
-    m_vecIdxOpen.push_back(0);
+    m_vecIdxOpen.push_back(m_stateStart.m_hash);
     valueOpen = m_stateStart.GetValue();
 
     while(m_vecIdxOpen.size() 
@@ -150,7 +169,7 @@ bool CCalculate::SolutionAstar()
             if(itResult != m_vecIdxOpen.end() ){  //todo
                 if(stSon.GetValue() < valueOpen)
                 {
-                    stSon.m_idxFather = curSt.m_id; //set N is X's father
+                    stSon.m_idxFather = curSt.m_hash; //set N is X's father
                     //stN.m_idxSon ; //todo
                     valueOpen = stSon.GetValue();
                 }
@@ -280,7 +299,7 @@ bool CCalculate::SolutionDeep1st()
 
             //erase this state
             if(C_DEL_DEAD){
-                m_mapDeadId.insert(curSt.m_id);
+                m_mapDeadId.insert(curSt.m_hash);
                 m_vecStateAll.erase(it);
             }
         }
@@ -404,7 +423,7 @@ bool  CCalculate::CheckAndInsertState(CState& stInsert, CState& stFather)
     }
     else{
         AddToAll(stInsert);
-        SortInsert(stFather.m_idxSon, stInsert.m_id);
+        SortInsert(stFather.m_idxSon, stInsert.m_hash);
         
     }
     return true;
@@ -414,8 +433,8 @@ bool CCalculate::FindStInAll(const CState& st, UINT& id) const
 {
     //const string& str = st.m_str;
 
-    MapHashId::const_iterator it = m_mapStateId.find(st.m_hash);
-    if(it == m_mapStateId.end() )
+    MapIdState::const_iterator it = m_vecStateAll.find(st.m_hash);
+    if(it == m_vecStateAll.end() )
         return false;
 
     return true;
@@ -439,27 +458,20 @@ bool  CCalculate::FindStInDead(UINT id) const
 
 bool CCalculate::AddToAll(CState& st)
 {
+    if(0 == st.m_hash){
+        ASSERT(false);
+        return false;
+    }
     //UINT idFind = 0;
     //if(FindStInAll(st, idFind) )  //don't check here
     //    return false;     
 
-    UINT id = m_nextGenId;
-    st.m_id = id;
-    m_nextGenId++;
+    //UINT id = m_nextGenId;
+    //st.m_id = id;
+    //m_nextGenId++;
 
-    //m_vecStateAll.push_back(st);
-    m_vecStateAll[id] = st;
-
-    //m_vecStateAll.rbegin()->m_id = (UINT)id;
-
-    //update map
-    //if(st.m_str.empty() ){
-    if(0 == st.m_hash){
-        ASSERT(false);
-    }
-    else{
-        m_mapStateId[st.m_hash] = id;  //m_str
-    }
+    m_vecStateAll[st.m_hash] = st;
+    
     return true;
 }
 

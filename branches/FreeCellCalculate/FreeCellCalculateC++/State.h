@@ -17,9 +17,11 @@ class CState
 {
 public:
     CState();
+    virtual ~CState();
     
     void InitData();
     //void InputData();
+    void Clear();
 
     UINT16 GetValue() const;
     
@@ -74,8 +76,8 @@ protected:
     UINT GetBenchEmptyCount () const;
 
 public:    
-    UINT                    m_id;
-    UINT                    m_idxFather;
+    //UINT                    m_id;
+    UINT                    m_idxFather; //save hash
     bool                    m_hasGenSon;
     //bool                    m_dead;
     ListInt                 m_idxSon;
@@ -93,4 +95,4 @@ public:
 typedef std::vector<CState>     VecState;
 typedef std::list<CState>     ListState;
 typedef std::map<UINT, UINT>  MapHashId;
-typedef std::map<UINT, CState>  MapIdState;
+typedef std::map<UINT, CState>  MapIdState; //<hash, state>
