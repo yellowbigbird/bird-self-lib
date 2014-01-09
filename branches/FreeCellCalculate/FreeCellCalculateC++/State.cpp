@@ -88,6 +88,14 @@ void CState::InitData()
 
     m_vecVecIdx.clear();
     m_vecVecIdx.resize(c_colSize);  //8   
+
+    m_id = -1;
+    m_idxFather = -1;
+    m_hasGenSon = false;
+    m_idxSon.clear();
+    m_value = c_valueInit;
+    m_step= 0;
+    m_hash = 0;
 }
 
 

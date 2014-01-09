@@ -15,7 +15,7 @@ bug max move amount incorrect
 //can input game number.
 
 multithread
-从一个son state 开始新的线程
+//从一个son state 开始新的线程
 //stop thread
 
 //can calculate

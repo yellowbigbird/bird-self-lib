@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int c_max_thread = 4; //max to cpu core number
+const int c_max_thread = 3; //max to cpu core number
 
 CThreadPool::CThreadPool()
     :m_gameNum(0)
@@ -133,19 +133,40 @@ void CThreadPool::Run()
             it++)
         {
             pCal = *it;
-            if(!pCal)
-                continue;
-            if(pCal->m_fEnd){
+            if(!pCal){
+                ASSERT(false);
+                m_threadArray.erase(it);
+                break;
+            }
+            if(pCal->m_fWin){
                 //win
 
-                //stop all
-                m_fEnd = true;
+                m_fThreadRunning = false; //must stop while 1st
+                ::Sleep(1000);
                 break;
             }
         }
     }// while
 
+    //stop all
+    for(ListCalc::iterator it = m_threadArray.begin();
+        it != m_threadArray.end();
+        it++)
+    {
+        pCal = *it;
+        if(!pCal)
+            continue;
+        pCal->Stop();
+        if(pCal->m_fWin){
+            if(m_vecStrStep.size() < 1
+                || pCal->m_vecStrStep.size() <  m_vecStrStep.size()){
+                m_vecStrStep = pCal->m_vecStrStep;
+            }
+        }
+    }
+
     m_fThreadRunning = false;
+    m_fEnd = true;
 
 }
 

@@ -15,7 +15,7 @@ const bool C_USE_A_STAR = true;
 
 CCalculate::CCalculate()
     :m_fThreadRunning(false)
-    ,m_fEnd(false)
+    ,m_fWin(false)
 {
 }
 
@@ -63,7 +63,6 @@ void CCalculate::Run()
         
 	//output
     OutputResult();
-    m_fEnd = true;
 }
 
 void  CCalculate::Init()
@@ -80,7 +79,7 @@ void  CCalculate::Init()
     //m_stateStart.InitData();
     //m_stateStart.CheckDataLegal();
 
-    m_fEnd = false;
+    m_fWin = false;
     m_stateStart.m_id = 0;
     m_stateStart.Update();
     m_nextGenId = 0;
@@ -96,7 +95,7 @@ bool CCalculate::SolutionAstar()
     //UINT idxInOpen = 0;
     UINT idxWin = 0;
     bool fFindLow = false;
-    bool game_done = false;
+    //bool game_done = false;
     UINT loopCount = 0;
 	UINT sonSum = 0;
     double   valueOpen = 0;    //save lowest value of open
@@ -106,7 +105,7 @@ bool CCalculate::SolutionAstar()
     valueOpen = m_stateStart.GetValue();
 
     while(m_vecIdxOpen.size() 
-        && !game_done
+        && !m_fWin
         && m_fThreadRunning)
     {
         loopCount++;
@@ -122,7 +121,7 @@ bool CCalculate::SolutionAstar()
         int ret = sprintf_s(szMessage, 1024, "step=%d, value=%d", stN.m_step, stN.m_value);
         //AddDebug(szMessage );
 
-        game_done = stN.FWin();
+        m_fWin = stN.FWin();
         //if( game_done){
         //    idxWin = stN.m_id;
         //    AddDebug("win.");
@@ -178,7 +177,7 @@ bool CCalculate::SolutionAstar()
     }//while
 
     m_fThreadRunning = false;
-    AddDebug("win = %d", game_done);
+    AddDebug("win = %d", m_fWin);
 	return true;
 }
 
@@ -284,7 +283,10 @@ bool CCalculate::SolutionDeep1st()
     } //while 
 
     m_fThreadRunning = false;
-    AddDebug("win = %d", game_done);
+
+    char	szMessage[1024];
+    int ret = sprintf_s(szMessage, 1024, "win = %d", game_done);
+    AddDebug(szMessage);
 	return game_done;
 }
 
