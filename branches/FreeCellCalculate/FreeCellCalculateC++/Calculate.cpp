@@ -154,6 +154,13 @@ bool CCalculate::SolutionAstar()
         else{
             sonSum = curSt.GenerateSonState(this);
         }
+        if(sonSum < 1){
+            //dead id
+            AddDebug("dead state.");
+            m_mapDeadId.insert(curSt.m_hash);
+            m_vecStateAll.erase(curSt.m_hash);
+            continue;
+        }
 
         //foreach cur state every son
         for(ListInt::iterator intIt = curSt.m_idxSon.begin();
@@ -165,6 +172,9 @@ bool CCalculate::SolutionAstar()
             double valueSon = stSon.GetValue();
 
             //if X in Open 
+            if(FindStInDead(stSon.m_hash) )
+                continue;  //for
+
             ListInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
             if(itResult != m_vecIdxOpen.end() ){  //todo
                 if(stSon.GetValue() < valueOpen)
