@@ -52,7 +52,7 @@ public:
     ListState   m_stateFather;
     
     ListInt     m_vecIdxOpen;
-    SetId       m_vecIdxClose;
+    SetId       m_vecCloseHash; //save hash
     SetId       m_mapDeadId;
         
     UINT        m_nextGenId;	

@@ -68,7 +68,7 @@ void CCalculate::Run()
 void  CCalculate::Init()
 {
     m_vecIdxOpen.clear();
-    m_vecIdxClose.clear();
+    m_vecCloseHash.clear();
     m_mapDeadId.clear();
 
     m_vecStrStep.clear();
@@ -115,13 +115,13 @@ bool CCalculate::SolutionAstar()
         //if(!fFindLow)
         //break;
         m_curStateIdx = *m_vecIdxOpen.begin();
-        CState& stN = m_vecStateAll[m_curStateIdx];
+        CState& curSt = m_vecStateAll[m_curStateIdx];
 
         char	szMessage[1024];
-        int ret = sprintf_s(szMessage, 1024, "step=%d, value=%d", stN.m_step, stN.m_value);
+        int ret = sprintf_s(szMessage, 1024, "step=%d, value=%d", curSt.m_step, curSt.m_value);
         //AddDebug(szMessage );
 
-        m_fWin = stN.FWin();
+        m_fWin = curSt.FWin();
         //if( game_done){
         //    idxWin = stN.m_id;
         //    AddDebug("win.");
@@ -129,36 +129,36 @@ bool CCalculate::SolutionAstar()
         //}
 
         //get son sums
-        if(stN.m_hasGenSon){
-            sonSum = (UINT)stN.m_idxSon.size();
+        if(curSt.m_hasGenSon){
+            sonSum = (UINT)curSt.m_idxSon.size();
         }
         else{
-            sonSum = stN.GenerateSonState(this);
+            sonSum = curSt.GenerateSonState(this);
         }
 
         //foreach cur state every son
-        for(ListInt::iterator intIt = stN.m_idxSon.begin();
-            intIt != stN.m_idxSon.end() ;
+        for(ListInt::iterator intIt = curSt.m_idxSon.begin();
+            intIt != curSt.m_idxSon.end() ;
             intIt++)
         {
             sonStateIdx = *intIt;
-            CState& stX = m_vecStateAll[sonStateIdx];
-            double valueSon = stX.GetValue();
+            CState& stSon = m_vecStateAll[sonStateIdx];
+            double valueSon = stSon.GetValue();
 
             //if X in Open 
             ListInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
             if(itResult != m_vecIdxOpen.end() ){  //todo
-                if(stX.GetValue() < valueOpen)
+                if(stSon.GetValue() < valueOpen)
                 {
-                    stX.m_idxFather = stN.m_id; //set N is X's father
+                    stSon.m_idxFather = curSt.m_id; //set N is X's father
                     //stN.m_idxSon ; //todo
-                    valueOpen = stX.GetValue();
+                    valueOpen = stSon.GetValue();
                 }
             }
             else {
                 //if x in close
-                SetId::const_iterator setIdConIt = m_vecIdxClose.find(sonStateIdx);
-                if(setIdConIt != m_vecIdxClose.end() ){
+                SetId::const_iterator setIdConIt = m_vecCloseHash.find(stSon.m_hash);
+                if(setIdConIt != m_vecCloseHash.end() ){
                     continue;
                 }
                 else{ //X not in both
@@ -169,7 +169,7 @@ bool CCalculate::SolutionAstar()
         }  //for
 
         //erase N in open, put into Close
-        m_vecIdxClose.insert(stN.m_id);
+        m_vecCloseHash.insert(curSt.m_hash);
         EraseStateFromOpen(m_curStateIdx);
 
         //按照估价值将OPEN表中的节点排序; //实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
