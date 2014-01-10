@@ -19,6 +19,7 @@ a* 需要减少内存占用
 multithread
 //从一个son state 开始新的线程
 //stop thread
+game4, 失败后开始新线程
 
 //can calculate
 
