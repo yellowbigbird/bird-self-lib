@@ -20,16 +20,18 @@ const UINT16 c_valueSortedCard = 5;
 const UINT16 c_valueSortedInColumn = 1;
 const UINT16 c_valueSortedChain = 1;
 
-const int c_maxStep = 70 ; //c_cardAll
+const int c_maxStep = 80 ; //c_cardAll
 
+const int c_hashInit = 0;
 //////////////////////////////////////////////////////////////////////////
 CState::CState()
-    :m_hash(-1)
+    :m_hash(c_hashInit)
     //m_id(0xffffffff)
     ,m_value(c_valueInit)
     ,m_step(0)
     ,m_hasGenSon(false)
     //,m_dead(false)
+    ,m_idxFather(c_hashInit)
 {
     InitData();
 }
@@ -104,12 +106,13 @@ void CState::InitData()
     m_vecVecIdx.resize(c_colSize);  //8   
 
     //m_id = -1;
-    m_idxFather = -1;
+    m_hash = c_hashInit;
+    m_idxFather = c_hashInit;
+
     m_hasGenSon = false;
     m_idxSon.clear();
     m_value = c_valueInit;
     m_step= 0;
-    m_hash = 0;
 }
 
 

@@ -13,6 +13,8 @@ typedef VecInt::iterator       VecIntIt;
 class CCalculate;
 class CStep;
 
+extern const int c_hashInit;
+
 class CState
 {
 public:

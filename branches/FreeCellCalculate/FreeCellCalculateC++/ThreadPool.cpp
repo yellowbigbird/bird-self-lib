@@ -162,7 +162,7 @@ void CThreadPool::Run()
                 m_threadArray.erase(it);
                 break;
             }
-            if(pCal->m_fWin){
+            if(pCal->IsWin() ){
                 //win
 
                 m_fThreadRunning = false; //must stop while 1st
@@ -173,6 +173,7 @@ void CThreadPool::Run()
     }// while
 
     //stop all
+    m_vecStrStep.clear();
     for(ListCalc::iterator it = m_threadArray.begin();
         it != m_threadArray.end();
         it++)
@@ -181,16 +182,26 @@ void CThreadPool::Run()
         if(!pCal)
             continue;
         pCal->Stop();
-        if(pCal->m_fWin){
+        if(pCal->IsWin() ){
             if(m_vecStrStep.size() < 1
                 || pCal->m_vecStrStep.size() <  m_vecStrStep.size()){
                 m_vecStrStep = pCal->m_vecStrStep;
             }
         }
     }
+    OutputResult();
 
     m_fThreadRunning = false;
     m_fEnd = true;
 
 }
+
+void  CThreadPool::OutputResult()
+{
+    for(UINT idx=0; idx< m_vecStrStep.size(); idx++)
+    {
+        AddDebug(m_vecStrStep[idx]);
+    }
+}
+
 

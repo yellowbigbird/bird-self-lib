@@ -26,6 +26,8 @@ protected:
     void AddThreads();
     void StartAllThreads();
 
+    void OutputResult();
+
     static DWORD  WINAPI ThreadFunc(void* pServer);
 
 public:

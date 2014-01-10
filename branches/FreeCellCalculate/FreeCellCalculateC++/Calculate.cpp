@@ -81,7 +81,9 @@ void CCalculate::Run()
         fWin = SolutionDeep1st();
         
 	//output
-    OutputResult();
+    if(fWin)
+        OutputResult();
+    m_fWin = fWin;
 }
 
 void  CCalculate::Init()
@@ -106,6 +108,12 @@ void  CCalculate::Init()
     AddToAll(m_stateStart);
 }
 
+bool  CCalculate::IsWin() const
+{
+    const bool fwin = !m_fThreadRunning && m_fWin;
+    return fwin;
+}
+
 bool CCalculate::SolutionAstar()
 {
     //int lowStateIdx = -1;
@@ -122,9 +130,11 @@ bool CCalculate::SolutionAstar()
     //push start in open
     m_vecIdxOpen.push_back(m_stateStart.m_hash);
     valueOpen = m_stateStart.GetValue();
+    m_fWin = false;
+    bool fWin = false;
 
     while(m_vecIdxOpen.size() 
-        && !m_fWin
+        && !fWin
         && m_fThreadRunning)
     {
         loopCount++;
@@ -140,12 +150,11 @@ bool CCalculate::SolutionAstar()
         int ret = sprintf_s(szMessage, 1024, "step=%d, value=%d", curSt.m_step, curSt.m_value);
         //AddDebug(szMessage );
 
-        m_fWin = curSt.FWin();
-        //if( game_done){
-        //    idxWin = stN.m_id;
-        //    AddDebug("win.");
-        //    break;
-        //}
+        fWin = curSt.FWin();
+        if( fWin){
+            AddDebug("win.");
+            break;
+        }
 
         //get son sums
         if(curSt.m_hasGenSon){
@@ -155,7 +164,7 @@ bool CCalculate::SolutionAstar()
             sonSum = curSt.GenerateSonState(this);
         }
         if(sonSum < 1){
-            //dead id
+            //dead id, delete it
             AddDebug("dead state.");
             m_mapDeadId.insert(curSt.m_hash);
             m_vecStateAll.erase(curSt.m_hash);
@@ -171,12 +180,14 @@ bool CCalculate::SolutionAstar()
             CState& stSon = m_vecStateAll[sonStateIdx];
             double valueSon = stSon.GetValue();
 
-            //if X in Open 
+            //if x in dead
             if(FindStInDead(stSon.m_hash) )
                 continue;  //for
 
+            //if X in Open 
             ListInt::iterator itResult = find( m_vecIdxOpen.begin(), m_vecIdxOpen.end(), sonStateIdx ); 
             if(itResult != m_vecIdxOpen.end() ){  //todo
+                //if this one is near the end
                 if(stSon.GetValue() < valueOpen)
                 {
                     stSon.m_idxFather = curSt.m_hash; //set N is X's father
@@ -201,17 +212,15 @@ bool CCalculate::SolutionAstar()
         m_vecCloseHash.insert(curSt.m_hash);
         EraseStateFromOpen(m_curStateIdx);
 
-        //按照估价值将OPEN表中的节点排序; //实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
-        //SortOpen();
     }//while
 
     m_fThreadRunning = false;
 
     char	szMessage[1024];
     //memset(szMessage, 0, 1024);
-    int ret = sprintf_s(szMessage, 1024, "win = %d", m_fWin);
+    int ret = sprintf_s(szMessage, 1024, "win = %d", fWin);
     AddDebug(szMessage);
-	return true;
+	return fWin;
 }
 
 bool CCalculate::SolutionDeep1st()
@@ -330,11 +339,12 @@ void CCalculate::OutputResult()
 	UINT curStIdx = m_curStateIdx;
 
     //get all state
-	while(true)
+	while(c_hashInit != curStIdx)
 	{
 		MapIdState::iterator it = m_vecStateAll.find(curStIdx);
 		if(it == m_vecStateAll.end() ){
-			TRACE("\nfail.\n");
+			//TRACE("\nfail.\n");
+            AddDebug("fail.");
 			break;
 		}
 		const CState& curSt = it->second;

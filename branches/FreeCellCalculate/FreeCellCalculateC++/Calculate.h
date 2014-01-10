@@ -24,6 +24,9 @@ public:
     void Stop();
     void Init();
 
+    bool IsStop() const;
+    bool IsWin() const;
+
     bool SolutionAstar();
     bool SolutionDeep1st();
 
@@ -48,8 +51,6 @@ protected:
     static DWORD  WINAPI ThreadFunc(void* pServer);
 
 public:
-    bool        m_fThreadRunning;
-    bool        m_fWin;
 
     CState      m_stateStart;
     ListState   m_stateFather;
@@ -66,6 +67,9 @@ public:
     MapIdState  m_vecStateAll;      //map<hash, state>
     VecStr      m_vecStrStep;
 
+protected:
+    bool        m_fThreadRunning;
+    bool        m_fWin;
 };
 
 
