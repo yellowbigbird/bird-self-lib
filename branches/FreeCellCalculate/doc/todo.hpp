@@ -27,6 +27,6 @@ game4, 失败后开始新线程
 
 //修改hash 方式
 
-release can't get result....
+//release can't get result....
 
 //不能从一行 完全移动到领一个空行

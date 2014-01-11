@@ -18,6 +18,8 @@ class CCalculate
 public:
     CCalculate();
     virtual ~CCalculate();
+
+    void Clear();
     
     void StartCalc();
     void Run();
@@ -47,7 +49,6 @@ public:
     bool FindStInDead(UINT id) const;
 
 protected:
-    void Clear();
     static DWORD  WINAPI ThreadFunc(void* pServer);
 
 public:
