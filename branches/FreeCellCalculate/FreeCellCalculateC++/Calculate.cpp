@@ -84,6 +84,7 @@ void CCalculate::Run()
     if(fWin)
         OutputResult();
     m_fWin = fWin;
+
 }
 
 void  CCalculate::Init()
@@ -145,6 +146,7 @@ bool CCalculate::SolutionAstar()
         //break;
         m_curStateIdx = *m_vecIdxOpen.begin();
         CState& curSt = m_vecStateAll[m_curStateIdx];
+        valueOpen = curSt.m_value;
 
         char	szMessage[1024];
         int ret = sprintf_s(szMessage, 1024, "step=%d, value=%d", curSt.m_step, curSt.m_value);
@@ -203,7 +205,7 @@ bool CCalculate::SolutionAstar()
                 }
                 else{ //X not in both
                     //m_vecIdxOpen.push_back(sonStateIdx);
-                    SortInsert(m_vecIdxOpen, sonStateIdx);
+                    SortInsert(m_vecIdxOpen, sonStateIdx);                    
                 }
             }
         }  //for
@@ -335,8 +337,15 @@ bool CCalculate::SolutionDeep1st()
 
 void CCalculate::OutputResult()
 {
-	VecState listSt;
+	VecState listSt ;
 	UINT curStIdx = m_curStateIdx;
+
+    //push father to this
+    for(ListState::const_iterator it = m_stateFather.begin();
+        it != m_stateFather.end();
+        it++){
+            listSt.push_back(*it);
+    }
 
     //get all state
 	while(c_hashInit != curStIdx)

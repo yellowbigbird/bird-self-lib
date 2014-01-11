@@ -189,6 +189,16 @@ void CThreadPool::Run()
             }
         }
     }
+
+    //clear
+    for(ListCalc::iterator it = m_threadArray.begin();
+        it != m_threadArray.end();
+        it++)
+    {
+        pCal = *it;
+        pCal->Clear();
+    }
+
     OutputResult();
 
     m_fThreadRunning = false;
