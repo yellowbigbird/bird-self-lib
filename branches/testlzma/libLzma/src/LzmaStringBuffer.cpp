@@ -69,11 +69,9 @@ bool CStringStreamOut::WriteData(const void *dataSrc, const size_t sizeToWrite, 
         return false;
     bool ifok= false;
     const size_t pointerStart = m_dataOut.size();
-    const char* chardata = (const char*)dataSrc;
-    for(size_t idx= 0; idx< sizeToWrite; idx++)
-    {
-        m_dataOut.push_back(chardata[idx]);  //todo, need change to memcpy
-    }
+    const char* chardata = (const char*)dataSrc;   
+    m_dataOut.append(chardata, sizeToWrite);
+
     //check
     writtenSize = m_dataOut.size() - pointerStart;
     ifok = true;
