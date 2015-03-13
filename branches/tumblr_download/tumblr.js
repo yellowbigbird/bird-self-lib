@@ -31,7 +31,7 @@ function onClickHandler(info, tab) {
 
 function openNewTab(tab, url0) {
 	console.log("opennewtab");
-	chrome.tabs.create({url: url0 } );
+	chrome.tabs.create({url: url0 , active: false } );
 	//chrome.tabs.create({url:chrome.extension.getURL("tabs_api.html")});
 	//chrome.tabs.update(tabs[0].id, newurl);	
 };
