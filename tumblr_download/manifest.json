@@ -1,0 +1,11 @@
+{
+  "name": "tumblr image download",
+  "description": "范德萨范德萨发松岛枫",
+  "version": "0.1",
+  "permissions": ["contextMenus", "tabs"],
+  "background": {
+	"persistent": false,
+    "scripts": ["tumblr.js"]
+  },
+  "manifest_version": 2
+}
