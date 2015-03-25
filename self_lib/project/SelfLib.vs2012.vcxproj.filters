@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{b3f843fe-79f1-437c-9a54-645ffcbfb85f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hash">
+      <UniqueIdentifier>{8e9d2e9d-ab56-4156-b1b8-21c8f6bb3d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ini">
+      <UniqueIdentifier>{084240b2-8c82-4ba2-8ffa-404b3592408b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\selflib_dll.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\util\Crc32.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\util\Utils.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\util\UtilsFile.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\util\UtilString.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\hash\hash.h">
+      <Filter>hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CIni\Ini.h">
+      <Filter>ini</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\util\DebugFile.h">
+      <Filter>util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\Crc32.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\Utils.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\UtilsFile.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\UtilString.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CIni\Ini.cpp">
+      <Filter>ini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\DebugFile.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SelfLib.def">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SelfLib.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\src\hash\crc32.txt">
+      <Filter>hash</Filter>
+    </Text>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>
