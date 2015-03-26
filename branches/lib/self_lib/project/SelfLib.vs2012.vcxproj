@@ -76,8 +76,8 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)\bin_vs12\$(Platform)_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\bin_vs12\obj\$(Platform)_$(ProjectName)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin_vs2012\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin_vs2012\obj\$(Platform)_$(ProjectName)_$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,8 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin_vs12\$(Platform)_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\bin_vs12\obj\$(Platform)_$(ProjectName)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin_vs2012\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin_vs2012\obj\$(Platform)_$(ProjectName)_$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
