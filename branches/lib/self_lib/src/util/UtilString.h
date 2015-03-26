@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "selflib_dll.h"
 //#include <WTypes.h>
 
