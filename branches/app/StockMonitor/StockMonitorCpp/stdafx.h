@@ -52,4 +52,6 @@
 #endif
 #endif
 
+#include <string>
+#include <vector>
 
