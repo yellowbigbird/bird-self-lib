@@ -22,6 +22,9 @@
     <Filter Include="ini">
       <UniqueIdentifier>{084240b2-8c82-4ba2-8ffa-404b3592408b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="http">
+      <UniqueIdentifier>{82e1c60d-7acf-4ce8-beea-7b6d81bebf2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
