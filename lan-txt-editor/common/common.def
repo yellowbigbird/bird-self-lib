@@ -1,0 +1,6 @@
+; common.def : Declares the module parameters for the DLL.
+
+LIBRARY      "common"
+
+EXPORTS
+    ; Explicit exports can go here

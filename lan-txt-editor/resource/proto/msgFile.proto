@@ -1,0 +1,17 @@
+message MsgFile
+{
+	enum TYPE 
+	{
+		FILE = 0;
+		DIR  = 1;
+		NotExist = 2;
+	}
+
+	required TYPE	fileType 	= 1;	
+	required string fileName 	= 2;
+	optional uint64 fileSize 	= 3;
+	optional int64	fileTime 	= 4;
+	required bool	file7z 		= 5;
+	optional string filePathName = 9;	
+	optional string fileData 	= 10 ;
+}
