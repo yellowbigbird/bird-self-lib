@@ -5,6 +5,7 @@
 
 #include <tchar.h>
 #include <windows.h>
+#include <algorithm> 
 
 using namespace std;
 
@@ -120,7 +121,7 @@ namespace UtilString{
 
     bool  ConvertHexStringToValue(const string& str, int& value) 
     {
-        const int strlen0 = str.length();
+        const int strlen0 = (int)str.length();
         char cc = 0;
         bool ifErr = false;
         value = 0;
@@ -149,6 +150,52 @@ namespace UtilString{
         }
         if(ifErr)
             return false;
+
+        return true;
+    }
+
+	//template < class InputIterator, class OutputIterator, class UnaryOperator >  
+	//OutputIterator transform ( InputIterator first1, InputIterator last1,  
+	//	OutputIterator result, UnaryOperator op );  
+
+	//template < class InputIterator1, class InputIterator2,  
+	//class OutputIterator, class BinaryOperator >  
+	//	OutputIterator transform ( InputIterator1 first1, InputIterator1 last1,  
+	//	InputIterator2 first2, OutputIterator result,  
+	//	BinaryOperator binary_op );
+
+	void ChangeStringLetter(std::string& str, bool fToUp)
+	{
+		transform(str.begin(), str.end(), str.begin(), fToUp?(::toupper):(::tolower)); 
+	}
+
+	void ChangeStringLetter(std::wstring& str, bool fToUp)
+	{
+		transform(str.begin(), str.end(), str.begin(), fToUp?(::toupper):(::tolower)); 
+	}
+
+    //typedef vector<string> VecStr;
+    bool SplitString(const string& strSrc, VecStr& vecStrDest, const string& strMark)
+    {
+        vecStrDest.clear();
+        string strNew = strSrc; 
+        string strLeft;
+        int pos =0;
+
+        if(strNew.empty() )
+            return false;
+
+        while(strNew.length() )
+        {
+            pos = (int)strNew.find(strMark);
+            if(pos < 0 || pos>= strNew.length() )
+                break;
+            strLeft = strNew.substr(0, pos);
+            strNew = strNew.substr(pos+1);
+            if(!strLeft.empty())
+                vecStrDest.push_back(strLeft);
+        };
+		vecStrDest.push_back(strNew);
 
         return true;
     }
