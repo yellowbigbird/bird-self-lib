@@ -39,6 +39,12 @@
     <ClInclude Include="http\HttpSocket.h">
       <Filter>http</Filter>
     </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stock.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StockMonitor.cpp">
@@ -52,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="http\HttpSocket.cpp">
       <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
