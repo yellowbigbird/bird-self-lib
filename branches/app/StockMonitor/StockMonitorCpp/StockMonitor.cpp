@@ -6,6 +6,8 @@
 #include "StockMonitor.h"
 #include "StockMonitorDlg.h"
 
+#include "DataManager.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -56,8 +58,7 @@ BOOL CStockMonitorApp::InitInstance()
 		AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
 		return FALSE;
 	}
-
-
+	
 	AfxEnableControlContainer();
 
 	// Create the shell manager, in case the dialog contains
@@ -75,6 +76,11 @@ BOOL CStockMonitorApp::InitInstance()
 	// TODO: You should modify this string to be something appropriate
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+
+	///////////////////////
+	CDataManager::Get();
+
+	/////////////////
 
 	CStockMonitorDlg dlg;
 	m_pMainWnd = &dlg;

@@ -11,6 +11,7 @@ public:
 	enum fdsf{
 		STOCK_NAME = 0,
 		STOCK_,
+		STOCK_, //
 		STOCK_,
 		STOCK_,
 		STOCK_,
