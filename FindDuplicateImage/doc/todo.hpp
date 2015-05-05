@@ -3,7 +3,7 @@
 
 加入dump
 输出错误， log， callstack
-加入数据库
+加入数据库 ，mysql， sqlite
 扫描文件线程
 读取文件buffer
 
