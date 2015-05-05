@@ -10,10 +10,10 @@ public:
 	virtual ~CFindDup();
 	
 	void TestOpencv();
-	void GetImageHash(const std::string& str);
+	UINT64 GetImageHash(const std::string& str);
 
 	UINT GetAverageGray(cv::Mat& I);
-	UINT64 GetImageHash(cv::Mat& mat, UINT grayAvg);
+	UINT64 GetMatHash(cv::Mat& mat, UINT grayAvg);
 };
 
 //int CompareHist(const char* imagefile1, const char* imagefile2);

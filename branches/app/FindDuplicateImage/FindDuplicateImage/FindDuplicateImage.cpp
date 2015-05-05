@@ -76,7 +76,7 @@ BOOL CFindDuplicateImageApp::InitInstance()
 
 	CFindDuplicateImageDlg dlg;
 	m_pMainWnd = &dlg;
-	INT_PTR nResponse = IDOK;//= dlg.DoModal();
+	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
 		// TODO: Place code here to handle when the dialog is
