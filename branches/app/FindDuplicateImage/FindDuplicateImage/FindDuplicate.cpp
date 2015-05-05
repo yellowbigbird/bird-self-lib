@@ -22,9 +22,12 @@ CFindDup::~CFindDup()
 
 void CFindDup::TestOpencv()
 {
-	const CString cstr = _T("d:\\1.jpg");
-	const string str = ("d:\\1.jpg");
-	GetImageHash(str);
+	//const CString cstr = _T("d:\\1.jpg");
+	const string str0 = ("d:\\0.jpg");
+	UINT64 hash0 = GetImageHash(str0);
+
+	string str1 = ("d:\\1.jpg");
+	UINT64 hash1 = GetImageHash(str1);
 
 	//Mat image;
  //   image = imread("d:\\1.jpg", IMREAD_COLOR); // Read the file
@@ -38,10 +41,10 @@ void CFindDup::TestOpencv()
     //waitKey(0); // Wait for a keystroke in the window
 }
 
-void CFindDup::GetImageHash(const std::string& str)
+UINT64 CFindDup::GetImageHash(const std::string& str)
 {
 	if(str.empty() )
-		return;
+		return 0;
 
 	//open image
 	Mat imgSrc;
@@ -50,22 +53,24 @@ void CFindDup::GetImageHash(const std::string& str)
     if( imgSrc.empty() ) // Check for invalid input
     {
         cout << "Could not open or find the image" << std::endl ;
-        return ;
+        return 0;
     }
 
 	//resize 8*8
-	resize(imgSrc, imgTemp, Size(98,98), 0, 0, CV_INTER_AREA);
+	resize(imgSrc, imgTemp, Size(8,8), 0, 0, CV_INTER_AREA);
 
 	//change to gray
 	cvtColor( imgTemp, imgTempGray, CV_RGB2GRAY );
 
 	//get avg 
 	const UINT grayAvg = GetAverageGray(imgTempGray);
+	UINT64 imghash = GetMatHash(imgTempGray, grayAvg );
 
 	//namedWindow( "Display_window", WINDOW_AUTOSIZE ); // Create a window for display.
     //imshow( "Display_window", imgTempGray ); // Show our image inside it.
     //waitKey(0); // Wait for a keystroke in the window
 	//img.resize();
+	return imghash;
 }
 
 UINT CFindDup::GetAverageGray(Mat& mat)
@@ -105,7 +110,7 @@ UINT CFindDup::GetAverageGray(Mat& mat)
     return valueAvg; 
 }
 
-UINT64 CFindDup::GetImageHash(cv::Mat& mat, UINT grayAvg)
+UINT64 CFindDup::GetMatHash(cv::Mat& mat, UINT grayAvg)
 {
 	CV_Assert(mat.depth() != sizeof(uchar));     
     
@@ -118,8 +123,12 @@ UINT64 CFindDup::GetImageHash(cv::Mat& mat, UINT grayAvg)
 		return 0;
          
 	MatIterator_<uchar> it, end; 
-	for( it = mat.begin<uchar>(), end = mat.end<uchar>(); it != end; ++it){
+	UINT64 idx = 0;
+	for( it = mat.begin<uchar>(), end = mat.end<uchar>();
+		it != end;
+		++it, idx++){
 		if(*it >= grayAvg){
+			value += (UINT64)1 << idx;
 		}
 	}
       
