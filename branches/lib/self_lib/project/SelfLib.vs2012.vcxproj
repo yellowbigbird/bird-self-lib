@@ -204,6 +204,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\DebugFile.h" />
     <ClInclude Include="..\src\util\DebugFile.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="..\src\selflib_dll.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="..\src\CIni\Ini.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\DebugFile.cpp" />
     <ClCompile Include="..\src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

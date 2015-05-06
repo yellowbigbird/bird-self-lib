@@ -7,6 +7,8 @@
 #include "FindDuplicateImageDlg.h"
 
 #include "FindDuplicate.h"
+#include <DebugFile.h>
+
 
 ///////////////////
 #ifdef _DEBUG
@@ -71,6 +73,8 @@ BOOL CFindDuplicateImageApp::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
+	AddDebug("");
+	AddDebug("app start.");
 	CFindDup fd;
 	fd.TestOpencv();
 

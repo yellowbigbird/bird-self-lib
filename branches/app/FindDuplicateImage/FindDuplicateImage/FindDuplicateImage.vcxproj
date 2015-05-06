@@ -114,7 +114,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\src1\opencv\build\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\src1\opencv\build\include;$(SolutionDir)\..\..\lib\self_lib\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,7 +132,8 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(OPENCV)\x64\vc11\bin\*.dll" "$(OutDir)\*.dll" /y /d</Command>
+      <Command>xcopy "$(OPENCV)\x64\vc11\bin\*.dll" "$(OutDir)\*.dll" /y /d
+xcopy "$(SolutionDir)\resource\*.*" "$(OutDir)\*.*" /y /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -189,6 +190,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="FileInfo.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="FindDuplicate.h" />
     <ClInclude Include="FindDuplicateImage.h" />
     <ClInclude Include="FindDuplicateImageDlg.h" />
@@ -197,6 +201,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="FileInfo.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="FindDuplicate.cpp" />
     <ClCompile Include="FindDuplicateImage.cpp" />
     <ClCompile Include="FindDuplicateImageDlg.cpp" />
@@ -215,6 +222,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\FindDuplicateImage.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\self_lib\project\SelfLib.vs2012.vcxproj">
+      <Project>{c6e70890-8ffa-44bc-9fb0-fa6b0b4df355}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
