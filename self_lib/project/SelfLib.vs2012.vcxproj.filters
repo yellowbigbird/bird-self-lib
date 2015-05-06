@@ -63,6 +63,9 @@
     <ClInclude Include="..\src\util\DebugFile.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\DebugFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\stdafx.cpp">
@@ -85,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="..\src\util\DebugFile.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DebugFile.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
