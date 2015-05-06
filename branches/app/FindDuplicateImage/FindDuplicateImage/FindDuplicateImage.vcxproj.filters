@@ -33,6 +33,15 @@
     <ClInclude Include="FindDuplicate.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FindDuplicateImage.cpp">
@@ -45,6 +54,15 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="FindDuplicate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

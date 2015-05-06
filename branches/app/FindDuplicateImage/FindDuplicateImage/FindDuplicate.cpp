@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "FindDuplicate.h"
 
+#include "config.h"
+#include "FileManager.h"
+
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
@@ -22,6 +25,10 @@ CFindDup::~CFindDup()
 
 void CFindDup::TestOpencv()
 {
+	CConfig::Get().LoadFile();
+	CFileManager::Get().StartSearchTread();
+	CFileManager::Get().StartSearchPath();  //why need 2 cmd
+
 	//const CString cstr = _T("d:\\1.jpg");
 	const string str0 = ("d:\\0.jpg");
 	UINT64 hash0 = GetImageHash(str0);
