@@ -6,9 +6,10 @@
 #include "FindDuplicateImage.h"
 #include "FindDuplicateImageDlg.h"
 
-#include "FindDuplicate.h"
+#include "config.h"
+//#include "FindDuplicate.h"
 #include <DebugFile.h>
-
+#include "FileManager.h"
 
 ///////////////////
 #ifdef _DEBUG
@@ -75,8 +76,12 @@ BOOL CFindDuplicateImageApp::InitInstance()
 
 	AddDebug("");
 	AddDebug("app start.");
-	CFindDup fd;
-	fd.TestOpencv();
+
+	CConfig::Get().LoadFile();
+	CFileManager::Get().StartSearchTread();
+	CFileManager::Get().StartSearchPath();  //why need 2 cmd
+	//CFindDup fd;
+	//fd.TestOpencv();
 
 	CFindDuplicateImageDlg dlg;
 	m_pMainWnd = &dlg;
