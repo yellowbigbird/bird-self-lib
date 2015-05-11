@@ -12,6 +12,8 @@
 
 #include <iostream>
 
+#include <util\UtilString.h>
+
 using namespace cv;
 using namespace std;
 /////////
@@ -31,10 +33,10 @@ void CFindDup::TestOpencv()
 
 	//const CString cstr = _T("d:\\1.jpg");
 	const string str0 = ("d:\\0.jpg");
-	UINT64 hash0 = GetImageHash(str0);
+	//UINT64 hash0 = GetImageHash(str0);
 
 	string str1 = ("d:\\1.jpg");
-	UINT64 hash1 = GetImageHash(str1);
+	//UINT64 hash1 = GetImageHash(str1);
 
 	//Mat image;
  //   image = imread("d:\\1.jpg", IMREAD_COLOR); // Read the file
@@ -46,6 +48,13 @@ void CFindDup::TestOpencv()
  //   namedWindow( "Display window", WINDOW_AUTOSIZE ); // Create a window for display.
  //   imshow( "Display window", image ); // Show our image inside it.
     //waitKey(0); // Wait for a keystroke in the window
+}
+
+UINT64  CFindDup::GetImageHash(const std::wstring& wstr)
+{
+	std::string str = UtilString::ConvertWideCharToMultiByte(wstr);
+	UINT64 hash = GetImageHash(str);
+	return hash;
 }
 
 UINT64 CFindDup::GetImageHash(const std::string& str)
