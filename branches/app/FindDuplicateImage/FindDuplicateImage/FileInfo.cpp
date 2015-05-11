@@ -9,6 +9,14 @@
 #include "util/UtilString.h"
 #include "util/UtilsFile.h"
 
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/highgui/highgui.hpp>  //compare
+#include "opencv/cv.hpp"
+
+#include "FindDuplicate.h"
+
 #define  USE_7Z  0
 #if USE_7Z
 #include <lzmaWrapper.h>
@@ -18,7 +26,9 @@
 #define new DEBUG_NEW
 #endif
 
+using namespace cv;
 using namespace std;
+
 //using namespace DebugFile;
 //////////////////////////////////////////////////////////////////////////
 CFileInfo::CFileInfo()
@@ -28,8 +38,9 @@ CFileInfo::CFileInfo()
 ,m_fImage(0)
 ,m_hashCrc32(0)
 ,m_hashImage(0)
+,m_imgW(0)
+,m_imgH(0)
 {
-
 }
 
 CFileInfo::~CFileInfo()
@@ -192,9 +203,13 @@ bool	CFileInfo::ReadAllInfo(const std::wstring& wstrRootPath)
 			m_time = UtilFile::GetFileTimeGmt(m_strFullPathName);
 
 			//get hash
+			CCrc32 crc32;
+			string str = UtilString::ConvertWideCharToMultiByte(m_strFullPathName);
+			bool fokcrc = crc32.GetCrc32FromFile(str.c_str(), m_hashCrc32);
 
-			//get imghash
-	
+			//parse image.
+			ReadImageInfo();
+				
 			ifok = true;
 		} while (false);
 		
@@ -206,7 +221,34 @@ bool	CFileInfo::ReadAllInfo(const std::wstring& wstrRootPath)
 	{
 	}
 	return ifok;
+}
 
+bool	CFileInfo::ReadImageInfo()
+{
+	bool ifok = false;
 
+	//open img
+	//open image
+	Mat imgSrc;
+	string str = UtilString::ConvertWideCharToMultiByte(m_strFullPathName);
+    imgSrc = imread(str.c_str(), IMREAD_COLOR); // Read the file
+    if( imgSrc.empty() ) // Check for invalid input
+    {
+        AddDebug("Could not open or find the image");
+		m_fImage = false;
+        return ifok;
+    }
+	m_fImage = true;
+	
+	//get img w h
+	m_imgW = imgSrc.cols;
+	m_imgH = imgSrc.rows;	
+
+	//get imghash
+	CFindDup dup;
+	m_hashImage = dup.GetImageHash(m_strFullPathName);
+
+	ifok = true;
+	return ifok;
 }
 

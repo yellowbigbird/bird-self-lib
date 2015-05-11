@@ -10,6 +10,7 @@ public:
 	virtual ~CFindDup();
 	
 	void TestOpencv();
+	UINT64 GetImageHash(const std::wstring& str);
 	UINT64 GetImageHash(const std::string& str);
 
 	UINT GetAverageGray(cv::Mat& I);

@@ -16,16 +16,23 @@ public:
     bool    GetData(std::string& strData, bool f7z) const;
 
 	bool	ReadAllInfo(const std::wstring& wstrRootPath);
-
+	
     void    GenerateFullPathName();
+
+protected:
+	bool	ReadImageInfo();
 
 public:
     bool			m_ifCached;
-	bool			m_fImage;
-
+	
     UINT64			m_size;
     UINT64			m_time;
-	UINT64			m_hashCrc32;
+	UINT32			m_hashCrc32;
+	
+	//image
+	bool			m_fImage;
+	UINT32			m_imgW;
+	UINT32			m_imgH;
 	UINT64			m_hashImage;
 
 	//UINT			m_fileDataIdx;
