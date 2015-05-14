@@ -191,6 +191,7 @@ xcopy "$(SolutionDir)\resource\*.*" "$(OutDir)\*.*" /y /d</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="dbSqlite.h" />
     <ClInclude Include="FileInfo.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="FindDuplicate.h" />
@@ -202,6 +203,7 @@ xcopy "$(SolutionDir)\resource\*.*" "$(OutDir)\*.*" /y /d</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="dbSqlite.cpp" />
     <ClCompile Include="FileInfo.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="FindDuplicate.cpp" />
