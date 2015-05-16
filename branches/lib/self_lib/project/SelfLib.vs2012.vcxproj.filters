@@ -48,9 +48,6 @@
     <ClInclude Include="..\src\util\Utils.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\util\UtilsFile.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\util\UtilString.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -66,6 +63,9 @@
     <ClInclude Include="..\src\DebugFile.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\util\UtilFile.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\stdafx.cpp">
@@ -75,9 +75,6 @@
       <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\src\util\Utils.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\util\UtilsFile.cpp">
       <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\src\util\UtilString.cpp">
@@ -91,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="..\src\DebugFile.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util\UtilFile.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
