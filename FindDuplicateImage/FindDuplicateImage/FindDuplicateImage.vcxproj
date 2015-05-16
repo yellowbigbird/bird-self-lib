@@ -77,6 +77,8 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\bin_vs2012\$(Platform)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\bin_vs2012\obj\$(Platform)_$(ProjectName)_$(Configuration)\</IntDir>
+    <IncludePath>X:\src\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>X:\src\opencv\build\x64\vc12\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -114,7 +116,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\src1\opencv\build\include;$(SolutionDir)\..\..\lib\self_lib\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(opencv)\include;$(SolutionDir)\..\..\lib\self_lib\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -226,6 +228,9 @@ xcopy "$(SolutionDir)\resource\*.*" "$(OutDir)\*.*" /y /d</Command>
     <Image Include="res\FindDuplicateImage.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\libSqlite\libSqlite.vs2012.vcxproj">
+      <Project>{2a2af3ca-c682-4d3a-a50e-c0de81dcc0da}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\lib\self_lib\project\SelfLib.vs2012.vcxproj">
       <Project>{c6e70890-8ffa-44bc-9fb0-fa6b0b4df355}</Project>
     </ProjectReference>

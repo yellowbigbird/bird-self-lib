@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "config.h"
 
-#include "util/UtilsFile.h"
+#include "util/UtilFile.h"
 #include <util/UtilString.h>
 
 #include <CIni/Ini.h>

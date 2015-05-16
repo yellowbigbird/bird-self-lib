@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SelfLib", "..\..\lib\self_l
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaLib", "..\..\lib\libLzma\libLzma\prj\LzmaLib_vs2012.vcxproj", "{68B1EA49-3919-4529-808D-10954A26FBF2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSqlite", "..\..\lib\libSqlite\libSqlite.vs2012.vcxproj", "{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -38,6 +40,14 @@ Global
 		{68B1EA49-3919-4529-808D-10954A26FBF2}.Release|Win32.Build.0 = Release|Win32
 		{68B1EA49-3919-4529-808D-10954A26FBF2}.Release|x64.ActiveCfg = Release|x64
 		{68B1EA49-3919-4529-808D-10954A26FBF2}.Release|x64.Build.0 = Release|x64
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Debug|Win32.Build.0 = Debug|Win32
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Debug|x64.ActiveCfg = Debug|x64
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Debug|x64.Build.0 = Debug|x64
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Release|Win32.ActiveCfg = Release|Win32
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Release|Win32.Build.0 = Release|Win32
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Release|x64.ActiveCfg = Release|x64
+		{2A2AF3CA-C682-4D3A-A50E-C0DE81DCC0DA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
