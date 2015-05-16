@@ -7,7 +7,9 @@
 #include <Util/Crc32.h>
 
 #include "util/UtilString.h"
-#include "util/UtilsFile.h"
+#include "util/UtilFile.h"
+
+#pragma warning(disable:4819)
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
