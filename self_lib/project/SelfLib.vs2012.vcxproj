@@ -213,7 +213,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="..\src\util\Crc32.h" />
     <ClInclude Include="..\src\util\Utils.h" />
-    <ClInclude Include="..\src\util\UtilsFile.h" />
+    <ClInclude Include="..\src\util\UtilFile.h" />
     <ClInclude Include="..\src\util\UtilString.h" />
     <ClInclude Include="..\src\hash\hash.h" />
     <ClInclude Include="..\src\CIni\Ini.h" />
@@ -229,7 +229,7 @@
     <ClCompile Include="..\src\util\Crc32.cpp" />
     <ClCompile Include="..\src\util\DebugFile.cpp" />
     <ClCompile Include="..\src\util\Utils.cpp" />
-    <ClCompile Include="..\src\util\UtilsFile.cpp" />
+    <ClCompile Include="..\src\util\UtilFile.cpp" />
     <ClCompile Include="..\src\util\UtilString.cpp" />
     <ClCompile Include="..\src\CIni\Ini.cpp" />
   </ItemGroup>
