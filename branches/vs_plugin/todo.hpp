@@ -6,3 +6,5 @@ get a src path
 //sourcecodeoutliner
 can edit c++
 
+test
+
